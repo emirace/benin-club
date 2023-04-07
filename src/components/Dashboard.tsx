@@ -1,4 +1,4 @@
-import { FaPlus, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import { FaPlus, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 
 interface DashboardProps {
   setCurrentPage: React.Dispatch<React.SetStateAction<string>>;
@@ -15,7 +15,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setCurrentPage }) => {
       <div className="my-2 w-full px-4">
         <button
           className="flex items-center px-2 py-1 text-sm font-bold text-red hover:text-white hover:bg-red focus:outline-none w-full"
-          onClick={() => setCurrentPage("create")}
+          onClick={() => setCurrentPage('create')}
         >
           <FaPlus className="mr-2" />
           Create QRCode
@@ -24,13 +24,13 @@ const Dashboard: React.FC<DashboardProps> = ({ setCurrentPage }) => {
       <div className="my-2 w-full px-4">
         <button
           className="flex items-center px-2 py-1 text-sm font-bold text-red hover:text-white hover:bg-red focus:outline-none w-full"
-          onClick={() => setCurrentPage("view")}
+          onClick={() => setCurrentPage('view')}
         >
           <FaEye className="mr-2" />
           View QRCode
         </button>
       </div>
-      <div className="my-2 w-full px-4">
+      {/* <div className="my-2 w-full px-4">
         <button
           className="flex items-center px-2 py-1 text-sm font-bold text-red hover:text-white hover:bg-red focus:outline-none w-full"
           onClick={() => setCurrentPage("update")}
@@ -47,7 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({ setCurrentPage }) => {
           <FaTrash className="mr-2" />
           Delete QRCode
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

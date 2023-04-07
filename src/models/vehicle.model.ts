@@ -1,12 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IVehicle extends Document {
-  carPlateNumber?: string;
+  carPlateNumber: string;
+  vehicleId: string;
   vehicleType?: string;
   vehicleColor?: string;
   purposeOfVehicle?: string;
   regNumber?: string;
-  imageUrl?: string;
+  imageUrl: string;
   qrCodeUrl: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -14,6 +15,10 @@ export interface IVehicle extends Document {
 
 const vehicleSchema: Schema = new Schema(
   {
+    vehicleId: {
+      type: String,
+      required: true,
+    },
     carPlateNumber: {
       type: String,
     },
@@ -41,7 +46,7 @@ const vehicleSchema: Schema = new Schema(
     timestamps: true,
   }
 );
-
-const Vehicle = mongoose.model<IVehicle>('Vehicle', vehicleSchema);
+const Vehicle =
+  mongoose.models.Vehicle || mongoose.model<IVehicle>('Vehicle', vehicleSchema);
 
 export default Vehicle;

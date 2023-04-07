@@ -3,7 +3,6 @@ import MemberDetails from '@/components/MemberDetails';
 import SocialMedia from '@/components/SocialMedia';
 import { activities } from '@/constants/activities';
 import { membership } from '@/constants/membership';
-import Head from 'next/head';
 import Image from 'next/image';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWallet } from 'react-icons/fa';
 import PrivacySettings from './PrivacySettings';

@@ -1,72 +1,35 @@
-import { useState } from 'react';
-import QRCode from 'qrcode';
-import Image from 'next/image';
+'use client';
 import { buttonStyle } from '@/constants/styles';
+import { IVehicle } from '@/models/vehicle.model';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
-import { createHash } from 'crypto';
+import QRCode from 'qrcode';
+import { generateSecureCode } from './QRCodeGenerator';
 
-interface QRCodeGeneratorProps {}
+interface UpdateQRcodeProps {
+  vehicle: IVehicle | undefined;
+  handleCloseModal: () => void;
+}
 
-const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = () => {
+const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
+  vehicle,
+  handleCloseModal
+) => {
   const [dataUrl, setDataUrl] = useState('');
   const [error, setError] = useState<Error | null>(null);
-  const [carPlateNumber, setCarPlateNumber] = useState('');
-  const [vehicleType, setVehicleType] = useState('');
-  const [vehicleColor, setVehicleColor] = useState('');
-  const [purposeOfVehicle, setPurposeOfVehicle] = useState('');
-  const [regNumber, setRegNumber] = useState('');
+  const [carPlateNumber, setCarPlateNumber] = useState(
+    vehicle?.vehicle?.carPlateNumber
+  );
+  const [vehicleType, setVehicleType] = useState(vehicle?.vehicle?.vehicleType);
+  const [vehicleColor, setVehicleColor] = useState(
+    vehicle?.vehicle?.vehicleColor
+  );
+  const [purposeOfVehicle, setPurposeOfVehicle] = useState(
+    vehicle?.vehicle?.purposeOfVehicle
+  );
+  const [regNumber, setRegNumber] = useState(vehicle?.vehicle?.regNumber);
   const [imagePreview, setImagePreview] = useState('');
-  const [vehicleId, setVehicleId] = useState('');
-
-  const handleSubmit = async (url: string) => {
-    const formData = {
-      carPlateNumber,
-      vehicleType,
-      vehicleColor,
-      purposeOfVehicle,
-      regNumber,
-      qrCodeUrl: url,
-      imageUrl: imagePreview,
-    };
-    try {
-      const response = await fetch('/api/vehicles', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      console.log('response', response);
-      if (response.ok) {
-        // Show success message
-        const newVehicle = await response.json();
-        console.log(
-          'Vehicle details saved successfully!',
-          newVehicle.vehicleId
-        );
-        setVehicleId(newVehicle.vehicleId);
-      } else {
-        // Show error message
-        console.error('Failed to save vehicle details.');
-      }
-    } catch (error) {
-      console.error('Error saving vehicle details: ', error);
-    }
-  };
-
-  const generateQRCode = () => {
-    const link = generateSecureCode(Math.random());
-    QRCode.toDataURL('https://beninclub1931.com/' + link, {
-      errorCorrectionLevel: 'H',
-    })
-      .then((dataUrl: string) => {
-        handleSubmit(link);
-        setDataUrl(dataUrl);
-        setError(null);
-      })
-      .catch((error: any) => {
-        console.error(error);
-        setError(error);
-      });
-  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -81,13 +44,57 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = () => {
     }
   };
 
-  const downloadFile = () => {
-    const link = document.createElement('a');
-    link.href = dataUrl;
-    link.download = vehicleId;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  useEffect(() => {
+    generateQRCode();
+  }, [vehicle]);
+
+  const generateQRCode = () => {
+    const link = generateSecureCode(Math.random());
+    QRCode.toDataURL(
+      'https://beninclub1931.com/' + vehicle?.vehicle?.qrCodeUrl,
+      {
+        errorCorrectionLevel: 'H',
+      }
+    )
+      .then((dataUrl: string) => {
+        setDataUrl(dataUrl);
+        setError(null);
+      })
+      .catch((error: any) => {
+        console.error(error);
+        setError(error);
+      });
+  };
+
+  const updateQRCode = async () => {
+    const data = {
+      carPlateNumber,
+      vehicleType,
+      vehicleColor,
+      purposeOfVehicle,
+      regNumber,
+      imagePreview,
+    };
+
+    try {
+      const response = await fetch(`/api/vehicles/${vehicle?.vehicle?._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const dataUrl = await response.json();
+        handleCloseModal();
+        setDataUrl(dataUrl.dataUrl);
+      } else {
+        setError(new Error(`Failed to update QR code: ${response.statusText}`));
+      }
+    } catch (error) {
+      setError(error as Error | null);
+    }
   };
 
   return (
@@ -95,7 +102,7 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = () => {
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-gray-50 p-8 rounded-lg">
         <div className="w-full md:w-1/2 flex flex-col items-center space-y-4">
           <label htmlFor="url-input" className="text-lg font-medium">
-            Enter Vehicle Details:
+            ID: {vehicle?.vehicle?.vehicleId}
           </label>
 
           <input
@@ -165,35 +172,26 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = () => {
               onChange={handleImageChange}
               className="hidden"
             />
+            {dataUrl && (
+              <Image
+                src={dataUrl}
+                alt="Vehicle Preview"
+                className="w-64 h-64 object-contain mt-4"
+                width={250}
+                height={250}
+              />
+            )}
           </div>
         </div>
       </div>
-      <button onClick={generateQRCode} className={buttonStyle}>
-        Generate
+      <button onClick={updateQRCode} className={buttonStyle}>
+        Update
       </button>
       {error && (
         <div className="text-red-500">{`Error generating QR code: ${error.message}`}</div>
       )}
-      {dataUrl && (
-        <div className="mt-4 mx-auto items-center justify-center">
-          <Image src={dataUrl} alt="QR code" width={300} height={300} />
-          <div className="font-bold text-center text-xl">{vehicleId}</div>
-          <button
-            className="p-2 border-2 rounded-lg m-4 border-red text-red"
-            onClick={downloadFile}
-          >
-            Download
-          </button>
-        </div>
-      )}
     </div>
   );
 };
-export default QRCodeGenerator;
 
-export const generateSecureCode = (string: number): string => {
-  const salt = '510fc1829cccd49d72bca0d3df84c054'; // you can use any string as a salt
-  const hash = createHash('sha256');
-  hash.update(string + salt); // add salt to the string before hashing
-  return hash.digest('hex');
-};
+export default UpdateQRcode;
