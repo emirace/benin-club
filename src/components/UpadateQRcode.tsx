@@ -8,7 +8,7 @@ import QRCode from 'qrcode';
 import { generateSecureCode } from './QRCodeGenerator';
 
 interface UpdateQRcodeProps {
-  vehicle: IVehicle | undefined;
+  vehicle: IVehicle;
   handleCloseModal: () => void;
 }
 
@@ -97,6 +97,15 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
     }
   };
 
+  const downloadFile = () => {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = vehicle.vehicle.vehicleId;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="flex flex-col  mr-auto ">
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-gray-50 p-8 rounded-lg">
@@ -173,13 +182,21 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
               className="hidden"
             />
             {dataUrl && (
-              <Image
-                src={dataUrl}
-                alt="Vehicle Preview"
-                className="w-64 h-64 object-contain mt-4"
-                width={250}
-                height={250}
-              />
+              <div>
+                <Image
+                  src={dataUrl}
+                  alt="Vehicle Preview"
+                  className="w-64 h-64 object-contain mt-4"
+                  width={250}
+                  height={250}
+                />
+                <button
+                  className="p-2 border-2 rounded-lg m-4 border-red text-red"
+                  onClick={downloadFile}
+                >
+                  Download
+                </button>
+              </div>
             )}
           </div>
         </div>

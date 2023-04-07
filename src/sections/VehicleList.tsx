@@ -14,7 +14,9 @@ type Props = {
 const VehicleList = ({ vehicles }: Props) => {
   const [vehicleList, setVehicleList] = useState<IVehicle[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentVehicle, setCurrentVehicle] = useState<IVehicle>();
+  const [currentVehicle, setCurrentVehicle] = useState<IVehicle>(
+    vehicles[3001]
+  );
 
   useEffect(() => {
     setVehicleList(vehicles);

@@ -54,7 +54,7 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = () => {
 
   const generateQRCode = () => {
     const link = generateSecureCode(Math.random());
-    QRCode.toDataURL('https://beninclub1931.com/' + link, {
+    QRCode.toDataURL('https://beninclub1931.com/vehicles/show/' + link, {
       errorCorrectionLevel: 'H',
     })
       .then((dataUrl: string) => {
