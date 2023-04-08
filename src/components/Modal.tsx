@@ -19,7 +19,7 @@ const Modal: FC<Props> = ({ isOpen, onClose, children }) => {
           onClick={onClose}
         />
         <div className="bg-white rounded-lg shadow-lg relative z-30">
-          <div className="h-24 w-full" />
+          <div className="h-24 md:h-0 w-full" />
           <div className="absolute top-24 md:top-0 right-0 p-2">
             <button
               className="text-gray-400 hover:text-gray-500 focus:outline-none"
