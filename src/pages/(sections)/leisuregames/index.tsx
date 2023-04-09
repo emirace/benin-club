@@ -1,5 +1,6 @@
-import HeroSectionPage from "@/sections/HeroSectionPage";
-import SectionHistory from "@/sections/SectionHistory";
+import { leisure } from '@/constants/sectionsCard';
+import HeroSectionPage from '@/sections/HeroSectionPage';
+import SectionHistory from '@/sections/SectionHistory';
 
 export default function LeisureGames() {
   return (
@@ -9,7 +10,7 @@ export default function LeisureGames() {
         desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
             voluptatum cupiditate veritatis."
       />
-      <SectionHistory />
+      <SectionHistory data={leisure} />
     </div>
   );
 }

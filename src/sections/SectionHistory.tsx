@@ -1,19 +1,13 @@
 'use client';
+import { SectionCard } from '@/types/sectionCard';
 import Image from 'next/image';
 import { useState } from 'react';
 
-const images = [
-  '/images/image1.jpg',
-  '/images/image2.jpg',
-  '/images/image3.jpg',
-  '/images/image1.jpg',
-  '/images/image2.jpg',
-  '/images/image3.jpg',
-  '/images/image2.jpg',
-  '/images/image1.jpg',
-];
+interface SectionHistoryProps {
+  data: SectionCard;
+}
 
-const SectionHistory = () => {
+const SectionHistory = ({ data }: SectionHistoryProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
   const handleImageClick = (image: string) => {
@@ -35,8 +29,7 @@ const SectionHistory = () => {
             Our story
           </p>
           <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-            Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis in accusamus quisquam.
+            {data.info}
           </p>
         </div>
         <div className="mt-10">
@@ -55,7 +48,7 @@ const SectionHistory = () => {
             </div>
             <div className="md:w-1/2 mt-10 md:mt-0">
               <Image
-                src="/images/image3.jpg"
+                src={data.imageUrl}
                 alt="About image"
                 width={500}
                 height={500}
@@ -64,7 +57,7 @@ const SectionHistory = () => {
           </div>
           <div className="mt-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shadow-xl rounded-t-lg p-4">
-              {images.map((image) => (
+              {data.images.map((image) => (
                 <div className="relative" key={image}>
                   <button
                     key={image}
@@ -72,7 +65,7 @@ const SectionHistory = () => {
                     onClick={() => handleImageClick(image)}
                   >
                     <Image
-                      src={image}
+                      src={`/images${data.link}/${image}`}
                       alt="Gallery image"
                       layout="fill"
                       objectFit="cover"
@@ -110,7 +103,7 @@ const SectionHistory = () => {
             </button>
             <div className="max-w-screen-lg mx-auto">
               <Image
-                src={expandedImage}
+                src={`/images${data.link}/${expandedImage}`}
                 alt="Expanded image"
                 layout="responsive"
                 objectFit="contain"

@@ -1,14 +1,14 @@
-"use client";
-import { buttonStyle } from "@/constants/styles";
-import { useState } from "react";
+'use client';
+import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import { useState } from 'react';
 
 type Props = {
   handleCloseModal?: () => void;
 };
 
 export default function LoginForm({ handleCloseModal }: Props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -46,7 +46,12 @@ export default function LoginForm({ handleCloseModal }: Props) {
           </button>
         </div>
       )}
-      <h2 className="text-2xl font-bold text-gray-800">Login</h2>
+      <div className="flex md:flex-row gap-4 ">
+        <h2 className="text-2xl md:text-4xl uppercase font-base mb-2">Sign</h2>
+        <h2 className="text-2xl md:text-4xl uppercase font-bold mb-8 text-red">
+          in
+        </h2>
+      </div>
       <div>
         <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
           Email
@@ -95,7 +100,7 @@ export default function LoginForm({ handleCloseModal }: Props) {
       <div className="flex justify-end ml-6">
         <button
           type="button"
-          className="bg-gray text-white py-2 px-4 border-2  rounded  mr-4"
+          className={`bg-gray text-white py-2 px-4 border-2  rounded  mr-4 ${buttonStyleOutline}`}
           onClick={handleCloseModal}
         >
           Cancel
@@ -105,7 +110,7 @@ export default function LoginForm({ handleCloseModal }: Props) {
         </button>
       </div>
       <p className="text-gray-600 text-sm mt-6">
-        Don&apos;t have an account yet?{" "}
+        Don&apos;t have an account yet?{' '}
         <a href="#" className="text-red underline">
           Sign up here
         </a>

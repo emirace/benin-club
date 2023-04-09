@@ -1,5 +1,6 @@
-import HeroSectionPage from "@/sections/HeroSectionPage";
-import SectionHistory from "@/sections/SectionHistory";
+import { golf } from '@/constants/sectionsCard';
+import HeroSectionPage from '@/sections/HeroSectionPage';
+import SectionHistory from '@/sections/SectionHistory';
 
 export default function Golf() {
   return (
@@ -9,7 +10,7 @@ export default function Golf() {
         desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
             voluptatum cupiditate veritatis."
       />
-      <SectionHistory />
+      <SectionHistory data={golf} />
     </div>
   );
 }
