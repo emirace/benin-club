@@ -10,6 +10,7 @@ const connectDB = async () => {
   try {
     const { connection } = await mongoose.connect(NEXT_PUBLIC_MONGODB_URL);
     if (connection.readyState === 1) {
+      console.log('connected to DB');
       return Promise.resolve(true);
     }
   } catch (error) {

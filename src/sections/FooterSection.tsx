@@ -1,6 +1,6 @@
-import { buttonStyleW } from "@/constants/styles";
-import Image from "next/image";
-import { FaMapMarker, FaPhone, FaEnvelope } from "react-icons/fa";
+import { buttonStyleW } from '@/constants/styles';
+import Image from 'next/image';
+import { FaMapMarker, FaPhone, FaEnvelope } from 'react-icons/fa';
 
 const FooterSection = () => {
   return (
@@ -24,15 +24,15 @@ const FooterSection = () => {
             </h2>
           </div>
           <p className="mb-8">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis
-            velit in lectus malesuada tincidunt a vel sapien. Fusce dignissim
-            feugiat est ac lobortis. Proin aliquam sit amet turpis in commodo.
-            In hac habitasse platea dictumst.
+            Club life in Benin club, as a respectable community centre for
+            recreation, intercourse and communion has come to stay. Today, the
+            club stands proundly amongst the first and best of any kind, in any
+            city in Nigeria with a very comfortable clubbing ambience.
           </p>
           <ul className="space-y-2 mb-8">
             <li>
-              <FaMapMarker className="inline-block mr-2" />
-              123 Main St, Anytown USA
+              <FaMapMarker className="inline-block mr-2" />1 Ambrose Ali Avenue
+              GRA, PO Box 393, Benin City
             </li>
             <li>
               <FaPhone className="inline-block mr-2" />
@@ -40,7 +40,7 @@ const FooterSection = () => {
             </li>
             <li>
               <FaEnvelope className="inline-block mr-2" />
-              info@example.com
+              info@beninclub1931.com
             </li>
           </ul>
         </div>

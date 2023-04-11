@@ -1,5 +1,6 @@
 'use client';
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import Link from 'next/link';
 import { useState } from 'react';
 
 type Props = {
@@ -111,15 +112,23 @@ export default function LoginForm({ handleCloseModal }: Props) {
       </div>
       <p className="text-gray-600 text-sm mt-6">
         Don&apos;t have an account yet?{' '}
-        <a href="#" className="text-red underline">
+        <Link
+          href="/auth/signup"
+          onClick={handleCloseModal}
+          className="text-red underline"
+        >
           Sign up here
-        </a>
+        </Link>
         .
       </p>
       <p className="text-gray-600 text-sm mt-2">
-        <a href="#" className="text-red underline">
+        <Link
+          href="/auth/forgetpassword"
+          onClick={handleCloseModal}
+          className="text-red underline"
+        >
           Forgot your password?
-        </a>
+        </Link>
       </p>
     </form>
   );

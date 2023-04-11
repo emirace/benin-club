@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { navLinks } from "@/constants/navbar";
-import { buttonStyleW } from "@/constants/styles";
-import LoginForm from "./LoginForm";
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { navLinks } from '@/constants/navbar';
+import { buttonStyleW } from '@/constants/styles';
+import LoginForm from './LoginForm';
 
 interface NavLinkProps {
   navLink: {
@@ -19,7 +19,6 @@ interface NavLinkProps {
 
 const Navbar = (): JSX.Element => {
   const [navbar, setNavbar] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -41,18 +40,18 @@ const Navbar = (): JSX.Element => {
       }
     }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
     <nav
       className={`w-full ${
-        navbar ? "bg-black bg-opacity-95" : ""
+        navbar ? 'bg-black bg-opacity-95' : ''
       } fixed top-0 left-0 right-0 z-50  ${
-        isScrolled ? "bg-black" : "md:bg-transparent"
+        isScrolled ? 'bg-black' : 'md:bg-transparent'
       } `}
     >
       <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
@@ -87,8 +86,8 @@ const Navbar = (): JSX.Element => {
                     strokeWidth={2}
                     d={
                       navbar
-                        ? "M6 18L18 6M6 6l12 12"
-                        : "M4 6h16M4 12h16M4 18h16"
+                        ? 'M6 18L18 6M6 6l12 12'
+                        : 'M4 6h16M4 12h16M4 18h16'
                     }
                   />
                 </svg>
@@ -99,7 +98,7 @@ const Navbar = (): JSX.Element => {
         <div>
           <div
             className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 transition duration-1000 ease-in-out ${
-              navbar ? "p-12 md:p-0 block" : "hidden"
+              navbar ? 'p-12 md:p-0 block' : 'hidden'
             }`}
           >
             <ul className="h-screen md:h-auto items-center justify-center md:flex ">
@@ -143,27 +142,35 @@ const NavLink: React.FC<NavLinkProps> = ({ navLink, setNavbar, navbar }) => {
     <li
       key={navLink.title}
       className={`relative pb-6 ${
-        "text-white"
+        'text-white'
         // isActiveLink(navLink.path) ? "text-red" : "text-white"
       } py-2 md:px-6 text-center border-b-2 md:border-b-0  hover:bg-pink  border-pink  md:hover:text-red md:hover:bg-transparent uppercase font-bold text-sm`}
     >
-      <Link
-        href={navLink.subLinks.length ? "#" : navLink.path}
-        onClick={() => {
-          navLink.subLinks.length
-            ? setDropdownOpen(!dropdownOpen)
-            : setNavbar(!navbar);
-        }}
-      >
-        {navLink.title}
-      </Link>
+      {dropdownOpen && (
+        <div
+          className="fixed top-0 left-0 right-0 bottom-0 "
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+        />
+      )}
+      {navLink.subLinks.length ? (
+        <div
+          className="cursor-pointer"
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+        >
+          {navLink.title}
+        </div>
+      ) : (
+        <Link href={navLink.path} onClick={() => setNavbar(!navbar)}>
+          {navLink.title}
+        </Link>
+      )}
       {dropdownOpen && (
         <ul className="absolute capitalize md:text-left md top-full left-0 bg-black  z-20 text-white  w-full md:w-auto">
           {navLink.subLinks.length &&
             navLink.subLinks.map((subLink) => (
               <Link
                 key={subLink.title}
-                href={`${subLink.path}`}
+                href={`/sections/${subLink.path}`}
                 onClick={() => {
                   setNavbar(!navbar);
                   setDropdownOpen(!dropdownOpen);

@@ -9,4 +9,11 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  input[type='checkbox']:checked + label::before {
+    border-color: red;
+  }
+}
+
+input[type='checkbox']:checked + label::before {
+  border-color: red;
 }

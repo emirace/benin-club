@@ -3,6 +3,7 @@ import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 import { User } from '@/models/user.model';
 import sendEmail from '@/utils/sendEmail';
+import connectDB from '@/utils/mongoose';
 
 const randomBytesAsync = promisify(randomBytes);
 
@@ -20,9 +21,10 @@ export default async function verifyEmail(
   if (!email) {
     return res.status(400).json({ message: 'Email address is required' });
   }
-
+  await connectDB();
   // Check if a user with this email already exists
   const existingUser = await User.findOne({ email });
+  console.log(existingUser);
   if (existingUser) {
     if (existingUser.verificationToken) {
       return res
@@ -34,7 +36,7 @@ export default async function verifyEmail(
         .json({ message: 'A user with this email already exists' });
     }
   }
-
+  console.log('hello');
   // Generate a verification code
   const code = (await randomBytesAsync(16)).toString('hex');
 

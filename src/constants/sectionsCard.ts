@@ -18,7 +18,7 @@ export const busStop: SectionCard = {
   imageUrl: '/images/busStop/image1.JPG',
   title: 'Bus Stop',
   info: 'This section that can best be referred to as the parliament of Benin club with a very robust membership is a very comfortable place to seat. The section over the year has provided socially vibrant space for members of the club to learn. The section organizes the manifesto night of the club every year. You may not have satisfied your yearning for joining the club if you have not made a stop at the section. The section enhance fellowship and interaction amongst members, Membership cuts across all segments of the society.',
-  link: '/busStop',
+  link: '/busstop',
   images: [
     'image1.JPG',
     'image2.JPG',
@@ -120,3 +120,14 @@ export const tableTennis: SectionCard = {
     'image8.JPG',
   ],
 };
+export const allSections = [
+  'Billiards & Snooker',
+  'Bus Stop',
+  'Darts',
+  'Golf',
+  'Leisure Games',
+  'Lawn Tennis',
+  'Squash',
+  'Swimming Pool',
+  'Table Tennis',
+];

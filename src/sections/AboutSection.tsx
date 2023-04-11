@@ -30,7 +30,7 @@ const AboutSection = () => {
         </p>
         <div className="flex gap-3 mt-4 flex-col md:flex-row">
           <div>
-            <Link href="/membership">
+            <Link href="/auth/signup">
               <button className={`${buttonStyle} `}>Join The Club</button>
             </Link>
           </div>
