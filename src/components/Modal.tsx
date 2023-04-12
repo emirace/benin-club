@@ -26,16 +26,15 @@ const Modal: FC<Props> = ({ isOpen, onClose, children }) => {
               onClick={onClose}
             >
               <svg
-                className="h-6 w-6"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-8 w-8 text-white"
+                viewBox="0 0 20 20"
+                fill="#000000"
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.293-9.293a1 1 0 00-1.414-1.414L10 8.586 7.121 5.707a1 1 0 00-1.414 1.414L8.586 10l-2.879 2.879a1 1 0 101.414 1.414L10 11.414l2.879 2.879a1 1 0 001.414-1.414L11.414 10l2.879-2.879z"
+                  clipRule="evenodd"
                 />
               </svg>
             </button>

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 const SectionB = (props: SectionProps) => {
   const { formData, onPrevious, onChange, onNext, error, handleError } = props;
   const handleNext = () => {
-    onNext;
+    onNext();
   };
   return (
     <div>

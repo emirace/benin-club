@@ -7,8 +7,8 @@ export default function SwimmingPool() {
     <div>
       <HeroSectionPage
         name="Swimming Pool"
-        desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis."
+        image={swimming.imageUrl}
+        desc="Experience aquatic fun and relaxation on our pristine swimming pools with top-of-the-line amenities. Join us to cool off or improve your stroke in a welcoming atmosphere with crystal-clear waters."
       />
       <SectionHistory data={swimming} />
     </div>

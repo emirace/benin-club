@@ -7,8 +7,8 @@ export default function Billiards() {
     <div>
       <HeroSectionPage
         name="Billiards & Snooker"
-        desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis."
+        image={billiards.imageUrl}
+        desc="Unleash your inner champion on our world-class billiard and snooker tables. Join our passionate community and experience the ultimate game room thrill."
       />
       <SectionHistory data={billiards} />
     </div>

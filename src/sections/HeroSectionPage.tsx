@@ -1,30 +1,35 @@
-"use client";
+'use client';
 
-import React from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import React from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import {
   headingVariants,
   heroVariants,
   paragraphVariants,
-} from "@/utils/motion";
+} from '@/utils/motion';
 
 interface HeroSectionPageProps {
   name: string;
   desc: string;
+  image: string;
 }
 
-const HeroSectionPage: React.FC<HeroSectionPageProps> = ({ name, desc }) => {
+const HeroSectionPage: React.FC<HeroSectionPageProps> = ({
+  name,
+  desc,
+  image,
+}) => {
   return (
     <motion.div
-      className="relative h-72 md:h-96 w-full overflow-hidden"
+      className="relative h-96 md:h-[26rem] w-full overflow-hidden"
       variants={heroVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Background image */}
       <Image
-        src="/images/hero.webp"
+        src={image}
         alt="Hero background image"
         fill
         className="object-cover"

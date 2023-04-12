@@ -7,8 +7,8 @@ export default function TableTennis() {
     <div>
       <HeroSectionPage
         name="Table Tennis"
-        desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis."
+        image={tableTennis.imageUrl}
+        desc="Unleash your competitive spirit on our world-class table tennis tables with expert coaching. Join us for state-of-the-art facilities and a welcoming atmosphere for all your table tennis needs."
       />
       <SectionHistory data={tableTennis} />
     </div>

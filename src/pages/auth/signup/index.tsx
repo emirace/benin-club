@@ -8,6 +8,8 @@ import { initialErrorData, initialFormData, steps } from '@/constants/signup';
 import { ErrorData, FormData } from '@/types/signup';
 import SectionB from '@/components/signup/SectionB';
 import SectionC from '@/components/signup/SectionC';
+import SectionD from '@/components/signup/SectionD';
+import SectionE from '@/components/signup/SectionE';
 
 const MembershipForm = () => {
   const router = useRouter();
@@ -49,18 +51,19 @@ const MembershipForm = () => {
     if (step === 1) return setStep(step + 1);
 
     setLoading(true);
-    const response = await fetch('/api/membership', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (response.ok) {
-      setStep(step + 1);
-    } else {
-      handleError('general', 'Error saving form data');
-    }
+    // const response = await fetch('/api/membership', {
+    //   method: 'POST',
+    //   body: JSON.stringify(formData),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+    // if (response.ok) {
+    //   setStep(step + 1);
+    // } else {
+    //   handleError('general', 'Error saving form data');
+    // }
+    setStep(step + 1);
     setLoading(false);
   };
 
@@ -129,6 +132,33 @@ const MembershipForm = () => {
       case 4:
         return (
           <SectionC
+            formData={formData}
+            error={error}
+            loading={loading}
+            onPrevious={handlePrevious}
+            onChange={handleChange}
+            onNext={handleNext}
+            handleError={handleError}
+            setFormData={setFormData}
+          />
+        );
+      case 5:
+        return (
+          <SectionD
+            formData={formData}
+            error={error}
+            loading={loading}
+            onPrevious={handlePrevious}
+            onChange={handleChange}
+            onNext={handleNext}
+            handleError={handleError}
+            setFormData={setFormData}
+          />
+        );
+
+      case 6:
+        return (
+          <SectionE
             formData={formData}
             error={error}
             loading={loading}

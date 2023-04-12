@@ -7,8 +7,8 @@ export default function LawnTennis() {
     <div>
       <HeroSectionPage
         name="Lawn Tennis"
-        desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis."
+        image={lawnTennis.imageUrl}
+        desc="Unleash your inner champion on our top-of-the-line tennis facilities with expert coaching. Join our welcoming community and take your game to the next level with state-of-the-art equipment."
       />
       <SectionHistory data={lawnTennis} />
     </div>

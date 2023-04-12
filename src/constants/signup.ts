@@ -46,6 +46,10 @@ export const initialFormData: FormData = {
   reasonToJoin: '',
   tribe: '',
   numberOfWives: '',
+  educations: [],
+  workExperiences: [],
+  proposerPersonality: '',
+  proposerKnown: '',
   // add more fields as needed
 };
 
@@ -87,5 +91,9 @@ export const initialErrorData: ErrorData = {
   reasonToJoin: '',
   tribe: '',
   numberOfWives: '',
+  educations: '',
+  workExperiences: '',
+  proposerPersonality: '',
+  proposerKnown: '',
   // add more fields as needed
 };

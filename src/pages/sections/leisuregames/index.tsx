@@ -7,8 +7,8 @@ export default function LeisureGames() {
     <div>
       <HeroSectionPage
         name="Leisure Games"
-        desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis."
+        image={leisure.imageUrl}
+        desc="Unwind and let loose with our variety of leisure games, perfect for a fun-filled day with family and friends. Join us for classic board games or interactive arcade games in our welcoming and entertaining atmosphere."
       />
       <SectionHistory data={leisure} />
     </div>

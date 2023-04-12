@@ -10,8 +10,12 @@ export interface SectionProps {
   onNext: () => void;
   onPrevious: () => void;
   handleError: (name: string, value: string) => void;
-  setFormData: (formData: FormData) => void;
+  setFormData: SetFormData;
 }
+
+export type SetFormData = (
+  updateFormData: (prevFormData: FormData) => FormData
+) => void;
 
 export interface FormData {
   email: string;
@@ -50,6 +54,10 @@ export interface FormData {
   reasonToJoin: string;
   tribe: string;
   numberOfWives: string;
+  educations: Education[];
+  workExperiences: WorkExperience[];
+  proposerPersonality: string;
+  proposerKnown: string;
 
   // add more fields as needed
 }
@@ -90,14 +98,31 @@ export interface ErrorData {
   disability: string;
   sportSection: string;
   reasonToJoin: string;
-  numberOfWives: string;
   tribe: string;
+  numberOfWives: string;
+  educations: string;
+  workExperiences: string;
+  proposerPersonality: string;
+  proposerKnown: string;
   // add more fields as needed
 }
 
-export type Child = {
+export interface Child {
   name: string;
   age: number;
   school: string;
   sex: 'male' | 'female';
-};
+}
+export interface Education {
+  school: string;
+  dates: string;
+  qualifications: string;
+}
+
+export interface WorkExperience {
+  from: string;
+  to: string;
+  employee: string;
+  position: string;
+  jobDescription: string;
+}

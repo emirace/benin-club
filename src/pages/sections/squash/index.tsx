@@ -7,8 +7,8 @@ export default function Golf() {
     <div>
       <HeroSectionPage
         name="squash"
-        desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis."
+        image={squash.imageUrl}
+        desc="Elevate your squash game on our world-class courts with expert coaching. Join our welcoming community and enjoy top-of-the-line facilities for all your squash needs."
       />
       <SectionHistory data={squash} />
     </div>

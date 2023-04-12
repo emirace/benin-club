@@ -7,8 +7,8 @@ export default function Darts() {
     <div>
       <HeroSectionPage
         name="Darts"
-        desc="Lorem ipsum dolor sit amet consect adipisicing elit. Possimus magnam
-            voluptatum cupiditate veritatis."
+        image={darts.imageUrl}
+        desc="Score a bullseye and elevate your game with our premier dart boards and professional-grade equipment. Join us for some casual fun or show off your skills in our welcoming and expertly crafted setup."
       />
       <SectionHistory data={darts} />
     </div>

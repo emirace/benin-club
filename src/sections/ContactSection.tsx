@@ -1,7 +1,7 @@
-import { buttonStyle } from "@/constants/styles";
-import { stagger } from "framer-motion";
-import Image from "next/image";
-import React from "react";
+import { buttonStyle } from '@/constants/styles';
+import { stagger } from 'framer-motion';
+import Image from 'next/image';
+import React from 'react';
 
 interface ContactSectionProps {}
 
@@ -41,7 +41,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({}) => {
       </div>
       <div className="md:w-1/2 mt-8 md:mt-0 pl-10">
         <Image
-          src="/images/image3.jpg"
+          src="/images/reception/image3.jpg"
           alt="Contact"
           width={500}
           height={500}
