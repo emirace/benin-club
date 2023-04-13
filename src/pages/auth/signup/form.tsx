@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { buttonStyle } from '@/constants/styles';
-import EmailSection from '@/components/signup/EmailSection';
 import PersonalInfo from '@/components/signup/PersonalInfo';
 import StepsIndicator from '@/components/signup/StepsIndicator';
 import { initialErrorData, initialFormData, steps } from '@/constants/signup';

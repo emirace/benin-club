@@ -1,5 +1,5 @@
 import Loading from '@/components/Loading';
-import EmailSection from '@/components/signup/EmailSection';
+import VerificationSuccess from '@/components/signup/VerificationSuccess';
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
 import { useState } from 'react';
 
@@ -7,6 +7,7 @@ export default function SignUp() {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
+  const [emailSent, setEmailSent] = useState<boolean>(false);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -31,7 +32,7 @@ export default function SignUp() {
       if (response.ok) {
         // Show success message
         setLoading(false);
-        setError('Verification email sent. Please check your inbox.');
+        setEmailSent(true);
       } else {
         const errorMessage = await response.json();
         setError(errorMessage.message);
@@ -46,54 +47,57 @@ export default function SignUp() {
   return (
     <>
       <div className="h-20 w-full bg-black" />
-
-      <div className="flex mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-20 mb-10 w-full">
-        <div className="bg-white px-4 md:px-8 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <div>
-            <div className="flex md:flex-row gap-4 ">
-              <h2 className="text-2xl md:text-4xl uppercase font-base mb-2">
-                Sign
-              </h2>
-              <h2 className="text-2xl md:text-4xl uppercase font-bold mb-8 text-red">
-                Up
-              </h2>
-            </div>
-            <label
-              htmlFor="email"
-              className="block text-gray-700 font-medium mb-1"
-            >
-              Email
-            </label>
-            <input
-              className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
-              type="email"
-              name="email"
-              onChange={onChange}
-              value={email}
-              onFocus={() => setError('')}
-            />
-            {error ? (
-              <div className="text-red text-sm mt-1">{error}</div>
-            ) : (
-              <div className="text-gray-500 text-sm mt-1">
-                Please enter your email to receive a verification email.
+      {!emailSent ? (
+        <div className="flex mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-20 mb-10 w-full">
+          <div className="bg-white px-4 shadow-md rounded-lg md:px-8 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div>
+              <div className="flex md:flex-row gap-4 ">
+                <h2 className="text-2xl md:text-4xl uppercase font-base mb-2">
+                  Sign
+                </h2>
+                <h2 className="text-2xl md:text-4xl uppercase font-bold mb-8 text-red">
+                  Up
+                </h2>
               </div>
-            )}
-            <div className="flex justify-end ml-6 mt-4">
-              <button
-                className={loading ? buttonStyleOutline : buttonStyle}
-                onClick={handleSubmit}
-                disabled={loading}
+              <label
+                htmlFor="email"
+                className="block text-gray-700 font-medium mb-1"
               >
-                {loading ? 'Verifying...' : 'Verify'}
-              </button>
+                Email
+              </label>
+              <input
+                className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                type="email"
+                name="email"
+                onChange={onChange}
+                value={email}
+                onFocus={() => setError('')}
+              />
+              {error ? (
+                <div className="text-red text-sm mt-1">{error}</div>
+              ) : (
+                <div className="text-gray-500 text-sm mt-1">
+                  Please enter your email to receive a verification email.
+                </div>
+              )}
+              <div className="flex justify-end ml-6 mt-4">
+                <button
+                  className={loading ? buttonStyleOutline : buttonStyle}
+                  onClick={handleSubmit}
+                  disabled={loading}
+                >
+                  {loading ? 'Verifying...' : 'Verify'}
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col w-full justify-center items-center mt-4">
-            {loading && <Loading />}
+            <div className="flex flex-col w-full justify-center items-center mt-4">
+              {loading && <Loading />}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <VerificationSuccess email={email} />
+      )}
     </>
   );
 }
