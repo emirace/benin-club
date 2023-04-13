@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
 
-const { NEXT_PUBLIC_MONGODB_URL } = process.env;
+const { MONGODB_URI } = process.env;
 
-if (!NEXT_PUBLIC_MONGODB_URL) {
+if (!MONGODB_URI) {
   throw new Error('no mongoDb url');
 }
-
+console.log(MONGODB_URI);
 const connectDB = async () => {
   try {
-    const { connection } = await mongoose.connect(NEXT_PUBLIC_MONGODB_URL);
+    const { connection } = await mongoose.connect(MONGODB_URI);
     if (connection.readyState === 1) {
       console.log('connected to DB');
       return Promise.resolve(true);

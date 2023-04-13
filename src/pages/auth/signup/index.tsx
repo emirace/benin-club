@@ -1,203 +1,99 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { buttonStyle } from '@/constants/styles';
+import Loading from '@/components/Loading';
 import EmailSection from '@/components/signup/EmailSection';
-import PersonalInfo from '@/components/signup/PersonalInfo';
-import StepsIndicator from '@/components/signup/StepsIndicator';
-import { initialErrorData, initialFormData, steps } from '@/constants/signup';
-import { ErrorData, FormData } from '@/types/signup';
-import SectionB from '@/components/signup/SectionB';
-import SectionC from '@/components/signup/SectionC';
-import SectionD from '@/components/signup/SectionD';
-import SectionE from '@/components/signup/SectionE';
+import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import { useState } from 'react';
 
-const MembershipForm = () => {
-  const router = useRouter();
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<ErrorData>(initialErrorData);
+export default function SignUp() {
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
 
-  useEffect(() => {
-    // Load saved form data from database when the component mounts
-    const fetchSavedData = async () => {
-      const response = await fetch('/api/membership');
-      if (response.ok) {
-        const savedData = await response.json();
-        setFormData(savedData);
-      }
-    };
-    fetchSavedData();
-  }, []);
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
 
   const handleSubmit = async () => {
+    setError('');
     setLoading(true);
-    const response = await fetch('/api/membership', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (response.ok) {
-      router.push('/membership/success');
-    } else {
-      alert('Error submitting form');
+    if (!email) {
+      setError('Please enter your email');
+      setLoading(false);
+      return;
     }
-    setLoading(false);
-  };
-
-  const handleNext = async () => {
-    if (step === 1) return setStep(step + 1);
-
-    setLoading(true);
-    // const response = await fetch('/api/membership', {
-    //   method: 'POST',
-    //   body: JSON.stringify(formData),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
-    // if (response.ok) {
-    //   setStep(step + 1);
-    // } else {
-    //   handleError('general', 'Error saving form data');
-    // }
-    setStep(step + 1);
-    setLoading(false);
-  };
-
-  const handlePrevious = () => {
-    setStep(step - 1);
-  };
-
-  const handleChange = (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    console.log(event);
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-    handleError('general', '');
-  };
-
-  const handleError = (name: string, value: string) => {
-    setError((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <EmailSection
-            formData={formData}
-            setFormData={setFormData}
-            error={error}
-            loading={loading}
-            onPrevious={handlePrevious}
-            onChange={handleChange}
-            onNext={handleNext}
-            handleError={handleError}
-          />
-        );
-
-      case 2:
-        return (
-          <PersonalInfo
-            formData={formData}
-            error={error}
-            setFormData={setFormData}
-            loading={loading}
-            onPrevious={handlePrevious}
-            onChange={handleChange}
-            onNext={handleNext}
-            handleError={handleError}
-          />
-        );
-
-      case 3:
-        return (
-          <SectionB
-            formData={formData}
-            error={error}
-            loading={loading}
-            onPrevious={handlePrevious}
-            setFormData={setFormData}
-            onChange={handleChange}
-            onNext={handleNext}
-            handleError={handleError}
-          />
-        );
-      case 4:
-        return (
-          <SectionC
-            formData={formData}
-            error={error}
-            loading={loading}
-            onPrevious={handlePrevious}
-            onChange={handleChange}
-            onNext={handleNext}
-            handleError={handleError}
-            setFormData={setFormData}
-          />
-        );
-      case 5:
-        return (
-          <SectionD
-            formData={formData}
-            error={error}
-            loading={loading}
-            onPrevious={handlePrevious}
-            onChange={handleChange}
-            onNext={handleNext}
-            handleError={handleError}
-            setFormData={setFormData}
-          />
-        );
-
-      case 6:
-        return (
-          <SectionE
-            formData={formData}
-            error={error}
-            loading={loading}
-            onPrevious={handlePrevious}
-            onChange={handleChange}
-            onNext={handleNext}
-            handleError={handleError}
-            setFormData={setFormData}
-          />
-        );
-      // more form sections...
+    try {
+      const response = await fetch('/api/auth/verify-email', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        // Show success message
+        setLoading(false);
+        setError('Verification email sent. Please check your inbox.');
+      } else {
+        const errorMessage = await response.json();
+        setError(errorMessage.message);
+        setLoading(false);
+      }
+    } catch (error) {
+      setError('Something went wrong, pls try again later');
+      console.log(error);
+      setLoading(false);
     }
   };
-
   return (
     <>
       <div className="h-20 w-full bg-black" />
-      <div className="mt-4 flex flex-col w-full justify-center items-center">
-        <StepsIndicator
-          currentStep={step}
-          setCurrentStep={setStep}
-          steps={steps}
-        />
-      </div>
-      <div className="flex  mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-5 mb-10  w-full">
+
+      <div className="flex mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-20 mb-10 w-full">
         <div className="bg-white px-4 md:px-8 pt-5 pb-4 sm:p-6 sm:pb-4">
-          {renderStep()}
-          <div className="flex flex-col w-full justify-center items-center">
-            {error?.general ? (
-              <div className="text-red text-sm">{error.general}</div>
+          <div>
+            <div className="flex md:flex-row gap-4 ">
+              <h2 className="text-2xl md:text-4xl uppercase font-base mb-2">
+                Sign
+              </h2>
+              <h2 className="text-2xl md:text-4xl uppercase font-bold mb-8 text-red">
+                Up
+              </h2>
+            </div>
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-medium mb-1"
+            >
+              Email
+            </label>
+            <input
+              className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+              type="email"
+              name="email"
+              onChange={onChange}
+              value={email}
+              onFocus={() => setError('')}
+            />
+            {error ? (
+              <div className="text-red text-sm mt-1">{error}</div>
             ) : (
-              <div className="h-5" />
+              <div className="text-gray-500 text-sm mt-1">
+                Please enter your email to receive a verification email.
+              </div>
             )}
-            {loading && <p>Loading...</p>}
+            <div className="flex justify-end ml-6 mt-4">
+              <button
+                className={loading ? buttonStyleOutline : buttonStyle}
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? 'Verifying...' : 'Verify'}
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-col w-full justify-center items-center mt-4">
+            {loading && <Loading />}
           </div>
         </div>
       </div>
     </>
   );
-};
-
-export default MembershipForm;
+}

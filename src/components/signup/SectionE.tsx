@@ -52,31 +52,6 @@ const SectionE = (props: SectionProps) => {
   const validation = () => {
     let isValid = true;
 
-    // Validate education
-    if (!formData.educations.length) {
-      handleError(
-        'educations',
-        'Please enter at least one educational qualification'
-      );
-      isValid = false;
-    } else {
-      for (let i = 0; i < formData.educations.length; i++) {
-        const education = formData.educations[i];
-        if (
-          !education.school ||
-          !education.dates ||
-          !education.qualifications
-        ) {
-          handleError(
-            'educations',
-            `Please fill in all fields for educational qualification ${i + 1}`
-          );
-          isValid = false;
-          break;
-        }
-      }
-    }
-
     if (isValid) {
       onNext();
     }

@@ -16,6 +16,7 @@ export default async function verifyEmail(
   }
 
   const { email } = req.body;
+  console.log(email);
 
   // Validate the email address
   if (!email) {
