@@ -14,9 +14,11 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
   const [errorMsg, setErrorMsg] = useState('');
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [passwordStrengthMsg, setPasswordStrengthMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(passwordStrengthMsg);
     if (passwordStrengthMsg) return;
 
     if (!password || !confirmPassword) {
@@ -70,7 +72,10 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
     return '';
   };
 
-  const passwordStrengthMsg = checkPasswordStrength(password);
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordStrengthMsg(checkPasswordStrength(event.target.value));
+    setPassword(event.target.value);
+  };
 
   return (
     <>
@@ -101,11 +106,11 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
                 name="password"
                 onFocus={() => setErrorMsg('')}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={onChange}
                 className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               />
               <p className="text-red h-5 text-sm">
-                {passwordStrengthMsg && password && passwordStrengthMsg}
+                {passwordStrengthMsg && passwordStrengthMsg}
               </p>
             </div>
             <div className="mb-4">
@@ -124,19 +129,21 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
                 className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               />
             </div>
-            <div className="mt-10 flex justify-end">
-              {loading ? (
-                <Loading />
-              ) : (
-                <button
-                  type="submit"
-                  className={`${buttonStyle} mt-5 md:mt-0 md:ml-5`}
-                >
-                  Reset Password
-                </button>
-              )}
+            <div className="mt-10 flex w-full justify-end ">
+              <button
+                type="submit"
+                className={`${
+                  loading ? buttonStyleOutline : buttonStyle
+                } mt-5 md:mt-0 md:ml-5`}
+                disabled={loading}
+              >
+                {loading ? 'Creating...' : 'Create Password'}
+              </button>
             </div>
           </form>
+          <div className="w-full flex justify-center items-center">
+            {loading ? <Loading /> : null}
+          </div>
         </div>
       </div>
     </>

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Types } from 'mongoose';
 
 import Vehicle, { IVehicle } from '@/models/vehicle.model';
-import connectDB from '@/utils/mongoose';
+import { connectDB } from '@/utils/mongoose';
 import { getServerSession } from 'next-auth';
 
 export default async function handler(

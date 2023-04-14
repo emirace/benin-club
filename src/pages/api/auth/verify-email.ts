@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 import { User } from '@/models/user.model';
 import sendEmail from '@/utils/sendEmail';
-import connectDB from '@/utils/mongoose';
+import { connectDB } from '@/utils/mongoose';
 
 const randomBytesAsync = promisify(randomBytes);
 
@@ -53,11 +53,13 @@ export default async function verifyEmail(
       token: code,
       expires: Date.now() + 60 * 60 * 1000, // Expires in 1 hour
     };
+    console.log(verificationToken);
 
     // If a user with this email already exists, update their verification token
     if (existingUser) {
       existingUser.verificationToken = verificationToken;
       await existingUser.save();
+      console.log('olduser');
     }
     // Otherwise, create a new user with the provided email and the verification token
     else {
@@ -67,10 +69,12 @@ export default async function verifyEmail(
         signupStep: 'EmailVerification',
       });
       await newUser.save();
+      console.log('newuser');
     }
 
     // Send an email to the user with instructions on how to complete the verification process
-    const verifyUrl = `${process.env.BASE_URL}/verify-email/${code}`;
+    const verifyUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password/${code}`;
+    console.log(verifyUrl);
     const message = `Please click the following link to verify your email address: ${verifyUrl}`;
     await sendEmail(email, 'Verify your email address', message);
 

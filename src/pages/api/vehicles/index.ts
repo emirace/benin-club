@@ -1,8 +1,8 @@
 import Vehicle, { IVehicle } from '@/models/vehicle.model';
-import connectDB from '@/utils/mongoose';
+import { connectDB } from '@/utils/mongoose';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import getNextVehicleId from '@/utils/utils';
 import { stringify } from 'querystring';
 

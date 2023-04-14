@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { hashPassword } from '@/utils/auth';
-import connectDB from '@/utils/mongoose';
+import { connectDB } from '@/utils/mongoose';
 import { User } from '@/models/user.model';
 
 export default async function handler(
@@ -12,6 +12,7 @@ export default async function handler(
   }
 
   const { password } = req.body;
+  const { token } = req.query;
 
   if (!password) {
     return res.status(422).json({ message: 'Missing password field' });
@@ -22,16 +23,21 @@ export default async function handler(
 
     const hashedPassword = await hashPassword(password);
 
-    const user = await User.findOneAndUpdate(
-      { resetToken: req.query.token },
-      { $set: { password: hashedPassword }, $unset: { resetToken: '' } }
-    );
+    const user = await User.findOne({
+      'verificationToken.token': token,
+      'verificationToken.expires': { $gt: Date.now() },
+    });
 
-    if (!user.value) {
+    if (!user) {
       return res
         .status(400)
         .json({ message: 'Invalid or expired reset token' });
     }
+
+    user.password = hashedPassword;
+    user.verificationToken = null;
+    user.signupStep = 'Payment';
+    await user.save();
 
     return res.status(200).json({ message: 'Password reset successful' });
   } catch (error) {

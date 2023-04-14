@@ -1,7 +1,6 @@
-"use client";
-import CommunicationPreferences from "@/components/CommunicationPreferences";
-import PrivacySettings from "@/components/PrivacySettings";
-import React, { useState } from "react";
+import CommunicationPreferences from '@/components/CommunicationPreferences';
+import PrivacySettings from '@/components/PrivacySettings';
+import React, { useState } from 'react';
 
 const PrivacySettingsSection: React.FC = () => {
   const [isPublic, setIsPublic] = useState(true);

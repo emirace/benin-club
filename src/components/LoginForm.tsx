@@ -2,6 +2,9 @@
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
 import Link from 'next/link';
 import { useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Loading from './Loading';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 type Props = {
   handleCloseModal?: () => void;
@@ -11,12 +14,42 @@ export default function LoginForm({ handleCloseModal }: Props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { data: session, status } = useSession();
+  console.log(session);
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(
-      `Email: ${email}, Password: ${password}, Remember me: ${rememberMe}`
-    );
+    try {
+      setLoading(true);
+      setError('');
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: `/account`,
+      });
+      if (result?.ok) {
+        //redirect to accouct
+        window.location.href = '/account';
+        setLoading(false);
+      } else {
+        setError('The password or email you entered is incorrect.');
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setError('Something went wrong, please try again later.');
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,12 +86,14 @@ export default function LoginForm({ handleCloseModal }: Props) {
           in
         </h2>
       </div>
+      <p className="text-red h-5 text-sm">{error && error}</p>
       <div>
         <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
           Email
         </label>
         <input
           type="email"
+          onFocus={() => setError('')}
           id="email"
           name="email"
           value={email}
@@ -66,21 +101,23 @@ export default function LoginForm({ handleCloseModal }: Props) {
           className="mt-1 block w-full rounded-md p-2 mb-2  shadow-lg  focus:border-red focus:ring-red focus:outline-red"
         />
       </div>
-      <div>
-        <label
-          htmlFor="password"
-          className="block text-gray-700 font-medium mb-1"
-        >
-          Password
-        </label>
+      <div className="relative">
         <input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           id="password"
           name="password"
+          onFocus={() => setError('')}
           value={password}
           onChange={(event) => setPassword(event.target.value)}
-          className="mt-1 block w-full p-2 mb-2  rounded-md md:w-96  shadow-lg focus:border-red focus:ring-red focus:outline-red"
+          className="mt-1 block w-full p-2 mb-2 rounded-md md:w-96 shadow-lg focus:border-red focus:ring-red focus:outline-red"
         />
+        <button
+          type="button"
+          className="absolute top-1/2 right-2 transform -translate-y-1/2 focus:outline-none"
+          onClick={togglePasswordVisibility}
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
       </div>
       <div className="flex items-center mb-2">
         <input
@@ -99,6 +136,9 @@ export default function LoginForm({ handleCloseModal }: Props) {
         </label>
       </div>
       <div className="flex justify-end ml-6">
+        <div className="flex flex-col w-full justify-center items-center ">
+          {(status === 'loading' || loading) && <Loading />}
+        </div>
         <button
           type="button"
           className={`bg-gray text-white py-2 px-4 border-2  rounded  mr-4 ${buttonStyleOutline}`}

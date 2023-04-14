@@ -40,15 +40,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   }
 
   try {
-    // const user = await User.findOne({
-    //   'verificationToken.token': token,
-    //   'verificationToken.expires': { $gt: Date.now() },
-    // });
+    const user = await User.findOne({
+      'verificationToken.token': token,
+      'verificationToken.expires': { $gt: Date.now() },
+    });
 
     return {
       props: {
-        // isValidToken: Boolean(user),
-        isValidToken: true,
+        isValidToken: Boolean(user),
+        // isValidToken: true,
         token,
       },
     };

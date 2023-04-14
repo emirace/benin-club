@@ -4,7 +4,7 @@ import QRCodeGenerator from '@/components/QRCodeGenerator';
 import Dashboard from '@/components/Dashboard';
 import VehicleList from '@/sections/VehicleList';
 import { GetServerSideProps } from 'next';
-import connectDB from '@/utils/mongoose';
+import { connectDB } from '@/utils/mongoose';
 import Vehicle, { IVehicle } from '@/models/vehicle.model';
 
 interface IBarcodeProps {

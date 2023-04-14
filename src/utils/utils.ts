@@ -1,5 +1,5 @@
 import Vehicle from '@/models/vehicle.model';
-import connectDB from './mongoose';
+import { connectDB } from './mongoose';
 
 export default async function getNextVehicleId() {
   try {
