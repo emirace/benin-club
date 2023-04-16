@@ -1,5 +1,5 @@
 import { connectDB } from '@/utils/mongoose';
-import { IUser, User } from '@/models/user.model';
+import User, { IUser } from '@/models/user.model';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function signup(
@@ -93,9 +93,9 @@ function validateUserData(user: IUser): string[] {
   // }
 
   // Validate payment info
-  if (!user.paymentInfo) {
-    errors.push('Payment info is required');
-  }
+  // if (!user.paymentInfo) {
+  //   errors.push('Payment info is required');
+  // }
 
   return errors;
 }

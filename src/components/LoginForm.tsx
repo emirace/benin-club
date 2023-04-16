@@ -18,7 +18,7 @@ export default function LoginForm({ handleCloseModal }: Props) {
   const [loading, setLoading] = useState(false);
 
   const { data: session, status } = useSession();
-  console.log(session);
+  console.log('session', session);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,7 +40,6 @@ export default function LoginForm({ handleCloseModal }: Props) {
       if (result?.ok) {
         //redirect to accouct
         window.location.href = '/account';
-        setLoading(false);
       } else {
         setError('The password or email you entered is incorrect.');
         setLoading(false);

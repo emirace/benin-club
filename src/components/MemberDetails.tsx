@@ -1,15 +1,16 @@
-import { Membership } from "@/types/membership";
-import { FaCreditCard, FaRegCalendarAlt } from "react-icons/fa";
+import { Membership } from '@/types/membership';
+import { FaCreditCard, FaRegCalendarAlt } from 'react-icons/fa';
+import moment from 'moment';
 
 interface MemberDetailsProps {
   membership: Membership;
 }
 
 const MemberDetails: React.FC<MemberDetailsProps> = ({ membership }) => {
-  const formattedJoinDate = new Date(membership.joinDate).toLocaleDateString();
-  const formattedRenewalDate = new Date(
-    membership.renewalDate
-  ).toLocaleDateString();
+  const formattedJoinDate = moment(membership.joinDate).format('MMM DD, YYYY');
+  const formattedRenewalDate = moment(membership.renewalDate).format(
+    'MMM DD, YYYY'
+  );
 
   return (
     <div className="flex flex-col border-t border-gray pt-8">
@@ -17,7 +18,7 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ membership }) => {
       <div className="flex items-center mb-4">
         <div
           className={`w-3 h-3 rounded-full ${
-            membership.status === "Active" ? "bg-green" : "bg-red"
+            membership.status === 'Active' ? 'bg-green' : 'bg-red'
           } mr-2`}
         ></div>
         <p>{membership.status} Member</p>

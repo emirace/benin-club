@@ -36,7 +36,7 @@ const FooterSection = () => {
             </li>
             <li>
               <FaPhone className="inline-block mr-2" />
-              (123) 456-7890
+              +234(0) 7059762558
             </li>
             <li>
               <FaEnvelope className="inline-block mr-2" />

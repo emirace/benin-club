@@ -83,7 +83,7 @@ const HorizontalCards: React.FC<Props> = ({ cards }) => {
           </p>
 
           <Link
-            href={`/sections/${card.link}`}
+            href={`/sections${card.link}`}
             className="flex justify-center items-center"
           >
             <button className="inline-block px-4 py-2 border border-red text-red rounded-lg mt-4 hover:bg-red hover:text-white transition duration-300 ease-in-out">

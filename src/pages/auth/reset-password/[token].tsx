@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { User } from '@/models/user.model';
+import User from '@/models/user.model';
 import ResetPasswordForm from '@/components/signup/ResetPasswordForm';
 
 interface Props {

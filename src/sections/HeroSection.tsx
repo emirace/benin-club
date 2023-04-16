@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import React from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import {
   headingVariants,
   heroVariants,
   paragraphVariants,
   buttonVariants,
-} from "@/utils/motion";
-import TypingAnimation from "@/components/TypingAnimation";
-import { typingText } from "@/constants/heroSection";
-import { buttonStyle } from "@/constants/styles";
-import Link from "next/link";
+} from '@/utils/motion';
+import TypingAnimation from '@/components/TypingAnimation';
+import { typingText } from '@/constants/heroSection';
+import { buttonStyle } from '@/constants/styles';
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
@@ -32,7 +32,7 @@ const HeroSection = () => {
       />
 
       <motion.div
-        className="absolute  top-0 left-0 h-full w-full bg-opacity-75 bg-black flex items-center justify-center "
+        className="absolute  top-0 left-0 h-full w-full bg-opacity-90 bg-black flex items-center justify-center "
         variants={heroVariants}
         initial="hidden"
         animate="visible"

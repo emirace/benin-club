@@ -1,10 +1,10 @@
-import { User } from '@/models/user.model';
 import clientPromise from '@/utils/mongoose';
 import { connectDB } from '@/utils/mongoose';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { comparePassword } from '@/utils/auth';
+import User, { IUser } from '@/models/user.model';
 
 export default NextAuth({
   providers: [
@@ -36,13 +36,28 @@ export default NextAuth({
         if (!isPasswordCorrect) {
           throw new Error('Invalid email & password');
         }
+        user.password = undefined;
+
         return user;
       },
     }),
   ],
   debug: process.env.NEXT_ENV === 'development',
   adapter: MongoDBAdapter(clientPromise),
-  session: { strategy: 'jwt' },
+  session: { strategy: 'jwt', maxAge: 30 * 24 * 60 * 60 },
   jwt: { secret: process.env.NEXTAUTH_SECRET },
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async session({ session, token }) {
+      session.user = token.user as IUser;
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user as unknown as IUser;
+      }
+      return token;
+    },
+  },
+  pages: { signIn: '/auth/signin' },
 });

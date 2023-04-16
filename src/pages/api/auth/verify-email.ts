@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
-import { User } from '@/models/user.model';
+import User from '@/models/user.model';
 import sendEmail from '@/utils/sendEmail';
 import { connectDB } from '@/utils/mongoose';
 

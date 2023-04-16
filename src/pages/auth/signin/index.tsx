@@ -1,6 +1,8 @@
 import LoginForm from '@/components/LoginForm';
 
-export default function SignIn() {
+interface Props {}
+
+const SignIn: React.FC<Props> = () => {
   return (
     <>
       <div className="h-24 w-full bg-black" />
@@ -9,4 +11,6 @@ export default function SignIn() {
       </div>
     </>
   );
-}
+};
+
+export default SignIn;

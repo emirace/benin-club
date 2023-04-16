@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { hashPassword } from '@/utils/auth';
 import { connectDB } from '@/utils/mongoose';
-import { User } from '@/models/user.model';
+import User from '@/models/user.model';
 
 export default async function handler(
   req: NextApiRequest,

@@ -6,6 +6,9 @@ import Image from 'next/image';
 import { navLinks } from '@/constants/navbar';
 import { buttonStyleW } from '@/constants/styles';
 import LoginForm from './LoginForm';
+import { useSession } from 'next-auth/react';
+import Loading from './Loading';
+import Dropdown from './Dropdown';
 
 interface NavLinkProps {
   navLink: {
@@ -18,6 +21,7 @@ interface NavLinkProps {
 }
 
 const Navbar = (): JSX.Element => {
+  const { data: session, status } = useSession();
   const [navbar, setNavbar] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -110,11 +114,24 @@ const Navbar = (): JSX.Element => {
                   navbar={navbar}
                 />
               ))}
-              <li className="relative pb-6  text-white py-2 md:px-6 text-center border-b-2 md:border-b-0  hover:bg-pink  border-pink  md:hover:text-red md:hover:bg-transparent uppercase font-bold text-sm">
-                <button onClick={handleOpenModal} className={buttonStyleW}>
-                  Membership
-                </button>
-              </li>
+              {status === 'loading' ? (
+                <Loading />
+              ) : (
+                <>
+                  {session?.user ? (
+                    <Dropdown user={session.user} />
+                  ) : (
+                    <li className="relative pb-6  text-white py-2 md:px-6 text-center border-b-2 md:border-b-0  hover:bg-pink  border-pink  md:hover:text-red md:hover:bg-transparent uppercase font-bold text-sm">
+                      <button
+                        onClick={handleOpenModal}
+                        className={buttonStyleW}
+                      >
+                        Membership
+                      </button>
+                    </li>
+                  )}
+                </>
+              )}
             </ul>
           </div>
         </div>
@@ -165,7 +182,7 @@ const NavLink: React.FC<NavLinkProps> = ({ navLink, setNavbar, navbar }) => {
         </Link>
       )}
       {dropdownOpen && (
-        <ul className="absolute capitalize md:text-left md top-full left-0 bg-black  z-20 text-white  w-full md:w-auto">
+        <ul className="absolute rounded-md capitalize md:text-left md top-full left-0 bg-black  z-20 text-white  w-full md:w-auto">
           {navLink.subLinks.length &&
             navLink.subLinks.map((subLink) => (
               <Link

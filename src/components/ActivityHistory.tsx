@@ -1,4 +1,5 @@
-import React from "react";
+import moment from 'moment';
+import React from 'react';
 
 interface Activity {
   id: number;
@@ -21,7 +22,7 @@ const ActivityHistory = ({ activities }: ActivityHistoryProps) => {
             <li key={activity.id} className="mb-4 md:mb-2">
               <div className="flex flex-col md:flex-row items-start md:items-center">
                 <span className="text-gray-600 mr-2 mb-1 md:mb-0">
-                  {new Date(activity.date).toLocaleDateString()}
+                  {moment(activity.date).format('MMM DD, YYYY')}
                 </span>
                 <div className="flex-1">
                   <span className="font-semibold block mb-1">
