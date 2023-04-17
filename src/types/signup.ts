@@ -17,21 +17,29 @@ export type SetFormData = (
   updateFormData: (prevFormData: FormData) => FormData
 ) => void;
 
+type Contact = {
+  address: string;
+  tel: string;
+};
+
 export interface FormData {
+  [key: string]:
+    | string
+    | number
+    | Child[]
+    | Education[]
+    | WorkExperience[]
+    | Contact;
   email: string;
   surname: string;
   firstName: string;
   dob: string;
   nationality: string;
-  homeAddress: string;
-  homeAddressTel: number;
-  permanentAddress: string;
-  permanentAddressTel: number;
-  occupation: string;
-  occupationTel: number;
+  home: Contact;
+  permanent: Contact;
+  occupation: Contact;
   employer: string;
-  businessAddress: string;
-  businessAddressTel: number;
+  business: Contact;
   nameOfBankers: string;
   employed: string;
   married: string;
@@ -58,6 +66,7 @@ export interface FormData {
   workExperiences: WorkExperience[];
   proposerPersonality: string;
   proposerKnown: string;
+  step: number;
 
   // add more fields as needed
 }
@@ -115,8 +124,8 @@ export interface Child {
 }
 export interface Education {
   school: string;
-  dates: string;
-  qualifications: string;
+  date: string;
+  degree: string;
 }
 
 export interface WorkExperience {

@@ -23,7 +23,9 @@ const MembershipForm = () => {
       const response = await fetch('/api/membership');
       if (response.ok) {
         const savedData = await response.json();
-        setFormData(savedData);
+        console.log('savedData', savedData);
+        setFormData((prev) => ({ ...prev, ...savedData }));
+        setStep(savedData.step);
       }
     };
     fetchSavedData();
@@ -32,7 +34,7 @@ const MembershipForm = () => {
   const handleSubmit = async () => {
     setLoading(true);
     const response = await fetch('/api/membership', {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify(formData),
       headers: {
         'Content-Type': 'application/json',
@@ -47,22 +49,26 @@ const MembershipForm = () => {
   };
 
   const handleNext = async () => {
-    if (step === 1) return setStep(step + 1);
-
+    if (step === 6) {
+      handleSubmit();
+      return;
+    }
+    //save current step
     setLoading(true);
-    // const response = await fetch('/api/membership', {
-    //   method: 'POST',
-    //   body: JSON.stringify(formData),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
-    // if (response.ok) {
-    //   setStep(step + 1);
-    // } else {
-    //   handleError('general', 'Error saving form data');
-    // }
-    setStep(step + 1);
+    const response = await fetch('/api/membership', {
+      method: 'PUT',
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(response);
+    if (response.ok) {
+      setStep(step + 1);
+      setFormData({ ...formData, step: step + 1 });
+    } else {
+      handleError('general', 'Error saving form data');
+    }
     setLoading(false);
   };
 

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
-import User from '@/models/user.model';
 import sendEmail from '@/utils/sendEmail';
+import User from '@/models/user.model';
 import { connectDB } from '@/utils/mongoose';
 
 const randomBytesAsync = promisify(randomBytes);
@@ -80,7 +80,7 @@ export default async function verifyEmail(
 
     return res.status(200).json({ message: 'Verification email sent' });
   } catch (error) {
-    console.error(error);
+    console.error('error', error);
     return res
       .status(500)
       .json({ message: 'Error sending verification email' });

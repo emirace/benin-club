@@ -9,15 +9,6 @@ export async function middleware(request: NextRequest) {
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
-  // if (
-  //   ['/auth/sigin', '/auth/signup'].some((path) =>
-  //     request.nextUrl.pathname.startsWith(path)
-  //   )
-  // ) {
-  //   if (token) {
-  //     return NextResponse.redirect(new URL('/', request.url));
-  //   }
-  // }
   if (!token) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }

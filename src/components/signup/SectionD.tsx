@@ -1,6 +1,6 @@
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
 import { Education, SectionProps, WorkExperience } from '@/types/signup';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const SectionD = (props: SectionProps) => {
   const {
@@ -14,16 +14,28 @@ const SectionD = (props: SectionProps) => {
   } = props;
 
   const [educations, setEducations] = useState<Education[]>([
-    { school: '', dates: '', qualifications: '' },
+    { school: '', date: '', degree: '' },
   ]);
 
   const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([
     { from: '', to: '', employee: '', position: '', jobDescription: '' },
   ]);
 
+  const updateFormdata = useCallback(() => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      educations,
+      workExperiences,
+    }));
+  }, [educations, setFormData, workExperiences]);
+
+  useEffect(() => {
+    updateFormdata();
+  }, [workExperiences, educations, updateFormdata]);
+
   const handleAddWorkExperience = () => {
-    setWorkExperiences([
-      ...workExperiences,
+    setWorkExperiences((prev) => [
+      ...prev,
       { from: '', to: '', employee: '', position: '', jobDescription: '' },
     ]);
   };
@@ -42,13 +54,12 @@ const SectionD = (props: SectionProps) => {
         i === index ? { ...education, [field]: value } : education
       )
     );
+    handleError('workExperiences', '');
   };
 
   const handleAddEducation = () => {
-    setEducations([
-      ...educations,
-      { school: '', dates: '', qualifications: '' },
-    ]);
+    setEducations((prev) => [...prev, { school: '', date: '', degree: '' }]);
+    handleError('educations', '');
   };
 
   const handleRemoveEducation = (index: number) => {
@@ -69,16 +80,12 @@ const SectionD = (props: SectionProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      educations,
-    }));
-
+    updateFormdata();
     validation();
   };
   const validation = () => {
     let isValid = true;
-
+    console.log(formData.workExperiences);
     // Validate education
     if (!formData.educations.length) {
       handleError(
@@ -89,11 +96,7 @@ const SectionD = (props: SectionProps) => {
     } else {
       for (let i = 0; i < formData.educations.length; i++) {
         const education = formData.educations[i];
-        if (
-          !education.school ||
-          !education.dates ||
-          !education.qualifications
-        ) {
+        if (!education.school || !education.date || !education.degree) {
           handleError(
             'educations',
             `Please fill in all fields for educational qualification ${i + 1}`
@@ -198,7 +201,7 @@ const SectionD = (props: SectionProps) => {
                 </div>
                 <div className="mb-4">
                   <label
-                    htmlFor={`dates-${index}`}
+                    htmlFor={`date-${index}`}
                     className="block text-gray-700 font-medium mb-2"
                   >
                     Dates Attended
@@ -206,19 +209,19 @@ const SectionD = (props: SectionProps) => {
                   <input
                     onFocus={() => handleError('educations', '')}
                     type="date"
-                    id={`dates-${index}`}
-                    name={`dates-${index}`}
-                    placeholder="Enter dates attended"
+                    id={`date-${index}`}
+                    name={`date-${index}`}
+                    placeholder="Enter date attended"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
-                      handleEducationChange(index, 'dates', e.target.value)
+                      handleEducationChange(index, 'date', e.target.value)
                     }
-                    value={education.dates}
+                    value={education.date}
                   />
                 </div>
                 <div className="mb-4">
                   <label
-                    htmlFor={`qualifications-${index}`}
+                    htmlFor={`degree-${index}`}
                     className="block text-gray-700 font-medium mb-2"
                   >
                     Qualifications Obtained
@@ -226,18 +229,14 @@ const SectionD = (props: SectionProps) => {
                   <input
                     onFocus={() => handleError('educations', '')}
                     type="text"
-                    id={`qualifications-${index}`}
-                    name={`qualifications-${index}`}
-                    placeholder="Enter qualifications obtained"
+                    id={`degree-${index}`}
+                    name={`degree-${index}`}
+                    placeholder="Enter degree obtained"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
-                      handleEducationChange(
-                        index,
-                        'qualifications',
-                        e.target.value
-                      )
+                      handleEducationChange(index, 'degree', e.target.value)
                     }
-                    value={education.qualifications}
+                    value={education.degree}
                   />
                 </div>
               </div>
@@ -290,7 +289,7 @@ const SectionD = (props: SectionProps) => {
               <div className="flex flex-col md:flex-row md:gap-8">
                 <div className="mb-4">
                   <label
-                    htmlFor={`dates-${index}`}
+                    htmlFor={`date-${index}`}
                     className="block text-gray-700 font-medium mb-2"
                   >
                     From

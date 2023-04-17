@@ -1,4 +1,4 @@
-import { Service } from "@/types/services";
+import { Service } from '@/types/services';
 import {
   FaDumbbell,
   FaFutbol,
@@ -7,63 +7,99 @@ import {
   FaTheaterMasks,
   FaUsers,
   FaUtensils,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 
 export const services: Service[] = [
   {
-    id: 1,
-    title: "Sports facilities",
+    id: 9,
+    title: 'Bar tending',
     description:
-      "We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.",
+      'We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.',
+    icon: FaFutbol,
+  },
+  {
+    id: 10,
+    title: 'Catering / Restaurant',
+    description:
+      'We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.',
+    icon: FaFutbol,
+  },
+  {
+    id: 11,
+    title: 'Grill / Barbecue',
+    description:
+      'We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.',
+    icon: FaFutbol,
+  },
+  {
+    id: 12,
+    title: 'Saloon',
+    description:
+      'We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.',
+    icon: FaFutbol,
+  },
+  {
+    id: 13,
+    title: 'Laundry',
+    description:
+      'We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.',
+    icon: FaFutbol,
+  },
+
+  {
+    id: 1,
+    title: 'Sports facilities',
+    description:
+      'We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.',
     icon: FaFutbol,
   },
   {
     id: 2,
-    title: "Fitness classes",
+    title: 'Fitness classes',
     description:
-      "Our fitness classes are led by experienced trainers and cover a range of disciplines, including yoga, Pilates, and strength training.",
+      'Our fitness classes are led by experienced trainers and cover a range of disciplines, including yoga, Pilates, and strength training.',
     icon: FaDumbbell,
   },
   {
     id: 3,
-    title: "Social events",
+    title: 'Social events',
     description:
-      "We host a variety of social events throughout the year, including parties, concerts, and cultural events.",
+      'We host a variety of social events throughout the year, including parties, concerts, and cultural events.',
     icon: FaTheaterMasks,
   },
   {
     id: 4,
-    title: "Entertainment",
+    title: 'Entertainment',
     description:
-      "We offer a range of entertainment options, including live music, movies, and theater performances.",
+      'We offer a range of entertainment options, including live music, movies, and theater performances.',
     icon: FaUsers,
   },
   {
     id: 5,
-    title: "Dining",
+    title: 'Dining',
     description:
-      "Our dining options include a variety of restaurants and cafes serving everything from casual snacks to gourmet cuisine.",
+      'Our dining options include a variety of restaurants and cafes serving everything from casual snacks to gourmet cuisine.',
     icon: FaUtensils,
   },
   {
     id: 6,
-    title: "Sports teams",
+    title: 'Sports teams',
     description:
-      "We offer a range of sports teams for members to join, including basketball, soccer, and volleyball.",
+      'We offer a range of sports teams for members to join, including basketball, soccer, and volleyball.',
     icon: FaFutbol,
   },
   {
     id: 7,
-    title: "Spa services",
+    title: 'Spa services',
     description:
-      "Our spa offers a range of treatments, including massages, facials, and body wraps, to help you relax and unwind.",
+      'Our spa offers a range of treatments, including massages, facials, and body wraps, to help you relax and unwind.',
     icon: FaSpa,
   },
   {
     id: 8,
-    title: "Personal training",
+    title: 'Personal training',
     description:
-      "Our experienced personal trainers will work with you to create a custom fitness plan and help you achieve your goals.",
+      'Our experienced personal trainers will work with you to create a custom fitness plan and help you achieve your goals.',
     icon: FaRunning,
   },
 ];

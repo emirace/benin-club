@@ -33,18 +33,12 @@ const SectionHistory = ({ data }: SectionHistoryProps) => {
           </p>
         </div>
         <div className="mt-10">
+          <h3 className="text-3xl md:text-5xl uppercase font-bold text-red">
+            {data.title} section
+          </h3>
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 md:pr-10">
-              <h3 className="text-3xl md:text-5xl uppercase font-bold text-black">
-                Details
-              </h3>
-              <p className="mt-4 text-lg text-gray-500">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis at
-                velit maximus, venenatis justo sed, accumsan felis. Fusce eu
-                justo vel dolor accumsan faucibus. Suspendisse lacinia, eros a
-                facilisis fermentum, odio massa viverra metus, eu feugiat quam
-                nisi sit amet erat.
-              </p>
+              <p className="mt-4 text-lg text-gray-500">{data.history}</p>
             </div>
             <div className="md:w-1/2 mt-10 md:mt-0">
               <Image
@@ -55,6 +49,7 @@ const SectionHistory = ({ data }: SectionHistoryProps) => {
               />
             </div>
           </div>
+          <p className="mt-4 text-lg text-gray-500">{data.history2}</p>
           <div className="mt-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shadow-xl rounded-t-lg p-4">
               {data.images.map((image) => (

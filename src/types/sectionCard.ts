@@ -5,4 +5,6 @@ export type SectionCard = {
   info: string;
   link: string;
   title: string;
+  history: string;
+  history2: string;
 };

@@ -5,12 +5,14 @@ import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Loading from './Loading';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 type Props = {
   handleCloseModal?: () => void;
 };
 
 export default function LoginForm({ handleCloseModal }: Props) {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -18,7 +20,6 @@ export default function LoginForm({ handleCloseModal }: Props) {
   const [loading, setLoading] = useState(false);
 
   const { data: session, status } = useSession();
-  console.log('session', session);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -39,7 +40,8 @@ export default function LoginForm({ handleCloseModal }: Props) {
       });
       if (result?.ok) {
         //redirect to accouct
-        window.location.href = '/account';
+        router.replace('/account');
+        if (handleCloseModal) return handleCloseModal();
       } else {
         setError('The password or email you entered is incorrect.');
         setLoading(false);

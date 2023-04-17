@@ -1,12 +1,12 @@
 import clientPromise from '@/utils/mongoose';
 import { connectDB } from '@/utils/mongoose';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { comparePassword } from '@/utils/auth';
 import User, { IUser } from '@/models/user.model';
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       id: 'credentials',
@@ -60,4 +60,6 @@ export default NextAuth({
     },
   },
   pages: { signIn: '/auth/signin' },
-});
+};
+
+export default NextAuth(authOptions);

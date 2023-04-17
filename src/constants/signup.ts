@@ -8,22 +8,20 @@ export const steps = [
   'Section D',
   'Section E',
 ];
-
+const contact = { address: '', tel: '' };
 export const initialFormData: FormData = {
+  step: 1,
   email: '',
   surname: '',
   firstName: '',
   dob: '',
   nationality: '',
-  homeAddress: '',
-  homeAddressTel: 0,
-  permanentAddress: '',
-  permanentAddressTel: 0,
-  occupation: '',
+  home: contact,
+  permanent: contact,
+  occupation: contact,
   occupationTel: 0,
   employer: '',
-  businessAddress: '',
-  businessAddressTel: 0,
+  business: contact,
   nameOfBankers: '',
   employed: '',
   married: '',

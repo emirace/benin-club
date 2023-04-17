@@ -1,4 +1,7 @@
 import LoginForm from '@/components/LoginForm';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { getServerSession } from 'next-auth';
 
 interface Props {}
 
@@ -14,3 +17,22 @@ const SignIn: React.FC<Props> = () => {
 };
 
 export default SignIn;
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

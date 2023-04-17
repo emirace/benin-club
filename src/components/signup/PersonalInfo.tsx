@@ -2,7 +2,44 @@ import { buttonStyle } from '@/constants/styles';
 import { SectionProps } from '@/types/signup';
 
 const PersonalInfo = (props: SectionProps) => {
-  const { formData, onChange, onNext, error, handleError } = props;
+  const { formData, onChange, onNext, error, handleError, setFormData } = props;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => {
+      let updatedBusiness = { ...prevFormData.business };
+      let updatedHome = { ...prevFormData.home };
+      let updatedPermanent = { ...prevFormData.permanent };
+      let updatedOccupation = { ...prevFormData.occupation };
+
+      if (name === 'homeAddress') {
+        updatedHome = { ...updatedHome, address: value };
+      } else if (name === 'homeAddressTel') {
+        updatedHome = { ...updatedHome, tel: value };
+      } else if (name === 'permanentAddress') {
+        updatedPermanent = { ...updatedPermanent, address: value };
+      } else if (name === 'permanentAddressTel') {
+        updatedPermanent = { ...updatedPermanent, tel: value };
+      } else if (name === 'occupationAddress') {
+        updatedOccupation = { ...updatedOccupation, address: value };
+      } else if (name === 'occupationTel') {
+        updatedOccupation = { ...updatedOccupation, tel: value };
+      } else if (name === 'businessAddress') {
+        updatedBusiness = { ...updatedBusiness, address: value };
+      } else if (name === 'businessTel') {
+        updatedBusiness = { ...updatedBusiness, tel: value };
+      }
+
+      return {
+        ...prevFormData,
+        home: updatedHome,
+        permanent: updatedPermanent,
+        occupation: updatedOccupation,
+        business: updatedBusiness,
+      };
+    });
+    handleError('general', '');
+  };
+
   const handleNext = () => {
     let isValid = true;
     if (!formData?.surname) {
@@ -21,30 +58,30 @@ const PersonalInfo = (props: SectionProps) => {
       handleError('nationality', 'Please enter your nationality');
       isValid = false;
     }
-    if (!formData?.homeAddress) {
+    if (!formData?.home.address) {
       handleError('homeAddress', 'Please enter your home address');
       isValid = false;
     }
-    if (!formData?.homeAddressTel) {
+    if (!formData?.home.tel) {
       handleError('homeAddressTel', 'Please enter your home telephone number');
       isValid = false;
     }
-    if (!formData?.permanentAddress) {
+    if (!formData?.permanent.address) {
       handleError('permanentAddress', 'Please enter your permanent address');
       isValid = false;
     }
-    if (!formData?.permanentAddressTel) {
+    if (!formData?.permanent.tel) {
       handleError(
         'permanentAddressTel',
         'Please enter your permanent address telephone number'
       );
       isValid = false;
     }
-    if (!formData?.occupation) {
+    if (!formData?.occupation.address) {
       handleError('occupation', 'Please enter your occupation');
       isValid = false;
     }
-    if (!formData?.occupationTel) {
+    if (!formData?.occupation.tel) {
       handleError(
         'occupationTel',
         'Please enter your occupation telephone number'
@@ -55,11 +92,11 @@ const PersonalInfo = (props: SectionProps) => {
       handleError('employer', 'Please enter your employer');
       isValid = false;
     }
-    if (!formData?.businessAddress) {
+    if (!formData?.business.address) {
       handleError('businessAddress', 'Please enter your business address');
       isValid = false;
     }
-    if (!formData?.businessAddressTel) {
+    if (!formData?.business.tel) {
       handleError(
         'businessAddressTel',
         'Please enter your business address telephone number'
@@ -178,8 +215,8 @@ const PersonalInfo = (props: SectionProps) => {
             className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
             name="homeAddress"
-            onChange={onChange}
-            value={formData?.homeAddress || ''}
+            onChange={handleChange}
+            value={formData.home.address || ''}
             onFocus={() => handleError('homeAddress', '')}
           />
           {error?.homeAddress ? (
@@ -199,8 +236,8 @@ const PersonalInfo = (props: SectionProps) => {
             className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
             name="homeAddressTel"
-            onChange={onChange}
-            value={formData?.homeAddressTel || ''}
+            onChange={handleChange}
+            value={formData.home.tel || ''}
             onFocus={() => handleError('homeAddressTel', '')}
           />
           {error?.homeAddressTel ? (
@@ -223,8 +260,8 @@ const PersonalInfo = (props: SectionProps) => {
             className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
             name="permanentAddress"
-            onChange={onChange}
-            value={formData?.permanentAddress || ''}
+            onChange={handleChange}
+            value={formData.permanent.address || ''}
             onFocus={() => handleError('permanentAddress', '')}
           />
           {error?.permanentAddress ? (
@@ -244,8 +281,8 @@ const PersonalInfo = (props: SectionProps) => {
             className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
             name="permanentAddressTel"
-            onChange={onChange}
-            value={formData?.permanentAddressTel || ''}
+            onChange={handleChange}
+            value={formData.permanent.tel || ''}
             onFocus={() => handleError('permanentAddressTel', '')}
           />
           {error?.permanentAddressTel ? (
@@ -267,9 +304,9 @@ const PersonalInfo = (props: SectionProps) => {
           <input
             className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
-            name="occupation"
-            onChange={onChange}
-            value={formData?.occupation || ''}
+            name="occupationAddress"
+            onChange={handleChange}
+            value={formData.occupation.address || ''}
             onFocus={() => handleError('occupation', '')}
           />
           {error?.occupation ? (
@@ -289,8 +326,8 @@ const PersonalInfo = (props: SectionProps) => {
             className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
             name="occupationTel"
-            onChange={onChange}
-            value={formData?.occupationTel || ''}
+            onChange={handleChange}
+            value={formData.occupation.tel || ''}
             onFocus={() => handleError('occupationTel', '')}
           />
           {error?.occupationTel ? (
@@ -335,8 +372,8 @@ const PersonalInfo = (props: SectionProps) => {
             className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
             name="businessAddress"
-            onChange={onChange}
-            value={formData?.businessAddress || ''}
+            onChange={handleChange}
+            value={formData.business.address || ''}
             onFocus={() => handleError('businessAddress', '')}
           />
           {error?.businessAddress ? (
@@ -347,7 +384,7 @@ const PersonalInfo = (props: SectionProps) => {
         </div>
         <div className="w-full md:w-1/3 md:pl-2 mt-4 md:mt-0">
           <label
-            htmlFor="businessAddressTel"
+            htmlFor="businessTel"
             className="block text-gray-700 font-medium mb-1"
           >
             Tel
@@ -355,9 +392,9 @@ const PersonalInfo = (props: SectionProps) => {
           <input
             className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
-            name="businessAddressTel"
-            onChange={onChange}
-            value={formData?.businessAddressTel || ''}
+            name="businessTel"
+            onChange={handleChange}
+            value={formData.business.tel || ''}
             onFocus={() => handleError('businessAddressTel', '')}
           />
           {error?.businessAddressTel ? (

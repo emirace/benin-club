@@ -6,7 +6,7 @@ const Services = () => {
     <div>
       <HeroSectionPage
         name="services"
-        desc="Morbi quis velit in lectus malesuada tincidunt a vel sapien. Fusce dignissim feugiat est ac lobortis"
+        desc="Unwind with luxurious amenities, delicious dining, and outstanding service. At our club, we are your hero for relaxation and entertainment."
         image="/images/manetKitchen/image1.JPG"
       />
       <ServicesSection />

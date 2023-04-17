@@ -13,39 +13,8 @@ const SectionE = (props: SectionProps) => {
     handleError,
   } = props;
 
-  const [educations, setEducations] = useState<Education[]>([
-    { school: '', dates: '', qualifications: '' },
-  ]);
-
-  const handleAddEducation = () => {
-    setEducations([
-      ...educations,
-      { school: '', dates: '', qualifications: '' },
-    ]);
-  };
-
-  const handleRemoveEducation = (index: number) => {
-    setEducations(educations.filter((_, i) => i !== index));
-  };
-
-  const handleEducationChange = (
-    index: number,
-    field: keyof Education,
-    value: string
-  ) => {
-    setEducations(
-      educations.map((education, i) =>
-        i === index ? { ...education, [field]: value } : education
-      )
-    );
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      educations,
-    }));
 
     validation();
   };
