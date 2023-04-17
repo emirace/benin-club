@@ -91,7 +91,7 @@ const SectionE = (props: SectionProps) => {
             Previous
           </button>
           <button type="submit" className={buttonStyle}>
-            Submit
+            Next
           </button>
         </div>
       </form>

@@ -41,7 +41,7 @@ const MembershipForm = () => {
       },
     });
     if (response.ok) {
-      router.push('/membership/success');
+      router.push('/account/success');
     } else {
       alert('Error submitting form');
     }
@@ -62,7 +62,6 @@ const MembershipForm = () => {
         'Content-Type': 'application/json',
       },
     });
-    console.log(response);
     if (response.ok) {
       setStep(step + 1);
       setFormData({ ...formData, step: step + 1 });
@@ -81,7 +80,6 @@ const MembershipForm = () => {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    console.log(event);
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
     handleError('general', '');

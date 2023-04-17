@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FiCheckCircle } from 'react-icons/fi';
 import React from 'react';
 
-const SuccessAnimation = () => {
+export const SuccessAnimation = () => {
   return (
     <motion.div
       className="flex justify-center items-center h-32 w-32 rounded-full bg-red"

@@ -42,8 +42,8 @@ const PersonalInfo = (props: SectionProps) => {
 
   const handleNext = () => {
     let isValid = true;
-    if (!formData?.surname) {
-      handleError('surname', 'Please enter your surname');
+    if (!formData?.surName) {
+      handleError('surName', 'Please enter your surname');
       isValid = false;
     }
     if (!formData?.firstName) {
@@ -120,7 +120,7 @@ const PersonalInfo = (props: SectionProps) => {
       <div className="flex flex-wrap mb-4">
         <div className="w-full md:w-1/2 md:pr-2">
           <label
-            htmlFor="surname"
+            htmlFor="surName"
             className="block text-gray-700 font-medium mb-1"
           >
             Surname
@@ -128,13 +128,13 @@ const PersonalInfo = (props: SectionProps) => {
           <input
             className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
-            name="surname"
+            name="surName"
             onChange={onChange}
-            value={formData?.surname || ''}
-            onFocus={() => handleError('surname', '')}
+            value={formData?.surName || ''}
+            onFocus={() => handleError('surName', '')}
           />
-          {error?.surname ? (
-            <div className="text-red text-sm">{error.surname}</div>
+          {error?.surName ? (
+            <div className="text-red text-sm">{error.surName}</div>
           ) : (
             <div className="h-5" />
           )}

@@ -6,6 +6,7 @@ import { membership } from '@/constants/membership';
 import Image from 'next/image';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWallet } from 'react-icons/fa';
 import PrivacySettings from './PrivacySettings';
+import { IUser } from '@/models/user.model';
 
 interface MembershipProfile {
   name: string;
@@ -27,24 +28,28 @@ const membershipProfile: MembershipProfile = {
   walletAmount: 500,
 };
 
-export default function PersonalInfo() {
+type PersonalInfoProps = {
+  user: IUser;
+};
+
+export default function PersonalInfo(props: PersonalInfoProps) {
+  const { user } = props;
   return (
     <div className="flex flex-col md:flex-row bg-white ">
       {/* Left Column */}
       <div className="relative flex flex-col items-center  md:w-1/3 py-8">
-        <Image
-          src={membershipProfile.imageUrl}
-          alt={membershipProfile.name}
-          width={200}
-          height={200}
-          className="rounded-full object-cover"
-        />
+        <div className="relative h-48 w-48">
+          <Image
+            src={user.image || '/images/profile.webp'}
+            alt={membershipProfile.name}
+            fill
+            className="rounded-full object-cover"
+          />
+        </div>
         <h1 className="text-2xl font-bold mt-4 uppercase">
-          {membershipProfile.name}
+          {user.firstName} {user.surName}
         </h1>
-        <h2 className="text-sm font-bold text-red">
-          {membershipProfile.membershipType} Member
-        </h2>
+        <h2 className="text-sm font-bold text-red">{user.level} Member</h2>
         {/* Contact Button */}
         <button className="bg-white text-red py-2 px-4 rounded-md shadow-md hover:bg-red hover:text-white transition duration-300 ease-in-out mb-4">
           Contact Member
@@ -65,22 +70,22 @@ export default function PersonalInfo() {
 
         {/* Personal Info */}
         <div className="mb-4 hidden md:block">
-          <h1 className="text-2xl font-bold mt-4">{membershipProfile.name}</h1>
-          <h2 className="text-sm font-bold text-red">
-            {membershipProfile.membershipType} Member
-          </h2>
+          <h1 className="text-2xl font-bold mt-4">
+            {user.firstName} {user.surName}
+          </h1>
+          <h2 className="text-sm font-bold text-red">{user.level} Member</h2>
         </div>
         <div className="flex items-center mb-4">
           <FaPhone className="mr-2" />
-          <p>123-456-7890</p>
+          <p>{user.home.tel}</p>
         </div>
         <div className="flex items-center mb-4">
           <FaEnvelope className="mr-2" />
-          <p>janesmith@example.com</p>
+          <p>{user.email}</p>
         </div>
         <div className="flex items-center mb-4">
           <FaMapMarkerAlt className="mr-2" />
-          <p>{membershipProfile.location}</p>
+          <p>{user.home.address}</p>
         </div>
 
         {/* Wallet Section */}
@@ -88,7 +93,7 @@ export default function PersonalInfo() {
           <FaWallet className="mr-2" />
           <p>
             Wallet Balance:
-            <span className="text-red">N{membershipProfile.walletAmount}</span>
+            <span className="text-red">N{0}</span>
           </p>
         </div>
 

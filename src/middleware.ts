@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
   if (!token) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
-  // console.log(token);
+  console.log(token);
 
   const user = (token as { user: IUser }).user;
 

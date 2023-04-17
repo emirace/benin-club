@@ -13,13 +13,15 @@ const SectionD = (props: SectionProps) => {
     handleError,
   } = props;
 
-  const [educations, setEducations] = useState<Education[]>([
-    { school: '', date: '', degree: '' },
-  ]);
+  const [educations, setEducations] = useState<Education[]>(
+    formData.educations || [{ school: '', date: '', degree: '' }]
+  );
 
-  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([
-    { from: '', to: '', employee: '', position: '', jobDescription: '' },
-  ]);
+  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>(
+    formData.workExperiences || [
+      { from: '', to: '', employee: '', position: '', jobDescription: '' },
+    ]
+  );
 
   const updateFormdata = useCallback(() => {
     setFormData((prevFormData) => ({

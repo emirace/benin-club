@@ -31,7 +31,7 @@ const Dropdown = (User: Props) => {
             />
           ) : (
             <Image
-              src="/images/image1.jpg"
+              src="/images/profile.webp"
               alt="profile image"
               fill
               className="rounded-full object-cover"

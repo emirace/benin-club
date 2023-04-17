@@ -12,7 +12,7 @@ const contact = { address: '', tel: '' };
 export const initialFormData: FormData = {
   step: 1,
   email: '',
-  surname: '',
+  surName: '',
   firstName: '',
   dob: '',
   nationality: '',
@@ -54,7 +54,7 @@ export const initialFormData: FormData = {
 export const initialErrorData: ErrorData = {
   general: '',
   email: '',
-  surname: '',
+  surName: '',
   firstName: '',
   dob: '',
   nationality: '',

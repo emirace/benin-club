@@ -11,10 +11,10 @@ export default function About() {
         image="/images/image1.jpg"
       />
       <div className="flex  mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center my-10 md:my-20  w-full">
-        <MissionVision />
+        <AboutSection />
       </div>
       <div className="flex  mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center my-10 md:my-20  w-full">
-        <AboutSection />
+        <MissionVision />
       </div>
     </div>
   );

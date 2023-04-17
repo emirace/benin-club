@@ -31,7 +31,7 @@ export interface FormData {
     | WorkExperience[]
     | Contact;
   email: string;
-  surname: string;
+  surName: string;
   firstName: string;
   dob: string;
   nationality: string;
@@ -74,7 +74,7 @@ export interface FormData {
 export interface ErrorData {
   general: string;
   email: string;
-  surname: string;
+  surName: string;
   firstName: string;
   dob: string;
   nationality: string;
