@@ -1,4 +1,4 @@
-import { Service } from "@/types/services";
+import { Service } from '@/types/services';
 
 interface ServiceCardProps {
   service: Service;
@@ -6,7 +6,7 @@ interface ServiceCardProps {
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
   return (
     <div
-      className="bg-red-500 rounded-lg shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-center items-center p-6"
+      className="bg-red-500 hover:bg-red hover:text-white cursor-pointer rounded-lg shadow-lg hover:shadow-xl transition duration-300 flex flex-col justify-center items-center p-6"
       key={service.id}
     >
       <div className="bg-red rounded-full p-3">
