@@ -8,23 +8,27 @@ export const addresses: Service[] = [
     title: 'Sports area',
     description: 'We offer a range of state-of the art facilities',
     icon: FaMapMarkerAlt,
+    link: '#',
   },
   {
     id: 2,
     title: 'club',
     description: address,
     icon: FaHome,
+    link: '#',
   },
   {
     id: 3,
     title: 'write us',
     description: emails,
     icon: FaEnvelope,
+    link: '#',
   },
   {
     id: 4,
     title: 'call us',
     description: tel,
     icon: FaPhone,
+    link: '#',
   },
 ];
