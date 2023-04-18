@@ -9,8 +9,12 @@ import SectionC from '@/components/signup/SectionC';
 import SectionD from '@/components/signup/SectionD';
 import SectionE from '@/components/signup/SectionE';
 import Declaration from '@/components/signup/Declaration';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 
-const MembershipForm = () => {
+interface Props {}
+const MembershipForm: NextPage<Props> = () => {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -34,7 +38,7 @@ const MembershipForm = () => {
   const handleSubmit = async () => {
     setLoading(true);
     const response = await fetch('/api/membership', {
-      method: 'PUT',
+      method: 'POST',
       body: JSON.stringify(formData),
       headers: {
         'Content-Type': 'application/json',
@@ -204,3 +208,31 @@ const MembershipForm = () => {
 };
 
 export default MembershipForm;
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    };
+  }
+
+  if (session.user.signupStep !== 'ProfileCreation') {
+    return {
+      redirect: {
+        destination: '//',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

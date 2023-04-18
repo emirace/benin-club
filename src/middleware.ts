@@ -1,6 +1,5 @@
 import { getToken } from 'next-auth/jwt';
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { IUser } from './models/user.model';
 
 // This function can be marked `async` if using `await` inside
@@ -12,9 +11,25 @@ export async function middleware(request: NextRequest) {
   if (!token) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
-  console.log(token);
+  // console.log(token);
 
   const user = (token as { user: IUser }).user;
+
+  const signupStepUrls = {
+    EmailVerification: '/signup',
+    VerifyingEmail: '/signup?emailSent=yes',
+    Payment: '/auth/form-payment',
+    ProfileCreation: '/auth/signup/form',
+    Verification: '/',
+    ClubPayment: '/',
+    Completed: null,
+  };
+
+  const signupStepUrl = signupStepUrls[user.signupStep];
+
+  if (signupStepUrl) {
+    return NextResponse.redirect(new URL(signupStepUrl, request.url));
+  }
 
   if (request.nextUrl.pathname.startsWith('/account/admin')) {
     if (user.role !== 'admin') {

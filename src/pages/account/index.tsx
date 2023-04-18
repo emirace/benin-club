@@ -10,7 +10,6 @@ interface AccountProps {
 }
 
 const Account: React.FC<AccountProps> = ({ user }) => {
-  console.log('user', user);
   return (
     <div>
       <div className="w-full h-24 bg-black" />
@@ -25,7 +24,6 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const session = await getServerSession(context.req, context.res, authOptions);
-  console.log(session);
 
   if (!session) {
     return {

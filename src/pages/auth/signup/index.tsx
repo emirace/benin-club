@@ -1,13 +1,17 @@
 import Loading from '@/components/Loading';
 import VerificationSuccess from '@/components/signup/VerificationSuccess';
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import { NextPage, NextPageContext } from 'next';
 import { useState } from 'react';
 
-export default function SignUp() {
+interface Props {
+  sent: boolean;
+}
+const SignUp: NextPage<Props> = ({ sent }) => {
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
-  const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [emailSent, setEmailSent] = useState<boolean>(sent);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -100,4 +104,11 @@ export default function SignUp() {
       )}
     </>
   );
-}
+};
+
+SignUp.getInitialProps = async ({ query }: NextPageContext) => {
+  const { emailSent } = query;
+
+  return { sent: emailSent ? true : false };
+};
+export default SignUp;

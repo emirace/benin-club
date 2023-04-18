@@ -86,7 +86,14 @@ export interface IUser extends Document {
   password: string;
   verificationToken: IVerificationToken | null;
   role: 'admin' | 'wallet' | 'user' | 'member';
-  signupStep: 'EmailVerification' | 'Payment' | 'ProfileCreation' | 'Completed';
+  signupStep:
+    | 'EmailVerification'
+    | 'VerifyingEmail'
+    | 'Verification'
+    | 'ClubPayment'
+    | 'Payment'
+    | 'ProfileCreation'
+    | 'Completed';
   wallet: IWallet;
 }
 
@@ -195,7 +202,15 @@ const userSchema = new Schema<IUser>(
     signupStep: {
       type: String,
       required: true,
-      enum: ['EmailVerification', 'Payment', 'ProfileCreation', 'Completed'],
+      enum: [
+        'EmailVerification',
+        'VerifyingEmail',
+        'Payment',
+        'ProfileCreation',
+        'Verification',
+        'ClubPayment',
+        'Completed',
+      ],
       default: 'EmailVerification',
     },
     wallet: { type: WalletSchema },

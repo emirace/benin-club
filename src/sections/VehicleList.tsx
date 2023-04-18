@@ -87,7 +87,7 @@ const VehicleList = ({ vehicles }: Props) => {
                 </button>
                 <button
                   className="text-red-600 hover:text-red-700"
-                  onClick={() => handleDelete(vehicle._id)}
+                  onClick={() => console.log('delete')}
                 >
                   Delete
                 </button>

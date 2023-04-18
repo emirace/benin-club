@@ -18,36 +18,33 @@ export default async function handler(
 
   try {
     await connectDB();
+    const user = await User.findOne({ email: session.user.email }).select(
+      '-password -_id'
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
 
     switch (req.method) {
       case 'GET':
-        console.log(session);
-        const user = await User.findOne({ email: session.user.email }).select(
-          '-password -_id'
-        );
-        if (!user) {
-          return res.status(404).json({ message: 'User not found.' });
-        }
-
         return res.status(200).json(user);
+
+      case 'POST':
+        user.sigupStep = 'Verification';
+        await user.save();
+        return res.status(200).json({ message: 'User created successfully.' });
 
       case 'PUT':
         const formData: FormData = req.body;
-        console.log(formData);
-        const currentUser: IUser | null = await User.findById(session.user._id);
-        if (!currentUser) {
-          return res.status(404).json({ message: 'User not found.' });
-        }
-        console.log(currentUser);
         Object.keys(formData).forEach((key) => {
           const value = formData[key];
           if (value !== '') {
-            currentUser[key] = value;
+            user[key] = value;
           }
         });
-        console.log(currentUser);
 
-        const updatedUser = await currentUser.save();
+        await user.save();
         return res.status(200).json({ message: 'User updated successfully.' });
 
       default:
