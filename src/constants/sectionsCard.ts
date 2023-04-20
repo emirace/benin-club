@@ -1,24 +1,24 @@
 import { SectionCard } from '@/types/sectionCard';
 
 export const billiards: SectionCard = {
-  imageUrl: '/images/billiards/image1.JPG',
+  imageUrl: '/images/billiards/image1.jpg',
   desc: 'Unleash your inner champion on our world-class billiard and snooker tables. Join our passionate community and experience the ultimate game room thrill.',
   title: 'Billiards & Snooker',
   info: 'With three full size tables Benin Club Snookers/Billiard Section is one of the oldest section in the club. It is a socially vibrant place in the club as tournament and parties are frequently held.',
   link: '/billiards',
   images: [
-    'image1.JPG',
-    'image2.JPG',
-    'image3.JPG',
-    'image4.JPG',
-    'image5.JPG',
+    'image1.jpg',
+    'image2.jpg',
+    'image3.jpg',
+    'image4.jpg',
+    'image5.jpg',
   ],
   history: '',
   history2: '',
 };
 
 export const busStop: SectionCard = {
-  imageUrl: '/images/busStop/image1.JPG',
+  imageUrl: '/images/busstop/image1.JPG',
   desc: "Welcome to the Parliament of Benin Club's bus stop, a socially vibrant space that enhances fellowship and interaction amongst members. Join us for comfortable seating, annual events like manifesto night, and a must-visit section that cuts across all segments of society.",
   title: 'Bus Stop',
   info: 'This section that can best be referred to as the parliament of Benin club with a very robust membership is a very comfortable place to seat. The section over the year has provided socially vibrant space for members of the club to learn. The section organizes the manifesto night of the club every year. You may not have satisfied your yearning for joining the club if you have not made a stop at the section. The section enhance fellowship and interaction amongst members, Membership cuts across all segments of the society.',
@@ -37,7 +37,7 @@ export const busStop: SectionCard = {
 };
 
 export const darts: SectionCard = {
-  imageUrl: '/images/dart/image1.jpg',
+  imageUrl: '/images/darts/image1.jpg',
   desc: 'Score a bullseye and elevate your game with our premier dart boards and professional-grade equipment. Join us for some casual fun or show off your skills in our welcoming and expertly crafted setup.',
   title: 'Darts',
   info: 'The section has the most modern facilities for the Game in the Country no wonder most of the best players in Nigeria are right here, that is life so when you step into Benin Club dart section you step into social life, they frequently travel for inter club tournament for this reason they have won many laurel for the club.',
@@ -57,7 +57,7 @@ export const golf: SectionCard = {
     'image1.JPG',
     'image2.JPG',
     'image3.JPG',
-    'image4.JPG',
+    'image4.jpg',
     'image5.JPG',
     'image6.JPG',
     'image7.JPG',
@@ -70,13 +70,13 @@ export const golf: SectionCard = {
 };
 
 export const lawnTennis: SectionCard = {
-  imageUrl: '/images/lawnTennis/image1.jpg',
+  imageUrl: '/images/lawntennis/image1.jpg',
   desc: '',
   title: 'Lawn Tennis',
   info: 'The club’s tennis section has one of the best facilities in the country. That is why the world class ATP Ogbe Hard Court Tournament with world class player participating has been hosted many time in the section. With the recently renovated tennis house/ cold room with eye pleasing interior décor under the Eddy Emma Osayi/ Osagie Osawe led executive, the tennis section is The place to be',
   link: '/lawntennis',
   images: [
-    'image1.JPG',
+    'image1.jpg',
     'image2.JPG',
     'image3.JPG',
     'image4.JPG',
@@ -166,7 +166,7 @@ export const swimming: SectionCard = {
     'image4.JPG',
     'image5.JPG',
     'image6.JPG',
-    'image7.JPG',
+    'image7.jpg',
     'image8.JPG',
   ],
   history: '',
