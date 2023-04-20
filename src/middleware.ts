@@ -20,13 +20,13 @@ export async function middleware(request: NextRequest) {
     VerifyingEmail: '/signup?emailSent=yes',
     Payment: '/auth/form-payment',
     ProfileCreation: '/auth/signup/form',
-    Verification: '/',
+    Verification: '/auth/success',
     ClubPayment: '/',
     Completed: null,
   };
 
   const signupStepUrl = signupStepUrls[user.signupStep];
-
+  console.log(signupStepUrl);
   if (signupStepUrl) {
     return NextResponse.redirect(new URL(signupStepUrl, request.url));
   }

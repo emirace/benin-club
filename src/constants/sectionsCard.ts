@@ -73,7 +73,7 @@ export const lawnTennis: SectionCard = {
   desc: '',
   title: 'Lawn Tennis',
   info: 'The club’s tennis section has one of the best facilities in the country. That is why the world class ATP Ogbe Hard Court Tournament with world class player participating has been hosted many time in the section. With the recently renovated tennis house/ cold room with eye pleasing interior décor under the Eddy Emma Osayi/ Osagie Osawe led executive, the tennis section is The place to be',
-  link: '/lawntennis',
+  link: '/lawnTennis',
   images: ['image1.JPG'],
   history: '',
   history2: '',

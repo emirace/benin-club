@@ -26,12 +26,6 @@ const RegistrationCompleted: React.FC<Props> = ({ name, verificationTime }) => {
         everyone.
       </p>
       <p className="mb-4">
-        If you&apos;re interested in the technology behind our website, we use
-        Next.js - a popular open-source React framework that allows us to build
-        fast, scalable web applications with ease. Feel free to learn more about
-        Next.js and how it powers our website.
-      </p>
-      <p className="mb-4">
         Once your account has been successfully verified, we will send you a
         confirmation email with further instructions on how to fully access our
         website and start enjoying all the benefits of membership.
@@ -40,11 +34,6 @@ const RegistrationCompleted: React.FC<Props> = ({ name, verificationTime }) => {
         Thank you for your patience during this verification process. We&apos;re
         excited to have you on board and we look forward to seeing you at our
         next event.
-      </p>
-      <p className="text-sm text-gray-500">
-        Best regards,
-        <br />
-        [Your Name]
       </p>
     </div>
   );

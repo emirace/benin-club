@@ -12,6 +12,7 @@ import Declaration from '@/components/signup/Declaration';
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import Loading from '@/components/Loading';
 
 interface Props {}
 const MembershipForm: NextPage<Props> = () => {
@@ -45,7 +46,7 @@ const MembershipForm: NextPage<Props> = () => {
       },
     });
     if (response.ok) {
-      router.push('/account/success');
+      router.push('/auth/success');
     } else {
       alert('Error submitting form');
     }
@@ -53,6 +54,7 @@ const MembershipForm: NextPage<Props> = () => {
   };
 
   const handleNext = async () => {
+    setError(initialErrorData);
     if (step === 6) {
       handleSubmit();
       return;
@@ -199,7 +201,7 @@ const MembershipForm: NextPage<Props> = () => {
             ) : (
               <div className="h-5" />
             )}
-            {loading && <p>Loading...</p>}
+            {loading && <Loading />}
           </div>
         </div>
       </div>

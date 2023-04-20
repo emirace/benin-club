@@ -31,20 +31,29 @@ export default async function handler(
         return res.status(200).json(user);
 
       case 'POST':
-        user.sigupStep = 'Verification';
-        await user.save();
+        const currentUser = await User.findOne({
+          email: session.user.email,
+        });
+
+        currentUser.signupStep = 'Verification';
+        console.log(currentUser);
+        await currentUser.save();
         return res.status(200).json({ message: 'User created successfully.' });
 
       case 'PUT':
         const formData: FormData = req.body;
+
+        const currentUser2 = await User.findOne({
+          email: session.user.email,
+        });
         Object.keys(formData).forEach((key) => {
           const value = formData[key];
           if (value !== '') {
-            user[key] = value;
+            currentUser2[key] = value;
           }
         });
 
-        await user.save();
+        await currentUser2.save();
         return res.status(200).json({ message: 'User updated successfully.' });
 
       default:
