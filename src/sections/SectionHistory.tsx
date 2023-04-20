@@ -104,6 +104,7 @@ const SectionHistory = ({ data }: SectionHistoryProps) => {
                 objectFit="contain"
                 width={1920}
                 height={1080}
+                className="object-contain"
               />
             </div>
           </div>

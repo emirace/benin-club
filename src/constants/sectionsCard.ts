@@ -41,7 +41,7 @@ export const darts: SectionCard = {
   desc: 'Score a bullseye and elevate your game with our premier dart boards and professional-grade equipment. Join us for some casual fun or show off your skills in our welcoming and expertly crafted setup.',
   title: 'Darts',
   info: 'The section has the most modern facilities for the Game in the Country no wonder most of the best players in Nigeria are right here, that is life so when you step into Benin Club dart section you step into social life, they frequently travel for inter club tournament for this reason they have won many laurel for the club.',
-  images: ['image1.jpg'],
+  images: ['image1.jpg', 'image2.JPG', 'image3.JPG'],
   link: '/darts',
   history: '',
   history2: '',
@@ -74,7 +74,7 @@ export const lawnTennis: SectionCard = {
   desc: '',
   title: 'Lawn Tennis',
   info: 'The club’s tennis section has one of the best facilities in the country. That is why the world class ATP Ogbe Hard Court Tournament with world class player participating has been hosted many time in the section. With the recently renovated tennis house/ cold room with eye pleasing interior décor under the Eddy Emma Osayi/ Osagie Osawe led executive, the tennis section is The place to be',
-  link: '/lawnTennis',
+  link: '/lawntennis',
   images: [
     'image1.JPG',
     'image2.JPG',
@@ -154,7 +154,7 @@ export const squash: SectionCard = {
 };
 
 export const swimming: SectionCard = {
-  imageUrl: '/images/swimming/image1.JPG',
+  imageUrl: '/images/swimmingpool/image1.JPG',
   desc: '',
   title: 'Swimming Pool',
   info: 'With a standard swimming pool, the section has created room for mony members to learn swimming which is. It is worthy to mention that his Excellency Mr. Godwin Nogheghase Obaseki learnt to swim here as a young boy years ago. It is a socially active place to be',
@@ -174,7 +174,7 @@ export const swimming: SectionCard = {
 };
 
 export const tableTennis: SectionCard = {
-  imageUrl: '/images/tableTennis/image1.JPG',
+  imageUrl: '/images/tabletennis/image1.JPG',
   desc: '',
   title: 'Table Tennis',
   info: 'With a fully air conditioned lounge well floored for playing and standard playing facilities and a taste fully furnished cool room for social and quiet moment undoubtedly it is a place to be.',
