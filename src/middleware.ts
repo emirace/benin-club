@@ -33,7 +33,7 @@ export async function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname.startsWith('/account/admin')) {
     if (user.role !== 'admin') {
-      const url = new URL(`/auth/signin`, request.url);
+      const url = new URL(`/account`, request.url);
       return NextResponse.rewrite(url);
     }
   }

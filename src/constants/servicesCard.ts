@@ -28,7 +28,7 @@ export const services: Service[] = [
     description:
       'Experience exquisite flavors and unparalleled service at our restaurant and catering services, where every dish is crafted with passion and creativity to delight your senses.',
     icon: FaUtensils,
-    link: 'bar',
+    link: 'catering',
   },
   {
     id: 11,
@@ -36,7 +36,7 @@ export const services: Service[] = [
     description:
       'Unleash your taste buds with our mouthwatering grill and barbecue services, expertly crafted with fresh ingredients and tantalizing aromas for an unforgettable culinary adventure.',
     icon: FaFire,
-    link: 'bar',
+    link: 'grill',
   },
   {
     id: 12,
@@ -44,7 +44,7 @@ export const services: Service[] = [
     description:
       'Step into the world of classic grooming and refined style at our saloon, where our expert barbers provide top-notch haircuts, shaves, and grooming services that leave you looking and feeling your best.',
     icon: FaCut,
-    link: 'bar',
+    link: 'saloon',
   },
   {
     id: 13,
@@ -52,7 +52,7 @@ export const services: Service[] = [
     description:
       'Leave the dirty work to us at our laundry services, where we use cutting-edge technology and provide top-notch customer service to exceed your expectations with fresh, clean clothes.',
     icon: FaTshirt,
-    link: 'bar',
+    link: 'laundry',
   },
 
   {
@@ -61,7 +61,6 @@ export const services: Service[] = [
     description:
       'We offer a range of state-of-the-art sports facilities, including basketball and tennis courts, swimming pools, and more.',
     icon: FaFutbol,
-    link: 'bar',
   },
   {
     id: 2,
@@ -69,7 +68,6 @@ export const services: Service[] = [
     description:
       'Our fitness classes are led by experienced trainers and cover a range of disciplines, including yoga, Pilates, and strength training.',
     icon: FaDumbbell,
-    link: 'bar',
   },
   {
     id: 3,
@@ -77,7 +75,6 @@ export const services: Service[] = [
     description:
       'We host a variety of social events throughout the year, including parties, concerts, and cultural events.',
     icon: FaTheaterMasks,
-    link: 'bar',
   },
   {
     id: 4,
@@ -85,7 +82,6 @@ export const services: Service[] = [
     description:
       'We offer a range of entertainment options, including live music, movies, and theater performances.',
     icon: FaUsers,
-    link: 'bar',
   },
   {
     id: 5,
@@ -93,7 +89,6 @@ export const services: Service[] = [
     description:
       'Our dining options include a variety of restaurants and cafes serving everything from casual snacks to gourmet cuisine.',
     icon: FaUtensils,
-    link: 'bar',
   },
   {
     id: 6,
@@ -101,7 +96,6 @@ export const services: Service[] = [
     description:
       'We offer a range of sports teams for members to join, including basketball, soccer, and volleyball.',
     icon: FaFutbol,
-    link: 'bar',
   },
   {
     id: 7,
@@ -109,7 +103,6 @@ export const services: Service[] = [
     description:
       'Our spa offers a range of treatments, including massages, facials, and body wraps, to help you relax and unwind.',
     icon: FaSpa,
-    link: 'bar',
   },
   {
     id: 8,
@@ -117,6 +110,5 @@ export const services: Service[] = [
     description:
       'Our experienced personal trainers will work with you to create a custom fitness plan and help you achieve your goals.',
     icon: FaRunning,
-    link: 'bar',
   },
 ];

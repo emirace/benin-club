@@ -5,5 +5,5 @@ export interface Service {
   title: string;
   description: string;
   icon: IconType;
-  link: string;
+  link?: string;
 }

@@ -213,6 +213,12 @@ const userSchema = new Schema<IUser>(
       ],
       default: 'EmailVerification',
     },
+    role: {
+      type: String,
+      required: true,
+      enum: ['admin', 'wallet', 'user', 'member'],
+      default: 'member',
+    },
     wallet: { type: WalletSchema },
     step: { type: Number, default: 1 },
   },
