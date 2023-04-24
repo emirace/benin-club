@@ -1,9 +1,28 @@
 import UpcomingEventCard from '@/components/UpComingEventCard';
-import { events } from '@/constants/events';
 import { buttonStyle } from '@/constants/styles';
+import Event from '@/types/events';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const UpcomingEventSection = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+
+  // Fetch upcoming events from an API
+  const fetchUpcomingEvents = async () => {
+    try {
+      const response = await fetch('<API_URL_HERE>');
+      const data = await response.json();
+      setEvents(data);
+    } catch (error) {
+      console.error('Error fetching upcoming events:', error);
+    }
+  };
+
+  // Call fetchUpcomingEvents when the component mounts
+  useEffect(() => {
+    fetchUpcomingEvents();
+  }, []);
+
   return (
     <div className="container mx-auto my-8">
       <div className="flex flex-col justify-center items-center">
@@ -17,15 +36,22 @@ const UpcomingEventSection = () => {
           </h2>
         </div>
       </div>
-
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {events.slice(0, 4).map((event) => (
-          <UpcomingEventCard key={event.id} {...event} />
-        ))}
-      </div>
-      <Link href={'/#'} className="flex justify-center items-center mt-8">
-        <button className={`${buttonStyle}`}>MORE EVENT</button>
-      </Link>
+      {events.length > 0 ? (
+        <>
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            {events.slice(0, 4).map((event) => (
+              <UpcomingEventCard key={event._id} {...event} />
+            ))}
+          </div>
+          <Link href={'/#'} className="flex justify-center items-center mt-8">
+            <button className={`${buttonStyle}`}>MORE EVENT</button>
+          </Link>
+        </>
+      ) : (
+        <div className="text-center py-8">
+          <p>There are no upcoming events at this time.</p>
+        </div>
+      )}
     </div>
   );
 };

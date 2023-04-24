@@ -1,9 +1,25 @@
-import NewsCard from "@/components/NewsCard";
-import { news } from "@/constants/newsCard";
-import { buttonStyle } from "@/constants/styles";
-import Link from "next/link";
+import NewsCard from '@/components/NewsCard';
+import { buttonStyle } from '@/constants/styles';
+import { News } from '@/types/newsCard';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const NewsSection = () => {
+  const [news, setNews] = useState<News[]>([]);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('<API_URL_HERE>');
+        const data = await response.json();
+        setNews(data);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      }
+    };
+    fetchNews();
+  }, []);
+
   return (
     <div className="container mx-auto my-8">
       <div className="flex flex-col justify-center items-center">
@@ -17,15 +33,22 @@ const NewsSection = () => {
           </h2>
         </div>
       </div>
-
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {news.slice(0, 4).map((n) => (
-          <NewsCard key={n.id} news={n} />
-        ))}
-      </div>
-      <Link href={"/#"} className="flex justify-center items-center mt-8">
-        <button className={`${buttonStyle}`}>MORE NEWS</button>
-      </Link>
+      {news.length > 0 ? (
+        <>
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            {news.slice(0, 4).map((n) => (
+              <NewsCard key={n._id} news={n} />
+            ))}
+          </div>
+          <Link href={'/#'} className="flex justify-center items-center mt-8">
+            <button className={`${buttonStyle}`}>MORE NEWS</button>
+          </Link>
+        </>
+      ) : (
+        <div className="text-center py-8">
+          <p>There are no news items available at this time.</p>
+        </div>
+      )}
     </div>
   );
 };

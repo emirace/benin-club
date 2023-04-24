@@ -8,6 +8,8 @@ import { events } from '@/constants/events';
 import Event from './Event';
 import Post from './Post';
 import { news } from '@/constants/newsCard';
+import Transaction from './Transaction';
+import { transactions } from '@/constants/transactions';
 
 function DashboardLayout(): JSX.Element {
   const [activePage, setActivePage] = useState('Dashboard');
@@ -37,7 +39,7 @@ function DashboardLayout(): JSX.Element {
       content = <Post posts={news} />;
       break;
     case 'Transactions':
-      content = <p>Here is a list of all upcoming events.</p>;
+      content = <Transaction transactions={transactions} />;
       break;
     case 'Vehicles':
       content = <p>Here is a list of all upcoming events.</p>;

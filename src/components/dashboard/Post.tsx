@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
+import { News } from '@/types/newsCard';
 
 interface PostProps {
-  posts: Array<{
-    id: number;
-    image: string;
-    title: string;
-    date: string;
-    tags: string[];
-    description: string;
-  }>;
+  posts: News[];
 }
 
 function Post(props: PostProps): JSX.Element {

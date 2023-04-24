@@ -1,6 +1,6 @@
-import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
-import Image from "next/image";
-import Link from "next/link";
+import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const MissionVision = () => {
   return (
@@ -22,20 +22,8 @@ const MissionVision = () => {
           mission & vision
         </h2>
 
-        <p className="text-gray-700 mb-4 text-justify">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam et
-          nisl euismod, feugiat quam eget, consectetur tortor. Vestibulum ut
-          commodo augue. Praesent sit amet sagittis lorem. adipiscing elit.
-          Aliquam et nisl euismod, feugiat quam eget, consectetur tortor.
-          Vestibulum ut commodo augue. Praesent sit amet sagittis lorem.
-        </p>
-        <p className="text-gray-700 mb-4 text-justify">
-          Duis sollicitudin ante vel neque pretium volutpat. Nam ut libero id
-          turpis sodales egestas nec vel velit. Sed sagittis, eros in efficitur
-          rhoncus, nisi est aliquam leo, sed bibendum turpis nunc id lacus.
-          adipiscing elit. Aliquam et nisl euismod, feugiat quam eget,
-          consectetur tortor. Vestibulum ut
-        </p>
+        <p className="text-gray-700 mb-4 text-justify"></p>
+        <p className="text-gray-700 mb-4 text-justify"></p>
         <div className="flex gap-3 mt-4 flex-col md:flex-row">
           <div>
             <Link href="/membership">
