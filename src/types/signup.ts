@@ -30,6 +30,7 @@ export interface FormData {
     | Education[]
     | WorkExperience[]
     | Contact;
+  memberId: string;
   email: string;
   surName: string;
   firstName: string;
@@ -72,6 +73,7 @@ export interface FormData {
 }
 
 export interface ErrorData {
+  memberId: string;
   general: string;
   email: string;
   surName: string;

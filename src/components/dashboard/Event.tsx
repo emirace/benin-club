@@ -1,29 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
 import { FiTrash } from 'react-icons/fi';
+import Modal from '../Modal';
+import EventsForm from './EventsForm';
+import Event from '@/types/events';
 
-interface EventProps {
-  events: Array<{
-    image: string;
-    name: string;
-    date: string;
-    time: string;
-    description: string;
-    location: string;
-  }>;
-}
+interface EventProps {}
 
-function Event(props: EventProps): JSX.Element {
-  const { events } = props;
-  const [searchQuery, setSearchQuery] = useState('');
+function Event(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [eventsPerPage] = useState(5);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Filtering events based on search query
-  const filteredEvents = events.filter((event) =>
-    event.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/dashboard/events');
+      const data = await response.json();
+      setEvents(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setFilteredEvents(events);
+  }, [events]);
 
   // Pagination logic
   const indexOfLastEvent = currentPage * eventsPerPage;
@@ -38,16 +50,40 @@ function Event(props: EventProps): JSX.Element {
     pageNumbers.push(i);
   }
 
+  const handleUpdateEventTable = async () => {
+    const response = await fetch('/api/dashboard/events');
+    const data = await response.json();
+    setEvents(data);
+  };
+
   const handlePageClick = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setSearchQuery(event.target.value);
+  // Filtering events based on search query
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerm = event.target.value.toLowerCase();
+    const filtered = events.filter((event) => {
+      const fullName = event.name.toLowerCase();
+      return fullName.includes(searchTerm);
+    });
+    setFilteredEvents(filtered);
+  };
+
+  const handleAddEvent = () => {
+    setShowModal(true); // <-- update state variable to show modal
+  };
+  const onClose = () => {
+    setShowModal(false); // <-- update state variable to show modal
+    handleUpdateEventTable();
+  };
 
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-medium">Events</h3>
-        <button className="px-3 py-2 bg-red text-white rounded-md hover:bg-red focus:outline-none focus:ring-2 focus:ring-red focus:ring-offset-2">
+        <button
+          className="px-3 py-2 bg-red text-white rounded-md hover:bg-red focus:outline-none focus:ring-2 focus:ring-red focus:ring-offset-2"
+          onClick={handleAddEvent}
+        >
           Add Event
         </button>
       </div>
@@ -56,7 +92,6 @@ function Event(props: EventProps): JSX.Element {
           type="text"
           placeholder="Search events..."
           className="border border-gray-200 rounded py-2 px-4 w-full md:w-64 focus:outline-none focus:border-red mb-0 md:ml-4"
-          value={searchQuery}
           onChange={handleSearch}
         />
       </div>
@@ -112,6 +147,10 @@ function Event(props: EventProps): JSX.Element {
           ))}
         </nav>
       </div>
+
+      <Modal isOpen={showModal} onClose={onClose}>
+        <EventsForm />
+      </Modal>
     </div>
   );
 }

@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import MainSection from './MainSection';
 import MembersTable from './MembersTable';
-import { members } from '@/constants/membership';
 import Dashboard from './Dashboard';
-import { events } from '@/constants/events';
 import Event from './Event';
 import Post from './Post';
 import { news } from '@/constants/newsCard';
@@ -30,10 +28,10 @@ function DashboardLayout(): JSX.Element {
       content = <Dashboard />;
       break;
     case 'Members':
-      content = <MembersTable members={members} />;
+      content = <MembersTable />;
       break;
     case 'Events':
-      content = <Event events={events} />;
+      content = <Event />;
       break;
     case 'Posts':
       content = <Post posts={news} />;

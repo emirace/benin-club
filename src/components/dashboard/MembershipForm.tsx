@@ -9,23 +9,27 @@ import SectionC from '@/components/signup/SectionC';
 import SectionD from '@/components/signup/SectionD';
 import SectionE from '@/components/signup/SectionE';
 import Declaration from '@/components/signup/Declaration';
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { NextPage } from 'next';
 import Loading from '@/components/Loading';
+import { buttonStyle } from '@/constants/styles';
 
-interface Props {}
-const MembershipForm: NextPage<Props> = () => {
+interface Props {
+  onClose: () => void;
+  id?: string;
+}
+const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
   const router = useRouter();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorData>(initialErrorData);
+  const [id2, setId] = useState(id || '');
 
   useEffect(() => {
     // Load saved form data from database when the component mounts
     const fetchSavedData = async () => {
-      const response = await fetch('/api/membership');
+      if (!id) return;
+      const response = await fetch(`/api/dashboard/members/${id}`);
       if (response.ok) {
         const savedData = await response.json();
         console.log('savedData', savedData);
@@ -37,38 +41,48 @@ const MembershipForm: NextPage<Props> = () => {
   }, []);
 
   const handleSubmit = async () => {
+    setError(initialErrorData);
+    if (!formData.memberId) {
+      handleError('memberId', 'Enter member Id');
+      return;
+    }
     setLoading(true);
-    const response = await fetch('/api/membership', {
+    const response = await fetch(`/api/dashboard/members`, {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: JSON.stringify({ memberId: formData.memberId }),
       headers: {
         'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
-      router.push('/auth/success');
+      const savedData = await response.json();
+      console.log(savedData);
+      setId(savedData._id);
+      setFormData((prev) => ({ ...prev, ...savedData }));
+      setStep(step + 1);
+      setFormData({ ...formData, step: step + 1 });
     } else {
-      alert('Error submitting form');
+      handleError('general', 'Error submitting form');
     }
     setLoading(false);
   };
 
   const handleNext = async () => {
     setError(initialErrorData);
-    if (step === 6) {
-      handleSubmit();
-      return;
-    }
+
     //save current step
     setLoading(true);
-    const response = await fetch('/api/membership', {
+    const response = await fetch(`/api/dashboard/members/${id2}`, {
       method: 'PUT',
-      body: JSON.stringify(formData),
+      body: JSON.stringify(
+        step === 6 ? { ...formData, signupStep: 'Verification' } : formData
+      ),
       headers: {
         'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
+      if (step === 6) return onClose();
       setStep(step + 1);
       setFormData({ ...formData, step: step + 1 });
     } else {
@@ -97,6 +111,42 @@ const MembershipForm: NextPage<Props> = () => {
 
   const renderStep = () => {
     switch (step) {
+      case 0:
+        return (
+          <>
+            <div className="w-full md:w-1/2 md:pr-2">
+              <label
+                htmlFor="memberId"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Member ID
+              </label>
+              <input
+                className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                type="text"
+                name="memberId"
+                onChange={handleChange}
+                value={formData?.memberId || ''}
+                onFocus={() => handleError('memberId', '')}
+              />
+              {error?.memberId ? (
+                <div className="text-red text-sm">{error.memberId}</div>
+              ) : (
+                <div className="h-5" />
+              )}
+            </div>
+            <div className="flex justify-end ml-6 mt-4">
+              <button
+                className={buttonStyle}
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                Next
+              </button>
+            </div>
+          </>
+        );
+
       case 1:
         return (
           <PersonalInfo
@@ -184,7 +234,6 @@ const MembershipForm: NextPage<Props> = () => {
 
   return (
     <>
-      <div className="h-20 w-full bg-black" />
       <div className="mt-4 flex flex-col w-full justify-center items-center">
         <StepsIndicator
           currentStep={step}
@@ -208,33 +257,4 @@ const MembershipForm: NextPage<Props> = () => {
     </>
   );
 };
-
 export default MembershipForm;
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-
-  if (session.user.signupStep !== 'ProfileCreation') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

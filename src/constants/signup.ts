@@ -11,6 +11,7 @@ export const steps = [
 const contact = { address: '', tel: '' };
 export const initialFormData: FormData = {
   step: 1,
+  memberId: '',
   email: '',
   surName: '',
   firstName: '',
@@ -52,6 +53,7 @@ export const initialFormData: FormData = {
 };
 
 export const initialErrorData: ErrorData = {
+  memberId: '',
   general: '',
   email: '',
   surName: '',

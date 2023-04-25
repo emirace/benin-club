@@ -12,7 +12,7 @@ const Modal: FC<Props> = ({ isOpen, onClose, children }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-40 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto  bg-black bg-opacity-50">
       <div className="flex items-center justify-center min-h-screen">
         <div
           className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"

@@ -1,31 +1,38 @@
 import { useEffect, useState } from 'react';
 import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
-import Image from 'next/image';
 import MemberTableRow from './MemberTableRow';
 import { buttonStyle } from '@/constants/styles';
+import { IUser } from '@/models/user.model';
+import Loading from '../Loading';
+import Modal from '../Modal';
+import MembershipForm from './MembershipForm';
 
-export interface Member {
-  id: number;
-  firstName: string;
-  lastName: string;
-  level: string;
-  position: string;
-  occupation: string;
-  email: string;
-  phone: string;
-  gender: string;
-  status: string;
-  picture: string;
-}
+interface MembersTableProps {}
 
-interface MembersTableProps {
-  members: Member[];
-}
-
-function MembersTable({ members }: MembersTableProps): JSX.Element {
-  const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+function MembersTable({}: MembersTableProps): JSX.Element {
+  const [filteredMembers, setFilteredMembers] = useState<IUser[]>([]);
+  const [members, setMembers] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [membersPerPage] = useState<number>(2);
+  const [membersPerPage] = useState<number>(20);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchMembers();
+  }, []);
+
+  const fetchMembers = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/dashboard/members');
+      const data = await response.json();
+      setMembers(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     setFilteredMembers(members);
@@ -59,8 +66,27 @@ function MembersTable({ members }: MembersTableProps): JSX.Element {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+  const handleAddMember = () => {
+    setShowModal(true); // <-- update state variable to show modal
+  };
+  const onClose = () => {
+    setShowModal(false); // <-- update state variable to show modal
+    handleUpdateMemberTable();
+  };
 
-  const handleAddMember = () => {};
+  const handleDelete = async (id: string) => {
+    const res = await fetch(`/api/dashboard/members/${id}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      setMembers(members.filter((member) => member._id !== id));
+    }
+  };
+  const handleUpdateMemberTable = async () => {
+    const response = await fetch('/api/dashboard/members');
+    const data = await response.json();
+    setMembers(data);
+  };
 
   const isMobile = window.matchMedia('(max-width: 640px)').matches;
 
@@ -81,9 +107,7 @@ function MembersTable({ members }: MembersTableProps): JSX.Element {
             <div className="bg-red text-white mx-4 p-2 rounded">
               <FiPlus
                 className="text-2xl cursor-pointer"
-                onClick={() => {
-                  // your code to handle the add member action
-                }}
+                onClick={handleAddMember}
               />
             </div>
           ) : (
@@ -93,18 +117,32 @@ function MembersTable({ members }: MembersTableProps): JSX.Element {
           )}
         </div>
       </div>
-      <div className="w-[calc(100vw_-_75px)] md:w-auto text-xs">
-        <div className="overflow-x-scroll">
-          <table className="w-full border-collapse">
-            <Header />
-            <tbody>
-              {currentMembers.map((member) => (
-                <MemberTableRow key={member.id} member={member} />
-              ))}
-            </tbody>
-          </table>
+      <Modal isOpen={showModal} onClose={onClose}>
+        <MembershipForm onClose={onClose} />
+      </Modal>
+      {isLoading ? (
+        <div className="w-full justify-center items-center">
+          <Loading />
         </div>
-      </div>
+      ) : (
+        <div className="w-[calc(100vw_-_75px)] md:w-auto text-xs">
+          <div className="overflow-x-scroll">
+            <table className="w-full border-collapse">
+              <Header />
+              <tbody>
+                {currentMembers.map((member) => (
+                  <MemberTableRow
+                    key={member.id}
+                    member={member}
+                    onDelete={handleDelete}
+                    handleUpdateMemberTable={handleUpdateMemberTable}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
       <div className="flex  items-center mt-4">
         <ul className="flex">
           {pageNumbers.map((number) => (
@@ -132,7 +170,7 @@ const Header = () => (
     <tr className="bg-gray-200 whitespace-nowrap">
       <th className="py-2 px-4 text-left">Member ID</th>
       <th className="py-2 px-4 text-left">Member Name</th>
-      <th className="py-2 px-4 text-left">Level</th>
+      <th className="py-2 px-4 text-left">Type</th>
       <th className="py-2 px-4 text-left">Position</th>
       <th className="py-2 px-4 text-left">Occupation</th>
       <th className="py-2 px-4 text-left">Email</th>

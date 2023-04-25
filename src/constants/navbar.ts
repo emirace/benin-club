@@ -9,7 +9,7 @@ export const navLinks = [
       { title: 'Darts', path: '/darts' },
       { title: 'Golf', path: '/golf' },
       { title: 'Lawn Tennis', path: '/lawntennis' },
-      { title: 'Leisure Games', path: '/leisuregames' },
+      { title: 'Leisure Games', path: '/leisure' },
       { title: 'Squash', path: '/squash' },
       { title: 'Swimming Pool', path: '/swimmingpool' },
       { title: 'Table Tennis', path: '/tabletennis' },

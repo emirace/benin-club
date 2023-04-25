@@ -39,6 +39,7 @@ interface IWallet {
 
 export interface IUser extends Document {
   [key: string]: any;
+  memberId: string;
   firstName: string;
   surName: string;
   step: number;
@@ -84,6 +85,8 @@ export interface IUser extends Document {
   joinDate: Date;
   renewalDate: Date;
   password: string;
+  gender: 'Male' | 'Female';
+  position: 'Member' | 'President' | 'Vice President';
   verificationToken: IVerificationToken | null;
   role: 'admin' | 'wallet' | 'user' | 'member';
   signupStep:
@@ -114,6 +117,7 @@ const WalletSchema = new Schema({
 
 const userSchema = new Schema<IUser>(
   {
+    memberId: { type: String },
     firstName: { type: String },
     surName: { type: String },
     lastName: { type: String },
@@ -181,13 +185,19 @@ const userSchema = new Schema<IUser>(
     ],
     proposerPersonality: { type: String },
     proposerKnown: { type: String },
-    image: { type: String },
-    email: { type: String, required: true },
+    image: { type: String, default: '/images/profile.webp' },
+    email: { type: String, default: null },
     status: {
       type: String,
       required: true,
       enum: ['Active', 'Inactive'],
       default: 'Inactive',
+    },
+    gender: {
+      type: String,
+      required: true,
+      enum: ['Male', 'Female'],
+      default: 'Female',
     },
     level: {
       type: String,
@@ -195,6 +205,13 @@ const userSchema = new Schema<IUser>(
       enum: ['Basic', 'Premium', 'VIP'],
       default: 'Basic',
     },
+    position: {
+      type: String,
+      required: true,
+      enum: ['Member', 'President', 'Vice President'],
+      default: 'Member',
+    },
+
     joinDate: { type: Date },
     renewalDate: { type: Date },
     password: { type: String },

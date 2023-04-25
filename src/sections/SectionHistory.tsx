@@ -38,7 +38,7 @@ const SectionHistory = ({ data }: SectionHistoryProps) => {
           </h3>
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 md:pr-10">
-              <p className="mt-4 text-lg text-gray-500">{data.history}</p>
+              <NewlineText text={data.history} />
             </div>
             <div className="md:w-1/2 mt-10 md:mt-0">
               <Image
@@ -49,7 +49,7 @@ const SectionHistory = ({ data }: SectionHistoryProps) => {
               />
             </div>
           </div>
-          <p className="mt-4 text-lg text-gray-500">{data.history2}</p>
+          <NewlineText text={data.history2} />
           <div className="mt-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 shadow-xl rounded-t-lg p-4">
               {data.images.map((image) => (
@@ -114,3 +114,16 @@ const SectionHistory = ({ data }: SectionHistoryProps) => {
   );
 };
 export default SectionHistory;
+function NewlineText(props: { text: string }): JSX.Element {
+  const lines = props.text.split('\n');
+  return (
+    <>
+      {lines.map((line, index) => (
+        <p className="mt-4 text-lg text-gray-500" key={index}>
+          {line}
+          {index !== lines.length - 1 && <br />}
+        </p>
+      ))}
+    </>
+  );
+}

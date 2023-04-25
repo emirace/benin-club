@@ -22,8 +22,18 @@ const MissionVision = () => {
           mission & vision
         </h2>
 
-        <p className="text-gray-700 mb-4 text-justify"></p>
-        <p className="text-gray-700 mb-4 text-justify"></p>
+        <h3 className="text-lg font-bold">Mission Statement</h3>
+        <p className="text-gray-700 mb-4 text-justify">
+          To be the foremost recreational family Club in the country and to
+          strive to contribute towards charitable deeds and other such endeavors
+          aimed at helping the needy and less-privileged in the society.
+        </p>
+        <h3 className="text-lg font-bold">Vision Statement</h3>
+
+        <p className="text-gray-700 mb-4 text-justify">
+          To entrench a family based recreational / social Club for the benefit
+          of all stakeholders.
+        </p>
         <div className="flex gap-3 mt-4 flex-col md:flex-row">
           <div>
             <Link href="/membership">

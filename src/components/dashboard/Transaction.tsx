@@ -103,7 +103,7 @@ function Transaction(props: TransactionProps): JSX.Element {
         />
       </div>
 
-      <table className="w-full whitespace-nowrap">
+      <table className="w-full whitespace-nowrap text-sm">
         <thead>
           <tr className="bg-gray-200">
             <th
@@ -197,7 +197,7 @@ function Transaction(props: TransactionProps): JSX.Element {
           ))}
         </tbody>
       </table>
-      <div className="flex justify-center items-center mt-4">
+      <div className="flex justify-start items-center mt-4">
         {pageNumbers.map((number) => (
           <button
             key={number}

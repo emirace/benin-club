@@ -1,26 +1,30 @@
 import { buttonStyleOutline, buttonStyleW } from '@/constants/styles';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaMapMarker, FaPhone, FaEnvelope } from 'react-icons/fa';
 
 const FooterSection = () => {
+  const { data: session, status } = useSession();
   return (
     <div>
-      <section className="bg-red py-4  ">
-        <div className="items-center justify-between flex flex-col md:flex-row  mx-auto lg:max-w-7xl px-4 md:px-8  w-full">
-          <div className="flex md:flex-row flex-col gap-0 md:gap-4 mb-2 md:mb-0 uppercase items-center">
-            <h2 className="text-white text-2xl md:text-4xl font-light">
-              Would you like to
-            </h2>
-            <h2 className="text-3xl md:text-5xl font-bold text-pink">
-              join the club?
-            </h2>
+      {!session && (
+        <section className="bg-red py-4  ">
+          <div className="items-center justify-between flex flex-col md:flex-row  mx-auto lg:max-w-7xl px-4 md:px-8  w-full">
+            <div className="flex md:flex-row flex-col gap-0 md:gap-4 mb-2 md:mb-0 uppercase items-center">
+              <h2 className="text-white text-2xl md:text-4xl font-light">
+                Would you like to
+              </h2>
+              <h2 className="text-3xl md:text-5xl font-bold text-pink">
+                join the club?
+              </h2>
+            </div>
+            <Link href="/auth/signup">
+              <button className={buttonStyleOutline}>Join Club</button>
+            </Link>
           </div>
-          <Link href="/auth/signup">
-            <button className={buttonStyleOutline}>Join Club</button>
-          </Link>
-        </div>
-      </section>
+        </section>
+      )}
       <footer className="relative py-12 bg-black">
         <div className="absolute inset-0">
           <Image
