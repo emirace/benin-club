@@ -8,8 +8,14 @@ import Post from './Post';
 import { news } from '@/constants/newsCard';
 import Transaction from './Transaction';
 import { transactions } from '@/constants/transactions';
+import { IUser } from '@/models/user.model';
 
-function DashboardLayout(): JSX.Element {
+interface DashboardLayoutProps {
+  user: IUser;
+}
+
+function DashboardLayout(props: DashboardLayoutProps): JSX.Element {
+  const { user } = props;
   const [activePage, setActivePage] = useState('Dashboard');
   const [isOpen, setIsOpen] = useState(true);
 
@@ -34,10 +40,10 @@ function DashboardLayout(): JSX.Element {
       content = <Event />;
       break;
     case 'Posts':
-      content = <Post posts={news} />;
+      content = <Post />;
       break;
     case 'Transactions':
-      content = <Transaction transactions={transactions} />;
+      content = <Transaction />;
       break;
     case 'Vehicles':
       content = <p>Here is a list of all upcoming events.</p>;
@@ -51,7 +57,11 @@ function DashboardLayout(): JSX.Element {
 
   return (
     <div className="flex h-screen ">
-      <Sidebar onNavClick={handleNavClick} activeMenuItem={activePage} />
+      <Sidebar
+        user={user}
+        onNavClick={handleNavClick}
+        activeMenuItem={activePage}
+      />
       <MainSection>{content}</MainSection>
     </div>
   );

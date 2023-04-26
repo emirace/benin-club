@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import User, { IUser } from '@/models/user.model';
 import { connectDB } from '@/utils/mongoose';
+import Event, { EventDocument } from '@/models/event.model';
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,33 +11,29 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const user: IUser | null = await User.findById(req.query.id);
-        if (!user) {
-          res.status(404).json({ message: 'User not found' });
+        const event: EventDocument | null = await Event.findById(req.query.id);
+        if (!event) {
+          res.status(404).json({ message: 'Event not found' });
         } else {
-          res.status(200).json(user);
+          res.status(200).json(event);
         }
         break;
       case 'PUT':
-        const updatedUser: IUser | null = await User.findByIdAndUpdate(
-          req.query.id,
-          req.body,
-          { new: true }
-        );
-        if (!updatedUser) {
-          res.status(404).json({ message: 'User not found' });
+        const updatedEvent: EventDocument | null =
+          await Event.findByIdAndUpdate(req.query.id, req.body, { new: true });
+        if (!updatedEvent) {
+          res.status(404).json({ message: 'Event not found' });
         } else {
-          res.status(200).json(updatedUser);
+          res.status(200).json(updatedEvent);
         }
         break;
       case 'DELETE':
-        const deletedUser: IUser | null = await User.findByIdAndDelete(
-          req.query.id
-        );
-        if (!deletedUser) {
-          res.status(404).json({ message: 'User not found' });
+        const deletedEvent: EventDocument | null =
+          await Event.findByIdAndDelete(req.query.id);
+        if (!deletedEvent) {
+          res.status(404).json({ message: 'Event not found' });
         } else {
-          res.status(200).json(deletedUser);
+          res.status(200).json(deletedEvent);
         }
         break;
       default:

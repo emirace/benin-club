@@ -119,7 +119,7 @@ const Navbar = (): JSX.Element => {
               ) : (
                 <>
                   {session?.user ? (
-                    <Dropdown user={session.user} />
+                    <Dropdown user={session.user} setNavbar={setNavbar} />
                   ) : (
                     <li className="relative pb-6  text-white py-2 md:px-6 text-center border-b-2 md:border-b-0  hover:bg-pink  border-pink  md:hover:text-red md:hover:bg-transparent uppercase font-bold text-sm">
                       <button

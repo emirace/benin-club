@@ -28,7 +28,7 @@ const FooterSection = () => {
       <footer className="relative py-12 bg-black">
         <div className="absolute inset-0">
           <Image
-            src="/images/image3.jpg"
+            src="/images/upperLonge/image1.jpg"
             alt="footer background"
             fill
             className="object-cover"

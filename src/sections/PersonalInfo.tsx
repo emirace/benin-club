@@ -5,7 +5,6 @@ import { activities } from '@/constants/activities';
 import { membership } from '@/constants/membership';
 import Image from 'next/image';
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWallet } from 'react-icons/fa';
-import PrivacySettings from './PrivacySettings';
 import { IUser } from '@/models/user.model';
 
 interface MembershipProfile {
@@ -99,7 +98,6 @@ export default function PersonalInfo(props: PersonalInfoProps) {
 
         <MemberDetails membership={membership} />
         <ActivityHistory activities={activities} />
-        <PrivacySettings />
       </div>
     </div>
   );

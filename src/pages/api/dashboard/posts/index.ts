@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connectDB } from '@/utils/mongoose';
-import Event, { EventDocument } from '@/models/event.model';
+import Post, { PostDocument } from '@/models/post.model';
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,15 +11,15 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const events: EventDocument[] = await Event.find();
-        res.status(200).json(events);
+        const posts: PostDocument[] = await Post.find();
+        res.status(200).json(posts);
         break;
       case 'POST':
         console.log(req.body);
-        const newUser: EventDocument = new Event(req.body);
-        console.log(newUser);
-        await newUser.save();
-        res.status(201).json(newUser);
+        const newPost: PostDocument = new Post(req.body);
+        console.log(newPost);
+        await newPost.save();
+        res.status(201).json(newPost);
         break;
       default:
         res.status(405).json({ message: 'Method Not Allowed' });

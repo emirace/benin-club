@@ -18,9 +18,7 @@ export default async function handler(
         const { memberId } = req.body;
         console.log(memberId);
         const newUser: IUser = new User({ memberId });
-        console.log(newUser);
         await newUser.save();
-        console.log(newUser);
         res.status(201).json(newUser);
         break;
       default:

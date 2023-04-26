@@ -4,7 +4,10 @@ import Image from 'next/image';
 import { FiTrash } from 'react-icons/fi';
 import Modal from '../Modal';
 import EventsForm from './EventsForm';
-import Event from '@/types/events';
+import Loading from '../Loading';
+import { EventDocument } from '@/models/event.model';
+import moment from 'moment';
+import EventRow from './EventRow';
 
 interface EventProps {}
 
@@ -12,8 +15,8 @@ function Event(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [eventsPerPage] = useState(5);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventDocument[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<EventDocument[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,6 +29,7 @@ function Event(): JSX.Element {
       const response = await fetch('/api/dashboard/events');
       const data = await response.json();
       setEvents(data);
+      console.log(data);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -76,6 +80,15 @@ function Event(): JSX.Element {
     handleUpdateEventTable();
   };
 
+  const handleDelete = async (id: string) => {
+    const res = await fetch(`/api/dashboard/events/${id}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      setEvents(events.filter((event) => event._id !== id));
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-4">
@@ -95,41 +108,24 @@ function Event(): JSX.Element {
           onChange={handleSearch}
         />
       </div>
-      <ul className="divide-y divide-gray">
-        {currentEvents.map((event, index) => (
-          <li key={index} className="py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <div className="relative w-16 h-16 rounded-md mr-4 overflow-hidden">
-                  <Image
-                    src={event.image}
-                    layout="fill"
-                    objectFit="cover"
-                    alt={event.name}
-                  />
-                </div>
-                <div>
-                  <h4 className="text-lg font-medium">{event.name}</h4>
-                  <p className="text-gray">
-                    {event.date} - {event.time}
-                  </p>
-                  <p className="text-gray">{event.location}</p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <button className="px-3 py-2 bg-gray text-white rounded-md hover:bg-gray focus:outline-none focus:ring-2 focus:ring-gray focus:ring-offset-2 ml-4">
-                  <FaEdit />
-                </button>
-
-                <button className="ml-2 px-3 py-2 bg-red text-white rounded-md hover:bg-red focus:outline-none focus:ring-2 focus:ring-red focus:ring-offset-2">
-                  <FiTrash />
-                </button>
-              </div>
-            </div>
-            <p className="text-gray mt-2">{event.description}</p>
-          </li>
-        ))}
-      </ul>
+      {isLoading ? (
+        <div className="w-full justify-center items-center">
+          <Loading />
+        </div>
+      ) : currentEvents.length === 0 ? (
+        <div className="text-center">No event</div>
+      ) : (
+        <ul className="divide-y divide-gray">
+          {currentEvents.map((event, index) => (
+            <EventRow
+              key={event._id}
+              event={event}
+              handleUpdateEventTable={handleUpdateEventTable}
+              onDelete={handleDelete}
+            />
+          ))}
+        </ul>
+      )}
       <div className="flex  items-center mt-8">
         <nav className="flex" aria-label="Pagination">
           {pageNumbers.map((pageNumber) => (
@@ -149,7 +145,7 @@ function Event(): JSX.Element {
       </div>
 
       <Modal isOpen={showModal} onClose={onClose}>
-        <EventsForm />
+        <EventsForm onClose={onClose} />
       </Modal>
     </div>
   );

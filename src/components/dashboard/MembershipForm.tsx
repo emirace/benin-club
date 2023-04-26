@@ -12,6 +12,7 @@ import Declaration from '@/components/signup/Declaration';
 import { NextPage } from 'next';
 import Loading from '@/components/Loading';
 import { buttonStyle } from '@/constants/styles';
+import UploadForm from '../signup/UploadForm';
 
 interface Props {
   onClose: () => void;
@@ -38,7 +39,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
       }
     };
     fetchSavedData();
-  }, []);
+  }, [id]);
 
   const handleSubmit = async () => {
     setError(initialErrorData);
@@ -216,6 +217,20 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
         );
 
       case 6:
+        return (
+          <UploadForm
+            formData={formData}
+            error={error}
+            loading={loading}
+            onPrevious={handlePrevious}
+            onChange={handleChange}
+            onNext={handleNext}
+            handleError={handleError}
+            setFormData={setFormData}
+          />
+        );
+
+      case 7:
         return (
           <Declaration
             formData={formData}

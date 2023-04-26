@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { TransactionDocument } from '@/models/transaction.model';
+import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { IWalletTransaction } from '@/models/walletTransaction.model';
 
-interface TransactionProps {
-  transactions: IWalletTransaction[];
-}
+interface TransactionProps {}
 
-function Transaction(props: TransactionProps): JSX.Element {
-  const { transactions } = props;
-  const [searchQuery, setSearchQuery] = useState('');
+function Transaction(): JSX.Element {
+  const [transactions, setTransactions] = useState<TransactionDocument[]>([]);
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    TransactionDocument[]
+  >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionsPerPage] = useState(5);
   const [sortConfig, setSortConfig] = useState({
@@ -16,11 +16,47 @@ function Transaction(props: TransactionProps): JSX.Element {
     direction: '',
     status: '',
   });
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/dashboard/transactions');
+      const data = await response.json();
+      setTransactions(data);
+      console.log(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setFilteredTransactions(transactions);
+  }, [transactions]);
+
+  const handleUpdateTransactionsTable = async () => {
+    const response = await fetch('/api/dashboard/transactions');
+    const data = await response.json();
+    setTransactions(data);
+  };
 
   // Filtering transactions based on search query
-  const filteredTransactions = transactions.filter((transaction) =>
-    transaction.memberName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchTerm = event.target.value.toLowerCase();
+    const filtered = transactions.filter((transaction) => {
+      const invoiceId =
+        `${transaction.invoiceId} ${transaction.memberName}`.toLowerCase();
+      return invoiceId.includes(searchTerm);
+    });
+    setFilteredTransactions(filtered);
+  };
 
   // Pagination logic
   const indexOfLastTransaction = currentPage * transactionsPerPage;
@@ -34,12 +70,6 @@ function Transaction(props: TransactionProps): JSX.Element {
   const sortedTransactions = [...currentTransactions];
   if (sortConfig.key) {
     sortedTransactions.sort((a, b) => {
-      if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === 'asc' ? -1 : 1;
-      }
-      if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === 'asc' ? 1 : -1;
-      }
       if (sortConfig.key === 'status') {
         switch (a.status) {
           case 'Completed':
@@ -51,6 +81,12 @@ function Transaction(props: TransactionProps): JSX.Element {
           default:
             return 0;
         }
+      }
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
       }
       return 0;
     });
@@ -66,9 +102,6 @@ function Transaction(props: TransactionProps): JSX.Element {
   }
 
   const handlePageClick = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setSearchQuery(event.target.value);
 
   const handleSort = (key: string, defaultDirection: string = 'asc') => {
     let direction = defaultDirection;
@@ -98,7 +131,6 @@ function Transaction(props: TransactionProps): JSX.Element {
           type="text"
           placeholder="Search transactions..."
           className="w-full px-4 py-2 border border-gray-300 rounded-md"
-          value={searchQuery}
           onChange={handleSearch}
         />
       </div>
@@ -145,7 +177,7 @@ function Transaction(props: TransactionProps): JSX.Element {
             <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
               Status
               <select
-                className="ml-2 border border-gray-400 rounded-md py-1 px-2 text-sm"
+                className="ml-2 border border-gray rounded-md py-1 px-2 text-sm"
                 onChange={(e) =>
                   setSortConfig({
                     key: 'status',
@@ -188,9 +220,6 @@ function Transaction(props: TransactionProps): JSX.Element {
               <td className="px-4 py-2">
                 <button className="mr-2  hover:text-yellow focus:outline-none">
                   <FaEdit />
-                </button>
-                <button className="text-red hover:text-red-700 focus:outline-none">
-                  <FaTrash />
                 </button>
               </td>
             </tr>

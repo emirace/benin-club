@@ -1,6 +1,6 @@
-import { IWalletTransaction } from '@/models/walletTransaction.model';
+import { ITransaction } from '@/models/transaction.model';
 
-export const transactions: IWalletTransaction[] = [
+export const transactions: ITransaction[] = [
   {
     _id: '1',
     invoiceId: 'INV001',

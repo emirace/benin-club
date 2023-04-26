@@ -5,21 +5,31 @@ import { IUser } from '@/models/user.model';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { buttonStyleOutline, buttonStyleW } from '@/constants/styles';
+import { profileNav } from '@/constants/navbar';
 
 interface Props {
   user: IUser;
+  setNavbar: (value: boolean) => void;
 }
 
 const Dropdown = (User: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = User;
+  const { user, setNavbar } = User;
+
+  const filteredNav = profileNav.filter(
+    (nav) => nav.role.includes(user.role) || nav.role.includes('member')
+  );
+
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
 
   return (
     <div className="relative">
-      <div className="flex items-center cursor-pointer" onClick={handleToggle}>
+      <div
+        className="flex items-center justify-center cursor-pointer"
+        onClick={handleToggle}
+      >
         <button className="h-14 w-14">
           {user?.image ? (
             <Image
@@ -33,8 +43,9 @@ const Dropdown = (User: Props) => {
             <Image
               src="/images/profile.webp"
               alt="profile image"
-              fill
-              className="rounded-full object-cover"
+              width={40}
+              height={40}
+              className="rounded-full"
             />
           )}
         </button>
@@ -49,25 +60,17 @@ const Dropdown = (User: Props) => {
             <div className="ml-2 py-2 font-bold text-red">
               Welcome, {user.firstName}!
             </div>
+            {filteredNav.map((nav) => (
+              <Link
+                key={nav.title}
+                href={nav.path}
+                className="block px-4 py-2 text-sm text-white hover:bg-pink capitalize font-bold"
+                onClick={() => setNavbar(false)}
+              >
+                {nav.title}
+              </Link>
+            ))}
 
-            <Link
-              href="/account"
-              className="block px-4 py-2 text-sm text-white hover:bg-pink capitalize font-bold"
-            >
-              Profile
-            </Link>
-            <Link
-              href="/account/activities"
-              className="block px-4 py-2 text-sm text-white hover:bg-pink capitalize font-bold"
-            >
-              Activities
-            </Link>
-            <Link
-              href="/account/settings"
-              className="block px-4 py-2 text-sm text-white hover:bg-pink capitalize font-bold"
-            >
-              Settings
-            </Link>
             <div className="w-full pt-4 pb-2 flex items-center justify-center">
               <button
                 onClick={() => signOut({ callbackUrl: '/auth/signin' })}
