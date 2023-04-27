@@ -21,7 +21,7 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ membership, user }) => {
       <div className="flex items-center mb-4">
         <div
           className={`w-3 h-3 rounded-full ${
-            membership.status === 'Active' ? 'bg-green' : 'bg-red'
+            user.status === 'Active' ? 'bg-green' : 'bg-red'
           } mr-2`}
         ></div>
         <p>{user.status} Member</p>
