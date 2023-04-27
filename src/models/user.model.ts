@@ -2,12 +2,19 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 interface IContact {
   address: string;
-  tel: number;
+  tel: string;
 }
 
 interface IChild {
   name: string;
   age: number;
+  school: string;
+  sex: 'male' | 'female';
+}
+
+interface IEntryFee {
+  fee: string;
+  bal: number;
 }
 
 interface IEducation {
@@ -37,18 +44,24 @@ interface IWallet {
   }[];
 }
 
-export interface IUser extends Document {
+export interface IUser {
   [key: string]: any;
   memberId: string;
   firstName: string;
   surName: string;
+  wife: string;
+  subcriptionFee: number;
+  subcriptionBal: number;
+  wifeId: string;
   step: number;
-  lastName: string;
   dob: string;
   employed: string;
+  entryFeePayment: number;
+  entryFeeBal: number;
   isNigeria: string;
   nationality: string;
-  home: IContact;
+  address: string;
+  tel: number;
   permanent: IContact;
   occupation: IContact;
   employer: string;
@@ -77,17 +90,22 @@ export interface IUser extends Document {
   workExperiences: IWorkExperience[];
   proposerPersonality: string;
   proposerKnown: string;
-  _id: string;
   image: string;
   email: string;
   status: 'Active' | 'Inactive';
-  level: 'Basic' | 'Premium' | 'VIP';
+  level:
+    | 'Member'
+    | 'Corporate Member'
+    | 'Old Member'
+    | 'Deseased Member'
+    | 'Transfered'
+    | 'Live Member'
+    | 'Honorary Member';
   joinDate: Date;
-  renewalDate: Date;
-  password: string;
+  password?: string;
   gender: 'Male' | 'Female';
   position: 'Member' | 'President' | 'Vice President';
-  verificationToken: IVerificationToken | null;
+  verificationToken?: IVerificationToken | null;
   role: 'admin' | 'wallet' | 'user' | 'member';
   signupStep:
     | 'EmailVerification'
@@ -97,7 +115,7 @@ export interface IUser extends Document {
     | 'Payment'
     | 'ProfileCreation'
     | 'Completed';
-  wallet: IWallet;
+  wallet?: IWallet;
 }
 
 const VerificationTokenSchema = new Schema({
@@ -115,18 +133,18 @@ const WalletSchema = new Schema({
   ],
 });
 
+export type UserDocument = IUser & Document;
+
 const userSchema = new Schema<IUser>(
   {
     memberId: { type: String },
-    firstName: { type: String },
-    surName: { type: String },
-    lastName: { type: String },
+    fullName: { type: String },
+    wife: { type: String },
+    wifeId: { type: String },
     dob: { type: String },
     nationality: { type: String },
-    home: {
-      address: { type: String },
-      tel: { type: Number },
-    },
+    address: { type: String },
+    tel: { type: Number },
     permanent: {
       address: { type: String },
       tel: { type: Number },
@@ -136,6 +154,10 @@ const userSchema = new Schema<IUser>(
       tel: { type: Number },
     },
     employer: { type: String },
+    entryFeePayment: { type: Number },
+    entryFeeBal: { type: Number },
+    subcriptionFee: { type: Number },
+    subcriptionBal: { type: Number },
     business: {
       address: { type: String },
       tel: { type: Number },
@@ -158,6 +180,8 @@ const userSchema = new Schema<IUser>(
       {
         name: { type: String },
         age: { type: Number },
+        school: { type: String },
+        sex: { type: String, enum: ['male', 'female'] },
       },
     ],
     addressYears: { type: String },
@@ -202,8 +226,16 @@ const userSchema = new Schema<IUser>(
     level: {
       type: String,
       required: true,
-      enum: ['Basic', 'Premium', 'VIP'],
-      default: 'Basic',
+      enum: [
+        'Member',
+        'Corporate Member',
+        'Old Member',
+        'Deseased Member',
+        'Transfered',
+        'Live Member',
+        'Honorary Member',
+      ],
+      default: 'Member',
     },
     position: {
       type: String,

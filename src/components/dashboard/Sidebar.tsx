@@ -25,7 +25,7 @@ function Sidebar(props: SidebarProps): JSX.Element {
           {filteredMenuItems.map((menuItem) => (
             <li
               key={menuItem.label}
-              className={`flex items-center justify-center md:justify-normal md:px-4 w-full md:w-auto py-2 ${
+              className={`flex items-center justify-center md:justify-normal cursor-pointer md:px-4 w-full md:w-auto py-2 ${
                 activeMenuItem === menuItem.label
                   ? 'bg-pink text-red'
                   : 'hover:text-red'

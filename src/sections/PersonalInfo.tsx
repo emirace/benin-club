@@ -40,7 +40,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         <div className="relative h-48 w-48">
           <Image
             src={user.image || '/images/profile.webp'}
-            alt={membershipProfile.name}
+            alt={user.firstName}
             fill
             className="rounded-full object-cover"
           />
@@ -48,7 +48,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         <h1 className="text-2xl font-bold mt-4 uppercase">
           {user.firstName} {user.surName}
         </h1>
-        <h2 className="text-sm font-bold text-red">{user.level} Member</h2>
+        <h2 className="text-sm font-bold text-red">{user.level}</h2>
         {/* Contact Button */}
         <button className="bg-white text-red py-2 px-4 rounded-md shadow-md hover:bg-red hover:text-white transition duration-300 ease-in-out mb-4">
           Contact Member
@@ -72,7 +72,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
           <h1 className="text-2xl font-bold mt-4">
             {user.firstName} {user.surName}
           </h1>
-          <h2 className="text-sm font-bold text-red">{user.level} Member</h2>
+          <h2 className="text-sm font-bold text-red"> {user.level}</h2>
         </div>
         <div className="flex items-center mb-4">
           <FaPhone className="mr-2" />
@@ -92,12 +92,12 @@ export default function PersonalInfo(props: PersonalInfoProps) {
           <FaWallet className="mr-2" />
           <p>
             Wallet Balance:
-            <span className="text-red">N{0}</span>
+            <span className="text-red ml-2 font-bold">N{0}</span>
           </p>
         </div>
 
-        <MemberDetails membership={membership} />
-        <ActivityHistory activities={activities} />
+        <MemberDetails membership={membership} user={user} />
+        {/* <ActivityHistory activities={activities} /> */}
       </div>
     </div>
   );

@@ -31,6 +31,7 @@ function Transaction(): JSX.Element {
       console.log(data);
       setIsLoading(false);
     } catch (error) {
+      setTransactions([]);
       console.error(error);
       setIsLoading(false);
     }

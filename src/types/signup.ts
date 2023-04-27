@@ -1,5 +1,7 @@
+import { IUser } from '@/models/user.model';
+
 export interface SectionProps {
-  formData: FormData;
+  formData: IUser;
   error: ErrorData;
   loading: boolean;
   onChange: (
@@ -14,7 +16,7 @@ export interface SectionProps {
 }
 
 export type SetFormData = (
-  updateFormData: (prevFormData: FormData) => FormData
+  updateFormData: (prevFormData: IUser) => IUser
 ) => void;
 
 type Contact = {
@@ -33,10 +35,13 @@ export interface FormData {
   memberId: string;
   email: string;
   surName: string;
+  wife: string;
+  wifeId: string;
   firstName: string;
   dob: string;
   nationality: string;
-  home: Contact;
+  address: string;
+  tel: string;
   permanent: Contact;
   occupation: Contact;
   employer: string;
@@ -68,7 +73,6 @@ export interface FormData {
   proposerPersonality: string;
   proposerKnown: string;
   step: number;
-
   // add more fields as needed
 }
 
@@ -77,11 +81,13 @@ export interface ErrorData {
   general: string;
   email: string;
   surName: string;
+  wife: string;
+  wifeId: string;
   firstName: string;
   dob: string;
   nationality: string;
-  homeAddress: string;
-  homeAddressTel: string;
+  address: string;
+  tel: string;
   permanentAddress: string;
   permanentAddressTel: string;
   occupation: string;

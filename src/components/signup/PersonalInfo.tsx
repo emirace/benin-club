@@ -11,9 +11,9 @@ const PersonalInfo = (props: SectionProps) => {
       let updatedPermanent = { ...prevFormData.permanent };
       let updatedOccupation = { ...prevFormData.occupation };
 
-      if (name === 'homeAddress') {
+      if (name === 'address') {
         updatedHome = { ...updatedHome, address: value };
-      } else if (name === 'homeAddressTel') {
+      } else if (name === 'tel') {
         updatedHome = { ...updatedHome, tel: value };
       } else if (name === 'permanentAddress') {
         updatedPermanent = { ...updatedPermanent, address: value };
@@ -59,11 +59,11 @@ const PersonalInfo = (props: SectionProps) => {
       isValid = false;
     }
     if (!formData?.home.address) {
-      handleError('homeAddress', 'Please enter your home address');
+      handleError('address', 'Please enter your home address');
       isValid = false;
     }
     if (!formData?.home.tel) {
-      handleError('homeAddressTel', 'Please enter your home telephone number');
+      handleError('tel', 'Please enter your home telephone number');
       isValid = false;
     }
     if (!formData?.permanent.address) {
@@ -206,7 +206,7 @@ const PersonalInfo = (props: SectionProps) => {
       <div className="flex flex-wrap mb-4">
         <div className="w-full md:w-2/3 md:pr-2">
           <label
-            htmlFor="homeAddress"
+            htmlFor="address"
             className="block text-gray-700 font-medium mb-1"
           >
             Home Address
@@ -214,34 +214,31 @@ const PersonalInfo = (props: SectionProps) => {
           <input
             className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
-            name="homeAddress"
+            name="address"
             onChange={handleChange}
             value={formData.home.address || ''}
-            onFocus={() => handleError('homeAddress', '')}
+            onFocus={() => handleError('address', '')}
           />
-          {error?.homeAddress ? (
-            <div className="text-red text-sm">{error.homeAddress}</div>
+          {error?.address ? (
+            <div className="text-red text-sm">{error.address}</div>
           ) : (
             <div className="h-5" />
           )}
         </div>
         <div className="w-full md:w-1/3 md:pl-2 mt-4 md:mt-0">
-          <label
-            htmlFor="homeAddressTel"
-            className="block text-gray-700 font-medium mb-1"
-          >
+          <label htmlFor="tel" className="block text-gray-700 font-medium mb-1">
             Tel
           </label>
           <input
             className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
             type="text"
-            name="homeAddressTel"
+            name="tel"
             onChange={handleChange}
             value={formData.home.tel || ''}
-            onFocus={() => handleError('homeAddressTel', '')}
+            onFocus={() => handleError('tel', '')}
           />
-          {error?.homeAddressTel ? (
-            <div className="text-red text-sm">{error.homeAddressTel}</div>
+          {error?.tel ? (
+            <div className="text-red text-sm">{error.tel}</div>
           ) : (
             <div className="h-5" />
           )}

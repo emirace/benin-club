@@ -2,10 +2,11 @@ import { Child, FormData, SetFormData } from '@/types/signup';
 import { useState } from 'react';
 import Modal from '../Modal';
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import { IUser } from '@/models/user.model';
 
 type ChildrenFieldProps = {
   setFormData: SetFormData;
-  formData: FormData;
+  formData: IUser;
 };
 
 const ChildrenField = ({ setFormData, formData }: ChildrenFieldProps) => {

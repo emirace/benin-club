@@ -1,9 +1,11 @@
 import { IUser } from '@/models/user.model';
 import Image from 'next/image';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { RiRefreshLine } from 'react-icons/ri';
 import Modal from '../Modal';
 import MembershipForm from './MembershipForm';
 import { useState } from 'react';
+import ResendPassword from './ResendPassword';
 
 interface MemberTableRowProps {
   member: IUser;
@@ -19,6 +21,7 @@ function MemberTableRow({
   let statusClassName = '';
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [resetPassword, setResetPassword] = useState(false);
 
   const handleDelete = () => {
     setShowConfirm(true);
@@ -40,6 +43,14 @@ function MemberTableRow({
 
   const onOpen = () => {
     setShowModal(true); // <-- update state variable to show modal
+  };
+
+  const onCloseP = () => {
+    setResetPassword(false); // <-- update state variable to show modal
+  };
+
+  const onOpenP = () => {
+    setResetPassword(true); // <-- update state variable to show modal
   };
 
   switch (member.status) {
@@ -88,8 +99,12 @@ function MemberTableRow({
               <button className="mr-2 " onClick={onOpen}>
                 <FiEdit2 />
               </button>
-              <button className="text-red" onClick={handleDelete}>
+              <button className="text-red mr-2" onClick={handleDelete}>
                 <FiTrash2 />
+              </button>
+
+              <button className="text-yellow" onClick={onOpenP}>
+                <RiRefreshLine />
               </button>
             </div>
           ) : (
@@ -105,6 +120,10 @@ function MemberTableRow({
 
       <Modal isOpen={showModal} onClose={onClose}>
         <MembershipForm onClose={onClose} id={member._id} />
+      </Modal>
+
+      <Modal isOpen={resetPassword} onClose={onCloseP}>
+        <ResendPassword id={member._id} />
       </Modal>
     </>
   );

@@ -1,4 +1,5 @@
-import { ErrorData, FormData } from '@/types/signup';
+import { IUser } from '@/models/user.model';
+import { ErrorData } from '@/types/signup';
 
 export const steps = [
   'Email',
@@ -9,16 +10,32 @@ export const steps = [
   'Section E',
 ];
 const contact = { address: '', tel: '' };
-export const initialFormData: FormData = {
+export const initialFormData: IUser = {
   step: 1,
   memberId: '',
   email: '',
   surName: '',
   firstName: '',
+  wife: '',
+  gender: 'Male',
+  position: 'Member',
+  subcriptionFee: 0,
+  role: 'member',
+  signupStep: 'ProfileCreation',
+  subcriptionBal: 0,
+  wifeId: '',
   dob: '',
   nationality: '',
   home: contact,
   permanent: contact,
+  entryFeePayment: 0,
+  entryFeeBal: 0,
+  address: '',
+  image: '',
+  status: 'Inactive',
+  level: 'Member',
+  joinDate: new Date(),
+  tel: 0,
   occupation: contact,
   occupationTel: 0,
   employer: '',
@@ -60,8 +77,6 @@ export const initialErrorData: ErrorData = {
   firstName: '',
   dob: '',
   nationality: '',
-  homeAddress: '',
-  homeAddressTel: '',
   permanentAddress: '',
   permanentAddressTel: '',
   occupation: '',
@@ -70,6 +85,10 @@ export const initialErrorData: ErrorData = {
   businessAddress: '',
   businessAddressTel: '',
   nameOfBankers: '',
+  wife: '',
+  wifeId: '',
+  address: '',
+  tel: '',
   employed: '',
   married: '',
   isNigeria: '',

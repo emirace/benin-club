@@ -13,6 +13,7 @@ import { NextPage } from 'next';
 import Loading from '@/components/Loading';
 import { buttonStyle } from '@/constants/styles';
 import UploadForm from '../signup/UploadForm';
+import { IUser } from '@/models/user.model';
 
 interface Props {
   onClose: () => void;
@@ -21,7 +22,7 @@ interface Props {
 const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
   const router = useRouter();
   const [step, setStep] = useState(0);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<IUser>(initialFormData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorData>(initialErrorData);
   const [id2, setId] = useState(id || '');
@@ -249,15 +250,15 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
 
   return (
     <>
-      <div className="mt-4 flex flex-col w-full justify-center items-center">
+      <div className="mt-4 flex flex-col w-full justify-center items-center ">
         <StepsIndicator
           currentStep={step}
           setCurrentStep={setStep}
           steps={steps}
         />
       </div>
-      <div className="flex  mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-5 mb-10  w-full">
-        <div className="bg-white px-4 md:px-8 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <div className="flex text-base  mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-5 mb-10  w-full">
+        <div className="bg-white px-4 md:px-8 pt-5 pb-4 sm:p-6 sm:pb-4 ">
           {renderStep()}
           <div className="flex flex-col w-full justify-center items-center">
             {error?.general ? (

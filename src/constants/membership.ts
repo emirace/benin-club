@@ -7,8 +7,8 @@ export const membership: Membership = {
   email: 'johndoe@example.com',
   status: 'Active',
   level: 'Premium',
-  joinDate: '2022-01-01T00:00:00Z',
-  renewalDate: '2023-01-01T00:00:00Z',
+  joinDate: '2011-04-24T00:00:00Z',
+  renewalDate: '2024-01-01T00:00:00Z',
   paymentInfo: '**** **** **** 1234',
   wallet: {
     balance: 500,

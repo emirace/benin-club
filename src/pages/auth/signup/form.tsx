@@ -13,12 +13,13 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import Loading from '@/components/Loading';
+import { IUser } from '@/models/user.model';
 
 interface Props {}
 const MembershipForm: NextPage<Props> = () => {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<IUser>(initialFormData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorData>(initialErrorData);
 

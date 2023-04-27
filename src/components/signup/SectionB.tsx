@@ -72,6 +72,17 @@ const SectionB = (props: SectionProps) => {
             ) : (
               <div className="h-5" />
             )}
+            {formData.married === 'yes' && (
+              <input
+                className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                type="text"
+                name="wife"
+                placeholder="Enter wife full name"
+                onChange={onChange}
+                value={formData.wife || ''}
+                onFocus={() => handleError('address', '')}
+              />
+            )}
           </motion.div>
 
           <motion.div
@@ -82,7 +93,7 @@ const SectionB = (props: SectionProps) => {
           >
             <div className="flex">
               <label className="block text-gray-700 font-medium mr-4">
-                Are you Nigeria?
+                Are you Nigerian?
               </label>
               <CustomRadio
                 name="isNigeria"
