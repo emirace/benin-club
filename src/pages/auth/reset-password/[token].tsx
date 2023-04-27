@@ -1,64 +1,48 @@
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import User from '@/models/user.model';
+import Loading from '@/components/Loading';
 import ResetPasswordForm from '@/components/signup/ResetPasswordForm';
+import { useEffect, useState } from 'react';
 
 interface Props {
-  isValidToken: boolean;
   token: string;
 }
 
-export default function ResetPassword({ isValidToken, token }: Props) {
+export default function ResetPassword({ token }: Props) {
+  const [isValidToken, setIsValidToken] = useState(null);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const response = await fetch(`/api/auth/verifyToken?token=${token}`);
+        const data = await response.json();
+        setIsValidToken(data.isValidToken);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    verifyToken();
+  }, [token]);
+
+  if (isValidToken === null) {
+    return (
+      <div>
+        <div className="bg-black w-full h-24 " />
+        <div className="justify-center items-center w-full h-screen">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
   if (!isValidToken) {
-    return <div>Invalid or expired token</div>;
+    return (
+      <div>
+        <div className="bg-black w-full h-24 " />
+        <div className="p-24 text-red flex justify-center items-center">
+          Invalid or expired token
+        </div>
+      </div>
+    );
   }
 
   return <ResetPasswordForm token={token} />;
 }
-
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context: GetServerSidePropsContext
-) => {
-  const { token } = context.query;
-  console.log('token', token);
-
-  if (Array.isArray(token)) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-
-  try {
-    const user = await User.findOne({
-      'verificationToken.token': token,
-      'verificationToken.expires': { $gt: Date.now() },
-    });
-
-    return {
-      props: {
-        isValidToken: Boolean(user),
-        // isValidToken: true,
-        token,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-};
