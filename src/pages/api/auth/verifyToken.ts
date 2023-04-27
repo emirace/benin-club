@@ -6,6 +6,7 @@ export default async function verifyToken(
   res: NextApiResponse
 ) {
   const { token } = req.query;
+  console.log(token);
 
   try {
     const user = await User.findOne({

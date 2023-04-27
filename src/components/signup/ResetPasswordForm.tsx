@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Loading from '../Loading';
 
 interface ResetPasswordFormProps {
-  token: string;
+  token: string | string[] | undefined;
 }
 
 const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {

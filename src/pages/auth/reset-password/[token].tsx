@@ -1,17 +1,18 @@
 import Loading from '@/components/Loading';
 import ResetPasswordForm from '@/components/signup/ResetPasswordForm';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-interface Props {
-  token: string;
-}
-
-export default function ResetPassword({ token }: Props) {
+export default function ResetPassword() {
   const [isValidToken, setIsValidToken] = useState(null);
+
+  const router = useRouter();
+  const { token } = router.query;
 
   useEffect(() => {
     const verifyToken = async () => {
       try {
+        console.log('tokehhj', token);
         const response = await fetch(`/api/auth/verifyToken?token=${token}`);
         const data = await response.json();
         setIsValidToken(data.isValidToken);
