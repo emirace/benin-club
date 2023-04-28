@@ -20,7 +20,7 @@ const FooterSection = () => {
               </h2>
             </div>
             <Link href="/auth/signup">
-              <button className={buttonStyleOutline}>Join Club</button>
+              <button className={buttonStyleOutline}>Join Benin Club</button>
             </Link>
           </div>
         </section>
@@ -53,7 +53,7 @@ const FooterSection = () => {
             <ul className="space-y-2 mb-8">
               <li>
                 <FaMapMarker className="inline-block mr-2" />1 Ambrose Ali
-                Avenue GRA, PO Box 393, Benin City
+                Avenue GRA, P.O. Box 393, Benin City
               </li>
               <li>
                 <FaPhone className="inline-block mr-2" />

@@ -11,11 +11,13 @@ export default function ResetPassword() {
 
   useEffect(() => {
     const verifyToken = async () => {
+      if (!token) return;
       try {
         console.log('tokehhj', token);
         const response = await fetch(`/api/auth/verifyToken?token=${token}`);
         const data = await response.json();
         setIsValidToken(data.isValidToken);
+        console.log('isValidData', data);
       } catch (error) {
         console.error(error);
       }

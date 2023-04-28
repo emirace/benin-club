@@ -37,6 +37,8 @@ export const profileNav = [
     path: '/account/dashboard',
     role: ['wallet', 'user', 'admin'],
   },
+  { title: 'Wallet', path: '/account/wallet', role: ['member'] },
+
   { title: 'Settings', path: '/account/settings', role: ['member'] },
 ];
 
