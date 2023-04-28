@@ -29,7 +29,7 @@ export default function ResetPassword() {
     return (
       <div>
         <div className="bg-black w-full h-24 " />
-        <div className="justify-center items-center w-full h-screen">
+        <div className="flex justify-center items-center w-full h-screen">
           <Loading />
         </div>
       </div>
