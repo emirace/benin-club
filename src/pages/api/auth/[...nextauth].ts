@@ -23,10 +23,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         await connectDB();
-        const user = await User.findOne({ email: credentials.email });
+        const user = await User.findOne({
+          $or: [{ email: credentials.email }, { memberId: credentials.email }],
+        });
 
         if (!user) {
-          throw new Error('Invalid email & password');
+          throw new Error('Invalid email & password 2');
         }
         const isPasswordCorrect = await comparePassword(
           credentials.password,

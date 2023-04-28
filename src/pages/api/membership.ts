@@ -45,14 +45,44 @@ export default async function handler(
 
         const currentUser2 = await User.findOne({
           email: session.user.email,
-        });
-        Object.keys(formData).forEach((key) => {
-          const value = formData[key];
-          if (value !== '') {
-            currentUser2[key] = value;
+        }).select(
+          '-password  -memberId -subcriptionFee -subcriptionBal -entryFeePayment -entryFeeBal -status -level -joinDate -password -position -verificationToken -role -signupStep -wallet '
+        );
+
+        const disallowedKeys = [
+          'memberId',
+          'subcriptionFee',
+          'subcriptionBal',
+          'entryFeePayment',
+          'entryFeeBal',
+          'status',
+          'level',
+          'joinDate',
+          'password',
+          'position',
+          'verificationToken',
+          'role',
+          'signupStep',
+          'wallet',
+          'nameOfBankers',
+        ]; // add the keys that are not allowed to be updated
+
+        // Remove disallowed keys from formData object
+        disallowedKeys.forEach((key) => {
+          if (currentUser2.hasOwnProperty(key)) {
+            // check if currentUser2 has the key
+            delete formData[key];
           }
         });
 
+        // Update currentUser2 object with remaining formData keys and values
+        Object.keys(formData).forEach((key) => {
+          const value = formData[key];
+          if (!disallowedKeys.includes(key) && value !== '') {
+            currentUser2[key] = value;
+          }
+        });
+        console.log(currentUser2);
         await currentUser2.save();
         return res.status(200).json({ message: 'User updated successfully.' });
 

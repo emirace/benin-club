@@ -44,6 +44,8 @@ export default function LoginForm({ handleCloseModal }: Props) {
         if (handleCloseModal) return handleCloseModal();
       } else {
         setError('The password or email you entered is incorrect.');
+
+        console.log(result);
         setLoading(false);
       }
     } catch (error) {
@@ -90,10 +92,10 @@ export default function LoginForm({ handleCloseModal }: Props) {
       <p className="text-red h-5 text-sm">{error && error}</p>
       <div>
         <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
-          Email
+          Email / Member ID
         </label>
         <input
-          type="email"
+          type="text"
           onFocus={() => setError('')}
           id="email"
           name="email"
@@ -101,7 +103,10 @@ export default function LoginForm({ handleCloseModal }: Props) {
           onChange={(event) => setEmail(event.target.value)}
           className="mt-1 block w-full rounded-md p-2 mb-2  shadow-lg  focus:border-red focus:ring-red focus:outline-red"
         />
-      </div>
+      </div>{' '}
+      <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
+        Password
+      </label>
       <div className="relative">
         <input
           type={showPassword ? 'text' : 'password'}

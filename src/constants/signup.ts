@@ -10,6 +10,7 @@ export const steps = [
   'Section E',
 ];
 const contact = { address: '', tel: '' };
+const socials = { facebook: '', twitter: '', instagram: '', linkedin: '' };
 export const initialFormData: IUser = {
   step: 1,
   memberId: '',
@@ -66,6 +67,8 @@ export const initialFormData: IUser = {
   workExperiences: [],
   proposerPersonality: '',
   proposerKnown: '',
+  bio: '',
+  socials: socials,
   // add more fields as needed
 };
 

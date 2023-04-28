@@ -36,6 +36,13 @@ interface IVerificationToken {
   expires: Date;
 }
 
+interface ISocial {
+  facebook: string;
+  twitter: string;
+  instagram: string;
+  linkedin: string;
+}
+
 interface IWallet {
   balance: number;
   transactions: {
@@ -63,11 +70,13 @@ export interface IUser {
   address: string;
   tel: number;
   permanent: IContact;
+  bio: string;
   occupation: IContact;
   employer: string;
   business: IContact;
   nameOfBankers: string;
   married: string;
+  socials: ISocial;
   clubMemberRelative: string;
   dependentRelativeBenin: string;
   residePermanentlyBenin: string;
@@ -154,10 +163,10 @@ const userSchema = new Schema<IUser>(
       tel: { type: Number },
     },
     employer: { type: String },
-    entryFeePayment: { type: Number },
-    entryFeeBal: { type: Number },
-    subcriptionFee: { type: Number },
-    subcriptionBal: { type: Number },
+    entryFeePayment: { type: Number, default: 1000000 },
+    entryFeeBal: { type: Number, default: 0 },
+    subcriptionFee: { type: Number, default: 50000 },
+    subcriptionBal: { type: Number, default: 0 },
     business: {
       address: { type: String },
       tel: { type: Number },
@@ -270,6 +279,13 @@ const userSchema = new Schema<IUser>(
     },
     wallet: { type: WalletSchema },
     step: { type: Number, default: 1 },
+    bio: { type: String },
+    socials: {
+      facebook: { type: String },
+      twitter: { type: String },
+      instagram: { type: String },
+      linkedin: { type: String },
+    },
   },
   {
     timestamps: true,

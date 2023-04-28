@@ -14,11 +14,11 @@ export const SuccessAnimation = () => {
   );
 };
 
-interface VerificationSuccessProps {
+interface ForgetPasswordSuccessProps {
   email: string;
 }
 
-const VerificationSuccess = (props: VerificationSuccessProps) => {
+const ForgetPasswordSuccess = (props: ForgetPasswordSuccessProps) => {
   const { email } = props;
   return (
     <motion.div
@@ -31,12 +31,13 @@ const VerificationSuccess = (props: VerificationSuccessProps) => {
         <div className="flex flex-col items-center w-full max-w-lg p-4 mx-4 rounded-lg shadow-lg bg-white">
           <SuccessAnimation />
           <h2 className="mt-4 mb-2 text-2xl font-bold text-center">
-            Verification email sent!
+            Password reset email sent!
           </h2>
           <p className="text-gray-600 text-center">
-            We have sent a verification email to the email address you provided{' '}
-            <span>{email}</span>. Please check your inbox and follow the
-            instructions in the email to complete the signup process.
+            We have sent a password reset link to the email address you provided{' '}
+            <span className="text-red">{email}</span>. Please check your inbox
+            and follow the instructions in the email to complete to reset your
+            password.
           </p>
         </div>
       </div>
@@ -44,4 +45,4 @@ const VerificationSuccess = (props: VerificationSuccessProps) => {
   );
 };
 
-export default VerificationSuccess;
+export default ForgetPasswordSuccess;

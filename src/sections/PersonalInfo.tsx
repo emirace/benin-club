@@ -4,28 +4,19 @@ import SocialMedia from '@/components/SocialMedia';
 import { activities } from '@/constants/activities';
 import { membership } from '@/constants/membership';
 import Image from 'next/image';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWallet } from 'react-icons/fa';
+import {
+  FaPhone,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaWallet,
+  FaTimes,
+  FaSave,
+} from 'react-icons/fa';
 import { IUser } from '@/models/user.model';
-
-interface MembershipProfile {
-  name: string;
-  membershipType: string;
-  membershipStatus: string;
-  location: string;
-  bio: string;
-  imageUrl: string;
-  walletAmount: number;
-}
-
-const membershipProfile: MembershipProfile = {
-  name: 'Jane Smith',
-  membershipType: 'Gold',
-  membershipStatus: 'Active',
-  location: 'Los Angeles',
-  bio: 'I love playing tennis and meeting new people!',
-  imageUrl: '/images/image3.jpg',
-  walletAmount: 500,
-};
+import { useEffect, useState } from 'react';
+import ShowBioPopup from '@/components/ShowBioPopup';
+import SocialMediaPopup from '@/components/SocialMediaPopup';
+import Link from 'next/link';
 
 type PersonalInfoProps = {
   user: IUser;
@@ -33,6 +24,8 @@ type PersonalInfoProps = {
 
 export default function PersonalInfo(props: PersonalInfoProps) {
   const { user } = props;
+  const [step, setStep] = useState(1);
+
   return (
     <div className="flex flex-col md:flex-row bg-white ">
       {/* Left Column */}
@@ -53,12 +46,14 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         <button className="bg-white text-red py-2 px-4 rounded-md shadow-md hover:bg-red hover:text-white transition duration-300 ease-in-out mb-4">
           Contact Member
         </button>
-        <p className="text-sm text-center px-4 mt-4">{membershipProfile.bio}</p>
-        <SocialMedia
-          facebook="https://www.facebook.com/johndoe"
-          twitter="https://twitter.com/johndoe"
-          instagram="https://www.instagram.com/johndoe"
-          linkedin="https://www.linkedin.com/in/johndoe"
+        <ShowBioPopup bio={user.bio} step={step} setStep={setStep} />
+
+        <SocialMediaPopup
+          facebook={user?.socials?.facebook}
+          twitter={user?.socials?.twitter}
+          instagram={user?.socials?.instagram}
+          linkedin={user?.socials?.linkedin}
+          step={step}
         />
       </div>
       {/* Right Column */}
@@ -92,7 +87,13 @@ export default function PersonalInfo(props: PersonalInfoProps) {
           <FaWallet className="mr-2" />
           <p>
             Wallet Balance:
-            <span className="text-red ml-2 font-bold">N{0}</span>
+            <span className="text-red ml-2 font-bold">&#x20a6;{0}</span>
+            <Link
+              href="/account/wallet"
+              className="ml-2 underline text-red font-light text-sm"
+            >
+              View
+            </Link>
           </p>
         </div>
 

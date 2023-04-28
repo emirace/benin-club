@@ -6,6 +6,7 @@ import Modal from '../Modal';
 import MembershipForm from './MembershipForm';
 import { useState } from 'react';
 import ResendPassword from './ResendPassword';
+import UserProfile from './UserProfile';
 
 interface MemberTableRowProps {
   member: IUser;
@@ -22,6 +23,7 @@ function MemberTableRow({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
+  const [userProfile, setUserProfile] = useState(false);
 
   const handleDelete = () => {
     setShowConfirm(true);
@@ -53,6 +55,14 @@ function MemberTableRow({
     setResetPassword(true); // <-- update state variable to show modal
   };
 
+  const onCloseU = () => {
+    setUserProfile(false); // <-- update state variable to show modal
+  };
+
+  const onOpenU = () => {
+    setUserProfile(true); // <-- update state variable to show modal
+  };
+
   switch (member.status) {
     case 'Active':
       statusClassName = 'text-green';
@@ -68,7 +78,10 @@ function MemberTableRow({
     <>
       <tr className="border-t">
         <td className="py-2 px-4">{member.memberId}</td>
-        <td className="py-2 px-4 flex items-center">
+        <td
+          className="py-2 px-4 flex items-center cursor-pointer"
+          onClick={onOpenU}
+        >
           <div className="w-10 h-10 relative mr-4">
             <Image
               src={member.image}
@@ -124,6 +137,10 @@ function MemberTableRow({
 
       <Modal isOpen={resetPassword} onClose={onCloseP}>
         <ResendPassword id={member._id} />
+      </Modal>
+
+      <Modal isOpen={userProfile} onClose={onCloseU}>
+        <UserProfile user={member} />
       </Modal>
     </>
   );
