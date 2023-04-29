@@ -30,7 +30,7 @@ export default async function handler(
 
   const verificationToken = {
     token,
-    expires: Date.now() + 60 * 60 * 1000, // Expires in 1 hour
+    expires: Date.now() + 60 * 60 * 1000 * 24, // Expires in 24 hour
   };
 
   // Update the user's verification token and expiration date

@@ -147,7 +147,8 @@ export type UserDocument = IUser & Document;
 const userSchema = new Schema<IUser>(
   {
     memberId: { type: String },
-    fullName: { type: String },
+    firstName: { type: String },
+    surName: { type: String },
     wife: { type: String },
     wifeId: { type: String },
     dob: { type: String },
