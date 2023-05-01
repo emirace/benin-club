@@ -72,7 +72,7 @@ const SectionB = (props: SectionProps) => {
             ) : (
               <div className="h-5" />
             )}
-            {formData.married === 'yes' && (
+            {formData.married === 'Yes' && (
               <input
                 className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                 type="text"

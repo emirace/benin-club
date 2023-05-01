@@ -18,10 +18,14 @@ export default function LoginForm({ handleCloseModal }: Props) {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { data: session, status } = useSession();
-
-  const [showPassword, setShowPassword] = useState(false);
+  if (session) {
+    if (handleCloseModal) handleCloseModal();
+    router.replace('/account');
+    return null;
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

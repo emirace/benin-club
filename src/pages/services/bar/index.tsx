@@ -20,8 +20,8 @@ export default function Bar() {
             </h2>
             <p className="mt-4 text-lg text-gray-500">
               The Benin Club Main Bar is situated at the Lower Lounge of the
-              Benin Club, while the Golf Section has its own Main Bar located at
-              the Golf Main Lounge. Both bars offer a wide range of drinks,
+              Club, while the Golf Section has its own Main Bar located at the
+              Golf Section Main Lounge. Both bars offer a wide range of drinks,
               including soft drinks, beer, water, wine, and spirits.
             </p>
             <Gallery

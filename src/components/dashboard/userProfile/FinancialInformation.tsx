@@ -20,25 +20,41 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
           <label className="block text-gray-700 font-bold mb-2">
             Subscription Fee
           </label>
-          <Input value={user.subcriptionFee} property="subcriptionFee" />
+          <Input
+            value={user.subcriptionFee}
+            id={user._id}
+            property="subcriptionFee"
+          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">
             Subscription Balance
           </label>
-          <Input value={user.subcriptionBal} property="subcriptionBal" />
+          <Input
+            value={user.subcriptionBal}
+            id={user._id}
+            property="subcriptionBal"
+          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">
             Entry Fee Payment
           </label>
-          <Input value={user.entryFeePayment} property="entryFeePayment" />
+          <Input
+            value={user.entryFeePayment}
+            id={user._id}
+            property="entryFeePayment"
+          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">
             Entry Fee Balance
           </label>
-          <Input value={user.entryFeeBal} property="entryFeeBal" />
+          <Input
+            value={user.entryFeeBal}
+            id={user._id}
+            property="entryFeeBal"
+          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">
@@ -68,13 +84,11 @@ export default FinancialInformation;
 
 interface Props {
   value: number;
-}
-interface Props {
-  value: number;
   property: string;
+  id: string;
 }
 
-const Input = ({ value, property }: Props) => {
+const Input = ({ value, property, id }: Props) => {
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
   const [loading, setLoading] = useState(false);
@@ -87,8 +101,9 @@ const Input = ({ value, property }: Props) => {
   const handleCheckClick = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/membership', {
-        method: 'POST',
+      console.log({ [property]: inputValue });
+      const response = await fetch(`/api/dashboard/members/${id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -97,7 +112,6 @@ const Input = ({ value, property }: Props) => {
         }),
       });
       const data = await response.json();
-      console.log(data);
       setEditing(false);
       setLoading(false);
     } catch (error) {

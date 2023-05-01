@@ -20,14 +20,57 @@ export default function Kitchen() {
             </h2>
             <p className="mt-4 text-lg text-gray-500">
               Specializes in making all varieties of confectionaries such as
-              Shawarma, Club Sandwich, Scotched Eggs, Cakes, Meat pie, Chicken
+              Shawarma, Club Sandwich, Scotched Eggs, Cakes, Meat Pie, Chicken
               Pie, Fish Pie, Sausage Roll, Egg Roll etc.
             </p>
             <p className="mt-4 text-lg text-gray-500">
-              They also make Popcorns, Ice Cream of different sizes, Cocktails,
+              They also make Popcorn, Ice Cream of different flavour, Cocktails,
               Chapman, Candy Floss, Bread and Small chops. They sell children
               toys and render indoor and outdoor catering services.
             </p>
+          </div>
+
+          <div className="mt-12">
+            <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
+              MANET KITCHEN
+            </h2>
+
+            <p className="mt-4 text-lg text-gray-500">
+              They offer the following; Jollof rice, Fried rice, Ofada rice,
+              Banga rice, Coconut rice, Spaghetti, and Oil rice (Native rice)
+              with toppings like Dodo, Moi-Moi, Vegetable salad, pasta and
+              salad.
+            </p>
+            <p className="mt-4 text-lg text-gray-500">
+              They also offer swallow like Amala, Semo, Pounded Yam, Wheat,
+              Starch, and Oat-Meal with soup like Ewedu, Gbegiri, Vegetable,
+              Banga, Egusi, Black soup, Ogbono and Owo soup.
+            </p>
+            <p className="mt-4 text-lg text-gray-500">
+              They offer INTERCONTINENTAL DISHES such as Chinese Fried Rice,
+              Russian salad, Chicken Escalope, Spaghetti Bolognese, Green Salad,
+              Singapore Fried Noodles, Beef Croma, Chicken Casseroie, Farfare
+              Pasta in Vegetable sauce, Shredded Beef in green pepper sauce etc.
+              Fried Fish Batter, Stewed Beef, Stewed Chicken/Turkey, Cat Fish,
+              Dry Fish, fish in tomato sauce, chicken in tomato sauce, fish in
+              curry sauce, Assorted and Goat Meat are also available..
+            </p>
+
+            <p className="mt-4 text-lg text-gray-500">
+              They also offer indoor and outdoor catering services.
+            </p>
+            <Gallery
+              images={[
+                'image1.JPG',
+                'image2.JPG',
+                'image3.JPG',
+                'image4.JPG',
+                'image5.JPG',
+                'image6.JPG',
+                'image7.JPG',
+              ]}
+              link="/manetKitchen"
+            />
           </div>
           <div className="mt-12">
             <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
@@ -38,8 +81,8 @@ export default function Kitchen() {
             </p>
             <p className="mt-4 text-lg text-gray-500">
               African dishes are available such as Pounded Yam, Semo, Starch,
-              Amala, Garri (Eba) with soups like Banga, Okro, Black, Oha, Bitter
-              Leaf, White, Egusi, Ogbono, and Vegetable Soup.
+              Amala, Garri (Eba) with soup like Banga, Okro, Black soup, Oha,
+              Bitter Leaf, White soup, Egusi, Ogbono, and Vegetable Soup.
             </p>
             <p className="mt-4 text-lg text-gray-500">
               Continental Dishes includes Basmati Fried and Jollof Rice, Curry
@@ -64,12 +107,12 @@ export default function Kitchen() {
               sauce, Turkey sauce, Goat meat sauce etc.
             </p>
             <p className="mt-4 text-lg text-gray-500">
-              They prepare hot cat fish peppersoup, Chicken Peppersoup, Turkey
+              They offer hot cat fish peppersoup, Chicken Peppersoup, Turkey
               peppersoup, Bush meat peppersoup, Gizzard Peppersoup, Snail
               peppersoup etc.
             </p>
             <p className="mt-4 text-lg text-gray-500">
-              They also prepare Poundo, Wheat, Semo, Plantain, Amala, Starch,
+              They also offer Poundo, Wheat, Semo, Plantain, Amala, Starch,
               Garri with soups such as Vegetable, Melon, Ogbono, Okro,
               Groundnut, Afang, White, Black and Banga Soup etc.
             </p>
@@ -77,49 +120,6 @@ export default function Kitchen() {
             <p className="mt-4 text-lg text-gray-500">
               They also offer indoor and outdoor catering services.
             </p>
-          </div>
-
-          <div className="mt-12">
-            <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
-              MANET KITCHEN
-            </h2>
-
-            <p className="mt-4 text-lg text-gray-500">
-              They prepare the following; Jollof rice, Fried rice, Ofada rice,
-              Banga rice, Coconut rice, spaghetti, and Oil rice (Native rice)
-              with toppings like Dodo, Moi-Moi, Vegetable salad, pasta and
-              salad.
-            </p>
-            <p className="mt-4 text-lg text-gray-500">
-              They also prepare swallow like Amala, Semo, Pounded Yam, Wheat,
-              Starch, and Oat-Meal with soups like Ewedu, Gbegiri, Vegetable,
-              Banga, Egusi, Black, Ogbono and Owo soup.
-            </p>
-            <p className="mt-4 text-lg text-gray-500">
-              They prepare INTERCONTINENTAL DISHES such as Chinese Fried Rice,
-              Russian salad, Chicken Escalope, Spaghetti Bolognese, Green Salad,
-              Singapore Fried Noodles, Beef Croma, Chicken Casseroie, Farfare
-              Pasta in Vegetable sauce, Shredded Beef in green pepper sauce etc.
-              Fried Fish Batter, Stewed Beef, Stewed Chicken/Turkey, Cat Fish,
-              Dry Fish, fish in tomato sauce, chicken in tomato sauce, fish in
-              curry sauce, Assorted and Goat Meat are also available..
-            </p>
-
-            <p className="mt-4 text-lg text-gray-500">
-              They also offer indoor and outdoor catering services.
-            </p>
-            <Gallery
-              images={[
-                'image1.JPG',
-                'image2.JPG',
-                'image3.JPG',
-                'image4.JPG',
-                'image5.JPG',
-                'image6.JPG',
-                'image7.JPG',
-              ]}
-              link="/manetKitchen"
-            />
           </div>
         </div>
       </div>

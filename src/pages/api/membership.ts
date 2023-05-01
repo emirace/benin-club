@@ -36,12 +36,13 @@ export default async function handler(
         });
 
         currentUser.signupStep = 'Verification';
-        console.log(currentUser);
         await currentUser.save();
         return res.status(200).json({ message: 'User created successfully.' });
 
       case 'PUT':
         const formData: FormData = req.body;
+
+        console.log('formData', formData);
 
         const currentUser2 = await User.findOne({
           email: session.user.email,

@@ -4,11 +4,12 @@ import Loading from '../Loading';
 
 interface ResendPasswordProps {
   id: string;
+  email: string;
 }
 
 export default function ResendPassword(props: ResendPasswordProps) {
-  const { id } = props;
-  const [email, setEmail] = useState('');
+  const { id, email } = props;
+  const [email1, setEmail1] = useState(email);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +21,7 @@ export default function ResendPassword(props: ResendPasswordProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, email }),
+        body: JSON.stringify({ id, email1 }),
       });
 
       const data = await response.json();
@@ -28,7 +29,7 @@ export default function ResendPassword(props: ResendPasswordProps) {
 
       //   setMessage(data.message);
       //   setValues(initialValues);
-      setEmail('');
+      setEmail1('');
     } catch (error) {
       setLoading(false);
       setError('An error occurred. Please try again later.');
@@ -52,8 +53,8 @@ export default function ResendPassword(props: ResendPasswordProps) {
             type="text"
             name="memberId"
             placeholder="Enter email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email || ''}
+            onChange={(e) => setEmail1(e.target.value)}
+            value={email1 || ''}
             onFocus={() => setError('')}
           />
           {error ? (

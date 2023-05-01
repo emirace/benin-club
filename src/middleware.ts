@@ -31,19 +31,30 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(signupStepUrl, request.url));
   }
 
-  if (request.nextUrl.pathname.startsWith('/account/admin')) {
-    if (user.role !== 'admin') {
+  if (request.nextUrl.pathname.startsWith('/account/dashboard')) {
+    if (
+      user.role !== 'admin' &&
+      user.role !== 'user' &&
+      user.role !== 'wallet'
+    ) {
       const url = new URL(`/account`, request.url);
       return NextResponse.rewrite(url);
     }
   }
 
-  if (request.nextUrl.pathname.startsWith('/account/user')) {
-    return NextResponse.rewrite(new URL('/dashboard/user', request.url));
+  if (request.nextUrl.pathname.startsWith('/api/dashboard')) {
+    if (
+      user.role !== 'admin' &&
+      user.role !== 'user' &&
+      user.role !== 'wallet'
+    ) {
+      const url = new URL(`/`, request.url);
+      return NextResponse.rewrite(url);
+    }
   }
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/account/:path*'],
+  matcher: ['/account/:path*', '/api/dashboard'],
 };

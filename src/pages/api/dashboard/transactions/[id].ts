@@ -1,12 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connectDB } from '@/utils/mongoose';
 import Transaction, { TransactionDocument } from '@/models/transaction.model';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
+    const session = await getServerSession(req, res, authOptions);
+
+    if (!session)
+      return res
+        .status(401)
+        .json({ message: 'You must log in to access this resource.' });
+
+    const { user: loginUser } = session;
+
+    if (loginUser.role !== 'admin' && loginUser.role !== 'wallet') {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
     await connectDB();
 
     switch (req.method) {

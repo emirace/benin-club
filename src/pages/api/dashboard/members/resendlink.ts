@@ -4,6 +4,8 @@ import User from '@/models/user.model';
 import { promisify } from 'util';
 import sendEmail from '@/utils/sendEmail';
 import { connectDB } from '@/utils/mongoose';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]';
 
 const randomBytesAsync = promisify(randomBytes);
 
@@ -11,7 +13,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session)
+    return res
+      .status(401)
+      .json({ message: 'You must log in to access this resource.' });
+
+  const { user: loginUser } = session;
+
+  if (loginUser.role !== 'admin' && loginUser.role !== 'user') {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
   await connectDB();
+
   const { id, email } = req.body;
   console.log(id, email);
 
@@ -33,6 +49,7 @@ export default async function handler(
     expires: Date.now() + 60 * 60 * 1000, // Expires in 1 hour
   };
 
+  user.email = email;
   // Update the user's verification token and expiration date
   user.verificationToken = verificationToken;
   await user.save();

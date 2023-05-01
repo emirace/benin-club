@@ -136,7 +136,7 @@ function MemberTableRow({
       </Modal>
 
       <Modal isOpen={resetPassword} onClose={onCloseP}>
-        <ResendPassword id={member._id} />
+        <ResendPassword id={member._id} email={member.email} />
       </Modal>
 
       <Modal isOpen={userProfile} onClose={onCloseU}>

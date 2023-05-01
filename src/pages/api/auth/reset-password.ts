@@ -36,7 +36,7 @@ export default async function handler(
 
     user.password = hashedPassword;
     user.verificationToken = null;
-    user.signupStep = 'Payment';
+    if (user.status === 'Inactive') user.signupStep = 'Payment';
     await user.save();
 
     return res.status(200).json({ message: 'Password reset successful' });

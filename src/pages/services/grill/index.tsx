@@ -24,7 +24,7 @@ export default function Grill() {
           </div>
           <div className="mt-12">
             <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
-              LEBIS BARBECUE
+              LABBIS BARBECUE
             </h2>
 
             <p className="mt-4 text-lg text-gray-500">
