@@ -14,6 +14,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   const [members, setMembers] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [membersPerPage] = useState<number>(20);
+  const [numAdjacentPages] = useState<number>(3);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -62,6 +63,8 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   ) {
     pageNumbers.push(i);
   }
+
+  const totalPages = Math.ceil(filteredMembers.length / membersPerPage);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -143,20 +146,77 @@ function MembersTable({}: MembersTableProps): JSX.Element {
           </div>
         </div>
       )}
-      <div className="flex  items-center mt-4">
+      <div className="flex items-center mt-4">
         <ul className="flex">
-          {pageNumbers.map((number) => (
-            <li key={number}>
+          {currentPage > 1 && (
+            <li>
               <button
-                className={`${
-                  currentPage === number ? 'bg-red text-white' : ' text-red'
-                } py-2 px-4 rounded`}
-                onClick={() => handlePageChange(number)}
+                className="text-red py-2 px-4 rounded"
+                onClick={() => handlePageChange(currentPage - 1)}
               >
-                {number}
+                Prev
               </button>
             </li>
-          ))}
+          )}
+          {currentPage > numAdjacentPages + 1 && (
+            <li>
+              <button
+                className="text-red py-2 px-4 rounded"
+                onClick={() => handlePageChange(1)}
+              >
+                1
+              </button>
+            </li>
+          )}
+          {currentPage > numAdjacentPages + 2 && (
+            <li>
+              <span className="text-gray-500 py-2 px-4 rounded">...</span>
+            </li>
+          )}
+          {pageNumbers
+            .filter(
+              (number) =>
+                number >= currentPage - numAdjacentPages &&
+                number <= currentPage + numAdjacentPages
+            )
+            .map((number) => (
+              <li key={number}>
+                <button
+                  className={`${
+                    currentPage === number ? 'bg-red text-white' : ' text-red'
+                  } py-2 px-4 rounded`}
+                  onClick={() => handlePageChange(number)}
+                >
+                  {number}
+                </button>
+              </li>
+            ))}
+          {currentPage < totalPages - numAdjacentPages - 1 && (
+            <li>
+              <span className="text-gray-500 py-2 px-4 rounded">...</span>
+            </li>
+          )}
+          {currentPage < totalPages - numAdjacentPages && (
+            <li>
+              <button
+                className="text-red py-2 px-4 rounded"
+                onClick={() => handlePageChange(totalPages)}
+              >
+                {totalPages}
+              </button>
+            </li>
+          )}
+
+          {currentPage < totalPages && (
+            <li>
+              <button
+                className="text-red py-2 px-4 rounded"
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                Next
+              </button>
+            </li>
+          )}
         </ul>
       </div>
     </div>

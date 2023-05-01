@@ -11,7 +11,7 @@ import { IoIosArrowForward } from 'react-icons/io';
 function Dashboard(): JSX.Element {
   return (
     <>
-      <div className="flex flex-col gap-4 overflow-y-auto h-screen no-scrollbar">
+      <div className="flex flex-col gap-4 ">
         <div className="">
           <h2 className="text-xl font-semibold mb-4">Dashboard Overview</h2>
           <p className="text-gray text-sm mb-4">
