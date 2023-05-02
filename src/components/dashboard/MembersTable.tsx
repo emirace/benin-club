@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
 import MemberTableRow from './MemberTableRow';
 import { buttonStyle } from '@/constants/styles';
@@ -8,6 +8,10 @@ import Modal from '../Modal';
 import MembershipForm from './MembershipForm';
 
 interface MembersTableProps {}
+interface Sorting {
+  field: string;
+  order: 'asc' | 'desc';
+}
 
 function MembersTable({}: MembersTableProps): JSX.Element {
   const [filteredMembers, setFilteredMembers] = useState<IUser[]>([]);
@@ -17,23 +21,51 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   const [numAdjacentPages] = useState<number>(3);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [category, setCategory] = useState('all');
+  const [sorting, setSorting] = useState<Sorting>({
+    field: '_id',
+    order: 'asc',
+  });
+  const fetchMembers = useCallback(
+    async (
+      pageNumber: number,
+      pageSize: number,
+      sort: string,
+      order: 'asc' | 'desc',
+      category: string
+    ) => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `/api/dashboard/members?page=${pageNumber}&pageSize=${pageSize}&sort=${sort}&category=${category}&order=${order}`
+        );
+        const { members, totalMembers } = await response.json();
+        console.log(members);
+        setMembers(members);
+        setTotalPages(Math.ceil(totalMembers / membersPerPage));
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    fetchMembers();
-  }, []);
+    fetchMembers(
+      currentPage,
+      membersPerPage,
+      sorting.field,
+      sorting.order,
+      category
+    );
+  }, [currentPage, fetchMembers, membersPerPage]);
 
-  const fetchMembers = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/dashboard/members');
-      const data = await response.json();
-      setMembers(data);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-    }
-  };
+  useEffect(() => {
+    fetchMembers(1, membersPerPage, sorting.field, sorting.order, category);
+  }, [category, fetchMembers, membersPerPage, sorting]);
 
   useEffect(() => {
     setFilteredMembers(members);
@@ -42,33 +74,34 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase();
     const filtered = members.filter((member) => {
-      const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+      const fullName = `${member.firstName} ${member.surName}`.toLowerCase();
       return fullName.includes(searchTerm);
     });
     setFilteredMembers(filtered);
   };
 
-  const indexOfLastMember = currentPage * membersPerPage;
-  const indexOfFirstMember = indexOfLastMember - membersPerPage;
-  const currentMembers = filteredMembers.slice(
-    indexOfFirstMember,
-    indexOfLastMember
-  );
-
   const pageNumbers = [];
-  for (
-    let i = 1;
-    i <= Math.ceil(filteredMembers.length / membersPerPage);
-    i++
-  ) {
+  for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
-  const totalPages = Math.ceil(filteredMembers.length / membersPerPage);
+  const handleSorting = (field: string) => {
+    const order =
+      sorting.field === field && sorting.order === 'asc' ? 'desc' : 'asc';
+    setSorting({ field, order });
+  };
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    fetchMembers(
+      pageNumber,
+      membersPerPage,
+      sorting.field,
+      sorting.order,
+      category
+    );
   };
+
   const handleAddMember = () => {
     setShowModal(true); // <-- update state variable to show modal
   };
@@ -86,9 +119,13 @@ function MembersTable({}: MembersTableProps): JSX.Element {
     }
   };
   const handleUpdateMemberTable = async () => {
-    const response = await fetch('/api/dashboard/members');
-    const data = await response.json();
-    setMembers(data);
+    fetchMembers(
+      currentPage,
+      membersPerPage,
+      sorting.field,
+      sorting.order,
+      category
+    );
   };
 
   const isMobile = window.matchMedia('(max-width: 640px)').matches;
@@ -120,6 +157,22 @@ function MembersTable({}: MembersTableProps): JSX.Element {
           )}
         </div>
       </div>
+      <div className="my-4">
+        Category
+        <select
+          className="ml-2 border border-gray rounded-md py-1 px-2 text-sm"
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="all">All</option>
+          <option value="Member">Member</option>
+          <option value="Corporate Member">Corporate Member</option>
+          <option value="Old Member">Old Member</option>
+          <option value="Deseased Member">Deseased Member</option>
+          <option value="Transfered">Transfered</option>
+          <option value="Live Member">Live Member</option>
+          <option value="Honorary Member">Honorary Member</option>
+        </select>
+      </div>
       <Modal isOpen={showModal} onClose={onClose}>
         <MembershipForm onClose={onClose} />
       </Modal>
@@ -127,13 +180,15 @@ function MembersTable({}: MembersTableProps): JSX.Element {
         <div className="w-full justify-center items-center">
           <Loading />
         </div>
+      ) : filteredMembers.length === 0 ? (
+        <div className="text-center">No members</div>
       ) : (
         <div className="w-[calc(100vw_-_75px)] md:w-auto text-xs">
           <div className="overflow-x-scroll">
             <table className="w-full border-collapse">
-              <Header />
+              <Header handleSorting={handleSorting} sorting={sorting} />
               <tbody>
-                {currentMembers.map((member) => (
+                {filteredMembers.map((member) => (
                   <MemberTableRow
                     key={member.id}
                     member={member}
@@ -146,98 +201,146 @@ function MembersTable({}: MembersTableProps): JSX.Element {
           </div>
         </div>
       )}
-      <div className="flex items-center mt-4">
-        <ul className="flex">
-          {currentPage > 1 && (
-            <li>
-              <button
-                className="text-red py-2 px-4 rounded"
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                Prev
-              </button>
-            </li>
-          )}
-          {currentPage > numAdjacentPages + 1 && (
-            <li>
-              <button
-                className="text-red py-2 px-4 rounded"
-                onClick={() => handlePageChange(1)}
-              >
-                1
-              </button>
-            </li>
-          )}
-          {currentPage > numAdjacentPages + 2 && (
-            <li>
-              <span className="text-gray-500 py-2 px-4 rounded">...</span>
-            </li>
-          )}
-          {pageNumbers
-            .filter(
-              (number) =>
-                number >= currentPage - numAdjacentPages &&
-                number <= currentPage + numAdjacentPages
-            )
-            .map((number) => (
-              <li key={number}>
-                <button
-                  className={`${
-                    currentPage === number ? 'bg-red text-white' : ' text-red'
-                  } py-2 px-4 rounded`}
-                  onClick={() => handlePageChange(number)}
-                >
-                  {number}
-                </button>
-              </li>
-            ))}
-          {currentPage < totalPages - numAdjacentPages - 1 && (
-            <li>
-              <span className="text-gray-500 py-2 px-4 rounded">...</span>
-            </li>
-          )}
-          {currentPage < totalPages - numAdjacentPages && (
-            <li>
-              <button
-                className="text-red py-2 px-4 rounded"
-                onClick={() => handlePageChange(totalPages)}
-              >
-                {totalPages}
-              </button>
-            </li>
-          )}
-
-          {currentPage < totalPages && (
-            <li>
-              <button
-                className="text-red py-2 px-4 rounded"
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                Next
-              </button>
-            </li>
-          )}
-        </ul>
-      </div>
+      <Pagnation
+        currentPage={currentPage}
+        handlePageChange={handlePageChange}
+        numAdjacentPages={numAdjacentPages}
+        pageNumbers={pageNumbers}
+        totalPages={totalPages}
+      />
     </div>
   );
 }
 
 export default MembersTable;
 
-const Header = () => (
+interface HeaderProps {
+  handleSorting: (header: string) => void;
+  sorting: Sorting;
+}
+
+const Header = ({ handleSorting, sorting }: HeaderProps) => (
   <thead>
     <tr className="bg-gray-200 whitespace-nowrap">
-      <th className="py-2 px-4 text-left">Member ID</th>
-      <th className="py-2 px-4 text-left">Member Name</th>
-      <th className="py-2 px-4 text-left">Type</th>
-      <th className="py-2 px-4 text-left">Position</th>
-      <th className="py-2 px-4 text-left">Occupation</th>
-      <th className="py-2 px-4 text-left">Email</th>
-      <th className="py-2 px-4 text-left">Phone Number</th>
-      <th className="py-2 px-4 text-left">Gender</th>
-      <th className="py-2 px-4 text-left">Status</th>
-      <th className="py-2 px-4 text-left">Actions</th>
+      {membersTableHeader.map((header) => (
+        <th
+          className="py-2 px-4 text-left"
+          onClick={() => handleSorting(header.name)}
+          key={header.label}
+        >
+          {sorting.field === header.name ? (
+            <>
+              <span>{header.label}</span>
+              <span>{sorting.order === 'asc' ? '▲' : '▼'}</span>
+            </>
+          ) : (
+            <span>{header.label}</span>
+          )}
+        </th>
+      ))}
     </tr>
   </thead>
 );
+
+interface PagnationProps {
+  currentPage: number;
+  handlePageChange: (v: number) => void;
+  numAdjacentPages: number;
+  totalPages: number;
+  pageNumbers: number[];
+}
+
+const Pagnation = ({
+  currentPage,
+  handlePageChange,
+  totalPages,
+  numAdjacentPages,
+  pageNumbers,
+}: PagnationProps) => (
+  <div className="flex items-center mt-4">
+    <ul className="flex">
+      {currentPage > 1 && (
+        <li>
+          <button
+            className="text-red py-2 px-4 rounded"
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            Prev
+          </button>
+        </li>
+      )}
+      {currentPage > numAdjacentPages + 1 && (
+        <li>
+          <button
+            className="text-red py-2 px-4 rounded"
+            onClick={() => handlePageChange(1)}
+          >
+            1
+          </button>
+        </li>
+      )}
+      {currentPage > numAdjacentPages + 2 && (
+        <li>
+          <span className="text-gray-500 py-2 px-4 rounded">...</span>
+        </li>
+      )}
+      {pageNumbers
+        .filter(
+          (number) =>
+            number >= currentPage - numAdjacentPages &&
+            number <= currentPage + numAdjacentPages
+        )
+        .map((number) => (
+          <li key={number}>
+            <button
+              className={`${
+                currentPage === number ? 'bg-red text-white' : ' text-red'
+              } py-2 px-4 rounded`}
+              onClick={() => handlePageChange(number)}
+            >
+              {number}
+            </button>
+          </li>
+        ))}
+      {currentPage < totalPages - numAdjacentPages - 1 && (
+        <li>
+          <span className="text-gray-500 py-2 px-4 rounded">...</span>
+        </li>
+      )}
+      {currentPage < totalPages - numAdjacentPages && (
+        <li>
+          <button
+            className="text-red py-2 px-4 rounded"
+            onClick={() => handlePageChange(totalPages)}
+          >
+            {totalPages}
+          </button>
+        </li>
+      )}
+
+      {currentPage < totalPages && (
+        <li>
+          <button
+            className="text-red py-2 px-4 rounded"
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            Next
+          </button>
+        </li>
+      )}
+    </ul>
+  </div>
+);
+
+const membersTableHeader = [
+  { label: 'Member ID', name: 'memberId' },
+  { label: 'Member Name', name: 'surName' },
+  { label: 'Category', name: 'category' },
+  { label: 'Subcription Fee Bal.', name: 'subcriptionBal' },
+  { label: 'Occupation', name: 'occupation' },
+  { label: 'Email', name: 'email' },
+  { label: 'Phone Number', name: 'tel' },
+  { label: 'Gender', name: 'gender' },
+  { label: 'Status', name: 'status' },
+  { label: 'Actions', name: '_id' },
+];

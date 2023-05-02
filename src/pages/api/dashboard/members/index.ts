@@ -3,6 +3,7 @@ import User, { IUser } from '@/models/user.model';
 import { connectDB } from '@/utils/mongoose';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]';
+import { SortOrder } from 'mongoose';
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,8 +27,30 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const members: IUser[] = await User.find();
-        res.status(200).json(members);
+        const page = parseInt(req.query.page as string) || 1;
+        const pageSize = parseInt(req.query.pageSize as string) || 20;
+        const skip = (page - 1) * pageSize;
+        const sortField = (req.query.sort as string) || '_id';
+        const sortOrder = ((req.query.order as string) || 'asc') as SortOrder;
+        const sort: [string, SortOrder][] = [[sortField, sortOrder]];
+        const category = (req.query.category as string) || 'all';
+
+        const categoryFilter = category === 'all' ? {} : { level: category };
+        console.log(sortField, sortOrder, category, categoryFilter);
+
+        const members: IUser[] = await User.find({
+          role: 'member',
+          ...categoryFilter,
+        })
+          .sort(sort)
+          .skip(skip)
+          .limit(pageSize);
+        const totalMembers: number = await User.countDocuments({
+          role: 'member',
+          ...categoryFilter,
+        });
+        res.status(200).json({ members, totalMembers });
+
         break;
       case 'POST':
         const { memberId } = req.body;

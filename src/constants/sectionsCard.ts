@@ -2,9 +2,9 @@ import { SectionCard } from '@/types/sectionCard';
 
 export const billiards: SectionCard = {
   imageUrl: '/images/billiards/image1.jpg',
-  desc: 'Unleash your inner champion on our world-class billiard and snooker tables. Join our passionate community and experience the ultimate game room thrill.',
+  desc: 'Unleash your inner champion on our world-class Billiard and Snooker tables. Join our passionate community and experience the ultimate game room thrill.',
   title: 'Billiards & Snooker',
-  info: 'With two full size tables Benin Club Snookers / Billiard Section is one of the oldest section in the club. It is a socially vibrant place in the club as tournament and parties are frequently held.',
+  info: 'With two full size tables Benin Club Billiards / Snooker Section is one of the oldest section in the club. It is a socially vibrant place in the club as tournament and parties are frequently held.',
   link: '/billiards',
   images: [
     'image1.jpg',
@@ -19,9 +19,9 @@ export const billiards: SectionCard = {
 
 export const busStop: SectionCard = {
   imageUrl: '/images/busstop/image1.JPG',
-  desc: "Welcome to the Parliament of Benin Club's bus stop, a socially vibrant space that enhances fellowship and interaction amongst members. Join us for comfortable seating, annual events like manifesto night, and a must-visit section that cuts across all segments of society.",
+  desc: 'Welcome to the Parliament of Benin Club, a socially vibrant space that enhances fellowship and interaction amongst members. Join us for comfortable seating, annual events like manifesto night, and a must-visit section that cuts across all segments of society.',
   title: 'Bus Stop',
-  info: 'This section that can best be referred to as the parliament of Benin Club Bus Stop Section  with a very robust membership, it is a very comfortable place to seat. The section over the year has provided socially vibrant space for members of the club to learn. The section organizes the manifesto night of the club every year. You may not have satisfied your yearning for joining the club if you have not made a stop at the section. The section enhance fellowship and interaction amongst members, Membership cuts across all segments of the society.',
+  info: 'This section that can best be referred to as the parliament of Benin Club with a very robust membership, it is a very comfortable place to seat. The section over the years has provided socially vibrant space for members of the club to learn. The section organizes the manifesto night of the club every year. You may not have satisfied your yearning for joining the club if you have not made a stop at the section. The section enhance fellowship and interaction amongst members, Membership cuts across all segments of the society.',
   link: '/busstop',
   images: [
     'image1.JPG',
@@ -95,7 +95,7 @@ export const leisure: SectionCard = {
   imageUrl: '/images/leisure/image1.JPG',
   desc: '',
   title: 'Leisure Games AND INDOOR',
-  info: 'Aka ASO Rock the Section was Commissioned for indoor games such as Scrabble, Chess Ayo, Whot, Monopoly, Draught, Ludo e.t.c with a dedicated membership of young vibrant clubers who are out to see to the growth of its members physically, morally and socially. Leisure section also know as Aso Rock is the place for any forward looking member of the club to be.',
+  info: 'AKA Aso Rock the Section was Commissioned for indoor games such as Scrabble, Chess, Ayo, Whot, Monopoly, Draught, Ludo e.t.c with a dedicated membership of young vibrant clubers who are out to see to the growth of its members physically, morally and socially. Leisure section also know as Aso Rock is the place for any forward looking member of the club to be.',
   link: '/leisure',
   images: [
     'image1.JPG',
@@ -113,41 +113,29 @@ export const leisure: SectionCard = {
   history:
     'Leisure and Indoor Games Section was founded officially in 2012 by a group of dynamic young gentlemen from different background and profession, who at the material time were enthusiast of board games such as Chess, Scrabble, Whot, Monopoly, Draught and other leisure games and couldn’t find a section to accommodate the playing of such games within the province of Benin Club. \n Sequel to the inauguration of Aso Rock as a section, these gentlemen normally gather after close of work at the upper lounge of Benin Club to regularly participate in these games mentioned aboved, prominent amongst this Gentlemen are Arc. Perry Onah, our inaugural Captain, Mr. Nyamali Femi popularly called Baba Femo (Patron), Mr. Taju lawal Former Vice President Benin Club, Sir. Okon Iyang (Captain Emeritus 2nd), Barr. David Maduku (Captain Emeritus 3rd) Engr. Godslove Iserhien (A. k. A Ozidi Congo), Uyi Owie, Idowu Edebiri and so many others, to further foster the co jovial atmosphere in which this games were played every other evening, some members of this group provided a television set while Baba Femo (Patron) single handedly provided a music box. ',
   history2:
-    'This particular spot of the Upper Lounge of Benin Club became sort of a mecca to young professionals who are members of Benin Club after close of work. The unity and civility in which these games were played on daily basis, attracted the attention of the then president of Benin Club, Chief Sam Iredia of blessed memory , who became a regular participant himself, he also took the young men under his wing as a guardian, so as time went by when he was approached by some members of this group to approve a section to be called Leisure and Indoor Games Section and he willingly gave his approval and ensure a space was carved out for the section during renovation and because of the bond between the then President of Benin Club and our young section, our very own dear Taju Lawal who coincidentally was the then Vice President of Benin Club nick named the section Aso Rock, which has come to stay till this day, the benevolence of chief Sam Iredia of blessed memory towards the section during our formative years shall never be forgotten, I say may his soul continue to rest in peace. \n  Over the years Aso Rock has become more than a section to some of us, it has become a brotherhood, the unity and love that abide in Aso Rock can hardly be experience anywhere else, I say this because I am a benefactor of this love and unity of Aso Rock. \n These acts of kindness is not limited to me alone, in the time past our section has gifted a car to an senior member of Benin Club whose vehicle was broken down, Aso Rock regularly donate cash and other provisions to several orphanage homes within Benin metropolis and beyond, just this week in the spirit of our 10 years and thankful celebration, we visited Orosanye and Bethel Ophanage homes wherein we donated several provision to both orphanage homes, we also paid a visit to the Government hospital close to Benin Club and gave all the patient within the hospital money to ease their hospital bill. \n In business we believe in lifting each other up first, patronage amongst ourselves cannot be quantified, within the years of our existence many members that joined the section without their personal building has become landlord, myself inclusive because we were inspired by members before us to do so. May God continue to bless the spirit of umbutu amongst us. ',
+    'This particular spot of the Upper Lounge of Benin Club became sort of a mecca to young professionals who are members of Benin Club after close of work. The unity and civility in which these games were played on daily basis, attracted the attention of the then president of Benin Club, Chief Sam Iredia of blessed memory , who became a regular participant himself, he also took the young men under his wing as a guardian, so as time went by when he was approached by some members of this group to approve a section to be called Leisure and Indoor Games Section and he willingly gave his approval and ensure a space was carved out for the section during renovation and because of the bond between the then President of Benin Club and our young section, our very own dear Taju Lawal who coincidentally was the then Vice President of Benin Club nick named the section Aso Rock, which has come to stay till this day, the benevolence of chief Sam Iredia of blessed memory towards the section during our formative years shall never be forgotten, I say may his soul continue to rest in peace. \n  Over the years Aso Rock has become more than a section to some of us, it has become a brotherhood, the unity and love that abide in Aso Rock can hardly be experience anywhere else, I say this because I am a benefactor of this love and unity of Aso Rock. \n These acts of kindness is not limited to me alone, in the time past our section has gifted a car to an senior member of Benin Club whose vehicle was broken down, Aso Rock regularly donate cash and other provisions to several orphanage homes within Benin metropolis and beyond, just this week in the spirit of our 10 years and thankful celebration, we visited Orosanye and Bethel Ophanage homes wherein we donated several provision to both orphanage homes, we also paid a visit to the Government hospital close to Benin Club and gave all the patient within the hospital money to ease their hospital bill. \n In business we believe in lifting each other up first, patronage amongst ourselves cannot be quantified, within the years of our existence many members that joined the section without their personal building have become landlord, because we were inspired by members before us to do so. May God continue to bless the spirit of umbutu amongst us. ',
 };
 
 export const squash: SectionCard = {
   imageUrl: '/images/squash/image1.JPG',
   desc: '',
   title: 'Squash',
-  info: 'With the courts and a terrace that can comfortably sit about 80 people and with a soon to be ready Message / Gym Room, the section is the place to be. If truly you wish to know if you are fit, try squash. The section unarguably is one of the social hub in the club.',
+  info: 'With the courts and a terrace that can comfortably sit about 80 people and a soon to be ready Massage / Gym wing, the section is the place to be. If truly you wish to know if you are fit, try squash. The section unarguably is one of the social hub in the club.',
   link: '/squash',
   images: [
     'image1.JPG',
     'image2.JPG',
     'image3.JPG',
-    'image4.JPG',
-    'image5.JPG',
     'image6.JPG',
     'image7.JPG',
     'image8.JPG',
-    'image9.JPG',
     'image10.JPG',
     'image11.JPG',
-    'image12.JPG',
     'image13.JPG',
     'image14.JPG',
-    'image15.JPG',
     'image16.JPG',
     'image17.JPG',
-    'image18.JPG',
-    'image19.JPG',
     'image20.JPG',
-    'image21.JPG',
-    'image22.JPG',
-    'image23.JPG',
-    'image24.JPG',
-    'image25.JPG',
     'image26.JPG',
     'image27.JPG',
   ],
@@ -171,7 +159,6 @@ export const swimming: SectionCard = {
     'image5.JPG',
     'image6.JPG',
     'image7.jpg',
-    'image8.JPG',
   ],
   history: `The Swimming Section metamorphosed from the car park group in 2009 under the presidency of Dr. I.K Ofor. The first captain of the Section was Mr. Obiora Onwuteka.   The Pool itself was constructed in 1964 during the tenure of Chief Olu Akpata as President. \n A massive renovation / reconstruction was however carried out during the presidency of Pharm. Fred Iboi in 2022 and Mr. Justin Ajufo has the Captain. \n The aim of the pool is to recreate through swimming exercise. However, because of the present state of the pool which has now been upgraded tremendously, major events in the Club are now being held there and it is now the cynosure of attention in Benin Club.`,
   history2: '',

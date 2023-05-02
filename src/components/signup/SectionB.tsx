@@ -93,7 +93,7 @@ const SectionB = (props: SectionProps) => {
           >
             <div className="flex">
               <label className="block text-gray-700 font-medium mr-4">
-                Are you Nigerian?
+                Are you a Nigerian?
               </label>
               <CustomRadio
                 name="isNigeria"
@@ -188,7 +188,7 @@ const SectionB = (props: SectionProps) => {
           >
             <div className="flex flex-wrap">
               <label className="block text-gray-700 font-medium mr-4">
-                Do you have any dependent relative in Benin?
+                Do you reside permanently in Benin?
               </label>
               <div className="flex">
                 <CustomRadio
@@ -223,7 +223,7 @@ const SectionB = (props: SectionProps) => {
           >
             <div className="flex flex-wrap">
               <label className="block text-gray-700 font-medium mr-4">
-                Are you a member of any club?
+                Are you a member of any other club?
               </label>
               <div className="flex">
                 <CustomRadio

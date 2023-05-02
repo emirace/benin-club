@@ -251,7 +251,7 @@ const PersonalInfo = (props: SectionProps) => {
             htmlFor="permanentAddress"
             className="block text-gray-700 font-medium mb-1"
           >
-            Permanet Home Address
+            Permanent Home Address
           </label>
           <input
             className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"

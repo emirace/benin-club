@@ -47,6 +47,6 @@ transactionSchema.pre<TransactionDocument>('save', async function (next) {
 
 const Transaction =
   mongoose.models.Transaction ||
-  mongoose.model<ITransaction>('Transaction', transactionSchema);
+  mongoose.model<TransactionDocument>('Transaction', transactionSchema);
 
 export default Transaction;

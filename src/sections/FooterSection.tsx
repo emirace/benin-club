@@ -67,13 +67,14 @@ const FooterSection = () => {
           </div>
           <div className="text-white">
             <div className="flex flex-row gap-4">
-              <h2 className="text-3xl md:text-5xl font-base mb-8">SUBCRIBE</h2>
+              <h2 className="text-3xl md:text-5xl font-base mb-8">SUBSCRIBE</h2>
               <h2 className="text-3xl md:text-5xl font-bold text-red mb-8">
                 NOW
               </h2>
             </div>
             <p className="mb-4">
-              Subcribe to our newsletter so you don&apos;t miss important update
+              SubScribe to our newsletter so you don&apos;t miss important
+              update
             </p>
             <form>
               <input

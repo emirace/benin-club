@@ -132,16 +132,6 @@ const VerificationTokenSchema = new Schema({
   expires: { type: Date, required: true },
 });
 
-const WalletSchema = new Schema({
-  balance: { type: Number, required: true, default: 0 },
-  transactions: [
-    {
-      amount: { type: Number, required: true },
-      date: { type: Date, default: Date.now },
-    },
-  ],
-});
-
 export type UserDocument = IUser & Document;
 
 const userSchema = new Schema<IUser>(
@@ -278,7 +268,7 @@ const userSchema = new Schema<IUser>(
       enum: ['admin', 'wallet', 'user', 'member'],
       default: 'member',
     },
-    wallet: { type: WalletSchema },
+    wallet: { type: [Schema.Types.ObjectId], ref: 'Wallet' },
     step: { type: Number, default: 1 },
     bio: { type: String },
     socials: {

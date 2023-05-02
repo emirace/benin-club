@@ -93,17 +93,15 @@ function MemberTableRow({
             />
           </div>
           <div>
-            <p className="font-semibold">
-              {member.firstName} {member.lastName}
-            </p>
-            <p className="hidden md:block">{member.level}</p>
+            <p className="font-semibold">{member.surName}</p>
+            <p className="hidden md:block">{member.firstName}</p>
           </div>
         </td>
         <td className="py-2 px-4">{member.level}</td>
-        <td className="py-2 px-4">{member.position}</td>
+        <td className="py-2 px-4">{member.subcriptionBal}</td>
         <td className="py-2 px-4">{member?.occupation?.address}</td>
         <td className="py-2 px-4">{member.email}</td>
-        <td className="py-2 px-4">{member?.home?.tel}</td>
+        <td className="py-2 px-4">{member?.tel}</td>
         <td className="py-2 px-4">{member.gender}</td>
         <td className={`py-2 px-4 ${statusClassName}`}>{member.status}</td>
         <td className="py-2 px-4">

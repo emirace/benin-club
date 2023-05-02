@@ -1,16 +1,17 @@
-import mongoose, { Schema } from 'mongoose';
-import { ITransaction } from './transaction.model';
+import { Schema, model, Document, models } from 'mongoose';
 
-export interface IWallet extends mongoose.Document {
+export interface IWallet {
+  userId: number;
   balance: number;
-  transactions: ITransaction[];
 }
 
-const walletSchema = new Schema({
-  balance: { type: Number, required: true, default: 0 },
-  transactions: { type: [Schema.Types.ObjectId], ref: 'Transaction' },
+export type WalletDocument = IWallet & Document;
+
+const walletSchema = new Schema<WalletDocument>({
+  userId: { type: Number, required: true },
+  balance: { type: Number, default: 0, required: true },
 });
 
-const Wallet = mongoose.model<IWallet>('Wallet', walletSchema);
+const Wallet = models.Wallet || model<WalletDocument>('Wallet', walletSchema);
 
-export { Wallet };
+export default Wallet;

@@ -24,12 +24,34 @@ export default function Grill() {
           </div>
           <div className="mt-12">
             <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
-              LABBIS BARBECUE
+              LABIS BARBECUE
             </h2>
 
             <p className="mt-4 text-lg text-gray-500">
               Labis Barbecue specializes in making Barbecue with all kinds of
               fish.
+            </p>
+          </div>
+
+          <div className="mt-12">
+            <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
+              UMARU HUSANI SUYA SPOT
+            </h2>
+
+            <p className="mt-4 text-lg text-gray-500">
+              in Golf Section, specializes in making Suya such as Chicken, Ram
+              and Assorted.
+            </p>
+          </div>
+
+          <div className="mt-12">
+            <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
+              A B C CENTER
+            </h2>
+
+            <p className="mt-4 text-lg text-gray-500">
+              in Golf Section, prepares Barbecue fish, club sandwich, instant
+              noodles etc.
             </p>
           </div>
         </div>

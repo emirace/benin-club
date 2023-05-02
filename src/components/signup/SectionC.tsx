@@ -165,8 +165,8 @@ const SectionC = (props: SectionProps) => {
               htmlFor="disability"
               className="block text-gray-700 font-medium mb-2"
             >
-              Do you have a disability? If so, what is the nature of the
-              disability?
+              Do you have any physical disability? If so, what is the nature of
+              the disability?
             </label>
             <textarea
               id="disability"
@@ -242,7 +242,7 @@ const SectionC = (props: SectionProps) => {
               htmlFor="tribe"
               className="block text-gray-700 font-medium mb-2"
             >
-              If you are Nigerian, which tribe are you?
+              If you are a Nigerian, which tribe are you?
             </label>
             <input
               type="text"
