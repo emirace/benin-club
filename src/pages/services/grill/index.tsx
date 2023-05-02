@@ -39,7 +39,7 @@ export default function Grill() {
             </h2>
 
             <p className="mt-4 text-lg text-gray-500">
-              in Golf Section, specializes in making Suya such as Chicken, Ram
+              In Golf Section, specializes in making Suya such as Chicken, Ram
               and Assorted.
             </p>
           </div>
@@ -50,7 +50,7 @@ export default function Grill() {
             </h2>
 
             <p className="mt-4 text-lg text-gray-500">
-              in Golf Section, prepares Barbecue fish, club sandwich, instant
+              In Golf Section, prepares Barbecue fish, club sandwich, instant
               noodles etc.
             </p>
           </div>
