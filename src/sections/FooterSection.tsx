@@ -73,7 +73,7 @@ const FooterSection = () => {
               </h2>
             </div>
             <p className="mb-4">
-              SubScribe to our newsletter so you don&apos;t miss important
+              Subscribe to our newsletter so you don&apos;t miss important
               update
             </p>
             <form>
