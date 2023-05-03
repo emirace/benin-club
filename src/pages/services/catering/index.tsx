@@ -28,6 +28,7 @@ export default function Kitchen() {
               Chapman, Candy Floss, Bread and Small chops. They sell children
               toys and render indoor and outdoor catering services.
             </p>
+            <Gallery images={['image1.JPG', 'image2.JPG']} link="/candyland" />
           </div>
 
           <div className="mt-12">
