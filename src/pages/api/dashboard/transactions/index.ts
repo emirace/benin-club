@@ -37,16 +37,16 @@ export default async function handler(
         }
         break;
       case 'POST':
-        const { memberName, description, paymentMethod, amount } = req.body;
-        const newTransaction: TransactionDocument = new Transaction({
-          memberName,
-          description,
-          paymentMethod,
-          amount,
-        });
-        console.log(newTransaction);
-        await newTransaction.save();
-        res.status(201).json(newTransaction);
+        // const { memberName, description, paymentMethod, amount } = req.body;
+        // const newTransaction: TransactionDocument = new Transaction({
+        //   memberName,
+        //   description,
+        //   paymentMethod,
+        //   amount,
+        // });
+        // console.log(newTransaction);
+        // await newTransaction.save();
+        // res.status(201).json(newTransaction);
         break;
       default:
         res.status(405).json({ message: 'Method Not Allowed' });

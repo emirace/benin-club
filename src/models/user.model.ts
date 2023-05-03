@@ -12,11 +12,6 @@ interface IChild {
   sex: 'male' | 'female';
 }
 
-interface IEntryFee {
-  fee: string;
-  bal: number;
-}
-
 interface IEducation {
   degree: string;
   school: string;
@@ -41,14 +36,6 @@ interface ISocial {
   twitter: string;
   instagram: string;
   linkedin: string;
-}
-
-interface IWallet {
-  balance: number;
-  transactions: {
-    amount: number;
-    date: Date;
-  }[];
 }
 
 export interface IUser {
@@ -124,7 +111,6 @@ export interface IUser {
     | 'Payment'
     | 'ProfileCreation'
     | 'Completed';
-  wallet?: IWallet;
 }
 
 const VerificationTokenSchema = new Schema({
@@ -268,7 +254,6 @@ const userSchema = new Schema<IUser>(
       enum: ['admin', 'wallet', 'user', 'member'],
       default: 'member',
     },
-    wallet: { type: [Schema.Types.ObjectId], ref: 'Wallet' },
     step: { type: Number, default: 1 },
     bio: { type: String },
     socials: {

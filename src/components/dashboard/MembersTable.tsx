@@ -30,7 +30,6 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   const fetchMembers = useCallback(
     async (
       pageNumber: number,
-      pageSize: number,
       sort: string,
       order: 'asc' | 'desc',
       category: string
@@ -38,7 +37,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `/api/dashboard/members?page=${pageNumber}&pageSize=${pageSize}&sort=${sort}&category=${category}&order=${order}`
+          `/api/dashboard/members?page=${pageNumber}&pageSize=${membersPerPage}&sort=${sort}&category=${category}&order=${order}`
         );
         const { members, totalMembers } = await response.json();
         console.log(members);
@@ -50,22 +49,16 @@ function MembersTable({}: MembersTableProps): JSX.Element {
         setIsLoading(false);
       }
     },
-    []
+    [membersPerPage]
   );
 
   useEffect(() => {
-    fetchMembers(
-      currentPage,
-      membersPerPage,
-      sorting.field,
-      sorting.order,
-      category
-    );
-  }, [currentPage, fetchMembers, membersPerPage]);
+    fetchMembers(currentPage, sorting.field, sorting.order, category);
+  }, [currentPage, fetchMembers]);
 
   useEffect(() => {
-    fetchMembers(1, membersPerPage, sorting.field, sorting.order, category);
-  }, [category, fetchMembers, membersPerPage, sorting]);
+    fetchMembers(1, sorting.field, sorting.order, category);
+  }, [category, fetchMembers, sorting]);
 
   useEffect(() => {
     setFilteredMembers(members);
@@ -93,13 +86,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    fetchMembers(
-      pageNumber,
-      membersPerPage,
-      sorting.field,
-      sorting.order,
-      category
-    );
+    fetchMembers(pageNumber, sorting.field, sorting.order, category);
   };
 
   const handleAddMember = () => {
@@ -119,13 +106,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
     }
   };
   const handleUpdateMemberTable = async () => {
-    fetchMembers(
-      currentPage,
-      membersPerPage,
-      sorting.field,
-      sorting.order,
-      category
-    );
+    fetchMembers(currentPage, sorting.field, sorting.order, category);
   };
 
   const isMobile = window.matchMedia('(max-width: 640px)').matches;

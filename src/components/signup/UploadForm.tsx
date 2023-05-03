@@ -1,7 +1,9 @@
 import { buttonStyle } from '@/constants/styles';
 import { SectionProps } from '@/types/signup';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { FaCloudUploadAlt } from 'react-icons/fa';
+import { FiUpload } from 'react-icons/fi';
 
 const UploadForm = (props: SectionProps) => {
   const { formData, onChange, onNext, error, handleError, setFormData } = props;
@@ -38,26 +40,49 @@ const UploadForm = (props: SectionProps) => {
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2" htmlFor="image">
-          <FaCloudUploadAlt className="mr-2" />
-          Upload Image
+          Image
         </label>
-        <input
-          className="border rounded-lg py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="file"
-          name="image"
-          id="image"
-          onChange={handleImageChange}
-        />
-      </div>
-      {selectedImage && (
-        <div className="mb-4">
-          <img
-            src={selectedImage}
-            alt="Preview"
-            className="w-64 h-64 object-contain mx-auto"
+        <div className="relative">
+          <input
+            className="sr-only"
+            id="image"
+            name="image"
+            type="file"
+            onChange={handleImageChange}
           />
+          <div className="h-48 w-full border-dashed border-2 border-gray-300">
+            {selectedImage ? (
+              <div className="w-64 h-64">
+                <Image
+                  src={selectedImage}
+                  alt={`passPort`}
+                  layout="fill"
+                  className="object-contain mx-auto"
+                />
+              </div>
+            ) : (
+              <label
+                htmlFor="image"
+                className="flex flex-col p-8 items-center justify-center h-full text-gray-400"
+              >
+                <p className="mb-2">
+                  <FiUpload className="h-8 w-8" />
+                </p>
+                <p className="text-sm">Upload your passport</p>
+              </label>
+            )}
+          </div>
+          <div className="absolute bottom-0 right-0 p-2 bg-white rounded-md">
+            <label
+              htmlFor="image"
+              className="cursor-pointer flex items-center justify-center"
+            >
+              <FiUpload className="h-6 w-6 mr-2" />
+              Change
+            </label>
+          </div>
         </div>
-      )}
+      </div>
       <div className="mb-4">
         <button
           type="submit"

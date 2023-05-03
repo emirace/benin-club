@@ -22,22 +22,14 @@ export default async function handler(
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
+    if (req.method !== 'GET') {
+      return res.status(405).json({ message: 'Method Not Allowed' });
+    }
+
     await connectDB();
 
-    switch (req.method) {
-      case 'GET':
-        const wallets: WalletDocument[] = await Wallet.find();
-        res.status(200).json(wallets);
-        break;
-      case 'POST':
-        const { userId } = req.body;
-        const newUser: WalletDocument = new Wallet({ userId });
-        await newUser.save();
-        res.status(201).json(newUser);
-        break;
-      default:
-        res.status(405).json({ message: 'Method Not Allowed' });
-    }
+    const wallets: WalletDocument[] = await Wallet.find();
+    res.status(200).json(wallets);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });

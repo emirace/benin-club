@@ -52,8 +52,7 @@ function Transaction(): JSX.Element {
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase();
     const filtered = transactions.filter((transaction) => {
-      const invoiceId =
-        `${transaction.invoiceId} ${transaction.memberName}`.toLowerCase();
+      const invoiceId = `${transaction.invoiceId}`.toLowerCase();
       return invoiceId.includes(searchTerm);
     });
     setFilteredTransactions(filtered);
@@ -202,7 +201,7 @@ function Transaction(): JSX.Element {
           {sortedTransactions.map((transaction) => (
             <tr key={transaction.id} className="bg-white">
               <td className="px-4 py-2">{transaction.invoiceId}</td>
-              <td className="px-4 py-2">{transaction.memberName}</td>
+              <td className="px-4 py-2">{transaction._id?.surname}</td>
               <td className="px-4 py-2">{transaction.createdAt}</td>
               <td className="px-4 py-2">{transaction.description}</td>
               <td className="px-4 py-2">{transaction.paymentMethod}</td>

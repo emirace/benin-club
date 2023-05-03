@@ -22,43 +22,17 @@ export default async function handler(
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
+    if (req.method !== 'GET') {
+      return res.status(405).json({ message: 'Method Not Allowed' });
+    }
+
     await connectDB();
-    switch (req.method) {
-      case 'GET':
-        const wallet: WalletDocument | null = await Wallet.findById(
-          req.query.id
-        );
-        if (!wallet) {
-          res.status(404).json({ message: 'Wallet not found' });
-        } else {
-          res.status(200).json(wallet);
-        }
-        break;
-      case 'PUT':
-        const { balance } = req.body;
-        const updatedWallet: WalletDocument | null =
-          await Wallet.findByIdAndUpdate(
-            req.query.id,
-            { balance },
-            { new: true }
-          );
-        if (!updatedWallet) {
-          res.status(404).json({ message: 'Wallet not found' });
-        } else {
-          res.status(200).json(updatedWallet);
-        }
-        break;
-      // case 'DELETE':
-      //   const deletedWallet: WalletDocument | null =
-      //     await Wallet.findByIdAndDelete(req.query.id);
-      //   if (!deletedWallet) {
-      //     res.status(404).json({ message: 'Wallet not found' });
-      //   } else {
-      //     res.status(200).json(deletedWallet);
-      //   }
-      //   break;
-      default:
-        res.status(405).json({ message: 'Method Not Allowed' });
+
+    const wallet: WalletDocument | null = await Wallet.findById(req.query.id);
+    if (!wallet) {
+      res.status(404).json({ message: 'Wallet not found' });
+    } else {
+      res.status(200).json(wallet);
     }
   } catch (error) {
     console.error(error);

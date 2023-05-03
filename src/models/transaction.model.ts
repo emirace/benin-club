@@ -6,8 +6,11 @@ export interface ITransaction {
   amount: number;
   status: 'Pending' | 'Completed' | 'Failed';
   invoiceId: string;
-  memberName: string;
+  userId: Schema.Types.ObjectId;
   paymentMethod: string;
+  type: 'credit' | 'debit';
+  reference: string;
+  initiatedBy: Schema.Types.ObjectId;
 }
 
 export type TransactionDocument = ITransaction & Document;
@@ -20,11 +23,14 @@ const transactionSchema = new Schema<TransactionDocument>(
       enum: ['Pending', 'Completed', 'Failed'],
       default: 'Pending',
     },
+    type: { type: String, required: true, enum: ['credit', 'debit'] },
     description: { type: String, required: true },
-    memberName: { type: String, required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     paymentMethod: { type: String, required: true },
-    invoiceId: { type: String, required: true },
+    invoiceId: { type: String },
+    reference: { type: String },
     amount: { type: Number, required: true },
+    initiatedBy: { type: Schema.Types.ObjectId, ref: 'User' },
   },
   {
     timestamps: true,

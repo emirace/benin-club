@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import ShowBioPopup from '@/components/ShowBioPopup';
 import SocialMediaPopup from '@/components/SocialMediaPopup';
 import Link from 'next/link';
+import Loading from '@/components/Loading';
 
 type PersonalInfoProps = {
   user: IUser;
@@ -25,6 +26,26 @@ type PersonalInfoProps = {
 export default function PersonalInfo(props: PersonalInfoProps) {
   const { user } = props;
   const [step, setStep] = useState(1);
+  const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBalance();
+  }, []);
+
+  const fetchBalance = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/wallet/balance');
+      const { balance } = await response.json();
+      setBalance(balance);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setBalance(0);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row bg-white ">
@@ -87,7 +108,14 @@ export default function PersonalInfo(props: PersonalInfoProps) {
           <FaWallet className="mr-2" />
           <p>
             Wallet Balance:
-            <span className="text-red ml-2 font-bold">&#x20a6;{0}</span>
+            {loading ? (
+              <Loading />
+            ) : (
+              <span className="text-red ml-2 font-bold">
+                {currency}
+                {balance}
+              </span>
+            )}
             <Link
               href="/account/wallet"
               className="ml-2 underline text-red font-light text-sm"
@@ -103,3 +131,5 @@ export default function PersonalInfo(props: PersonalInfoProps) {
     </div>
   );
 }
+
+export const currency = <span>&#x20a6;</span>;
