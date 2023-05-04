@@ -11,6 +11,7 @@ import {
   FaFire,
   FaCut,
   FaTshirt,
+  FaFootballBall,
 } from 'react-icons/fa';
 
 export const services: Service[] = [
@@ -53,6 +54,14 @@ export const services: Service[] = [
       'Leave the dirty work to us at our laundry services, where we use cutting-edge technology and provide top-notch customer service to exceed your expectations with fresh, clean clothes.',
     icon: FaTshirt,
     link: 'laundry',
+  },
+  {
+    id: 14,
+    title: 'Sport Shop',
+    description:
+      'Discover the ultimate sporting experience at our Sport Shop, where you will find everything you need to take your game to the next level.',
+    icon: FaFootballBall,
+    link: 'sport',
   },
 
   // {

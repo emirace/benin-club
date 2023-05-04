@@ -25,7 +25,7 @@ export default function SALOON() {
               sterilizers.
             </p>
             <p className="mt-4 text-lg text-gray-500">
-              You can contact them on 07034499317.
+              You can contact them on 08022404306.
             </p>
           </div>
         </div>

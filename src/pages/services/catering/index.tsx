@@ -128,6 +128,9 @@ export default function Kitchen() {
             <p className="mt-4 text-lg text-gray-500">
               They also offer indoor and outdoor catering services.
             </p>
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 09138199573, 08078014366.
+            </p>
           </div>
         </div>
       </div>
