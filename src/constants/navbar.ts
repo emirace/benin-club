@@ -6,6 +6,7 @@ import {
   FiFileText,
   FiDollarSign,
   FiTruck,
+  FiCreditCard,
 } from 'react-icons/fi';
 
 export const navLinks = [
@@ -47,6 +48,7 @@ export const menuItems = [
   { label: 'Members', icon: FiUsers, role: ['admin', 'user'] },
   { label: 'Events', icon: FiCalendar, role: ['admin', 'user'] },
   { label: 'Posts', icon: FiFileText, role: ['admin', 'user'] },
+  { label: 'Wallet', icon: FiCreditCard, role: ['admin', 'wallet'] },
   { label: 'Transactions', icon: FiDollarSign, role: ['admin', 'wallet'] },
   { label: 'Vehicles', icon: FiTruck, role: ['admin'] },
   { label: 'Settings', icon: FiSettings, role: ['admin'] },

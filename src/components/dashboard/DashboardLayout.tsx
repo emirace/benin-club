@@ -9,6 +9,7 @@ import { news } from '@/constants/newsCard';
 import Transaction from './Transaction';
 import { transactions } from '@/constants/transactions';
 import { IUser } from '@/models/user.model';
+import Wallet from './Wallet';
 
 interface DashboardLayoutProps {
   user: IUser;
@@ -41,6 +42,9 @@ function DashboardLayout(props: DashboardLayoutProps): JSX.Element {
       break;
     case 'Posts':
       content = <Post />;
+      break;
+    case 'Wallet':
+      content = <Wallet />;
       break;
     case 'Transactions':
       content = <Transaction />;

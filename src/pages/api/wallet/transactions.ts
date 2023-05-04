@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Transaction from '@/models/transaction.model';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
+import { connectDB } from '@/utils/mongoose';
 
 export default async function handleGetTransactions(
   req: NextApiRequest,
@@ -18,6 +19,7 @@ export default async function handleGetTransactions(
   const userId = loginUser._id;
 
   try {
+    await connectDB();
     // Find all transactions for the given user
     const transactions = await Transaction.find({ userId });
 

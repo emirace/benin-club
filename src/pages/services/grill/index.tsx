@@ -21,6 +21,10 @@ export default function Grill() {
             <p className="mt-4 text-lg text-gray-500">
               Adamu Suya Spot prepares Ram Suya, Chicken suya, Cow meat etc.
             </p>
+
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 08106466412.
+            </p>
           </div>
           <div className="mt-12">
             <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
@@ -30,6 +34,9 @@ export default function Grill() {
             <p className="mt-4 text-lg text-gray-500">
               Labis Barbecue specializes in making Barbecue with all kinds of
               fish.
+            </p>
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 08030736668.
             </p>
           </div>
 
@@ -41,6 +48,9 @@ export default function Grill() {
             <p className="mt-4 text-lg text-gray-500">
               In Golf Section, specializes in making Suya such as Chicken, Ram
               and Assorted.
+            </p>
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 08169022732.
             </p>
           </div>
 

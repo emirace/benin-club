@@ -40,7 +40,6 @@ function MembersTable({}: MembersTableProps): JSX.Element {
           `/api/dashboard/members?page=${pageNumber}&pageSize=${membersPerPage}&sort=${sort}&category=${category}&order=${order}`
         );
         const { members, totalMembers } = await response.json();
-        console.log(members);
         setMembers(members);
         setTotalPages(Math.ceil(totalMembers / membersPerPage));
         setIsLoading(false);

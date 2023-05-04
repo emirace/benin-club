@@ -24,6 +24,9 @@ export default function SALOON() {
               waves, dreadlocks and hair washing with towel warmer and
               sterilizers.
             </p>
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 07034499317.
+            </p>
           </div>
         </div>
       </div>

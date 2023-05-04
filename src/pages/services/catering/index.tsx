@@ -28,6 +28,9 @@ export default function Kitchen() {
               Chapman, Candy Floss, Bread and Small chops. They sell children
               toys and render indoor and outdoor catering services.
             </p>
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 08033009052.
+            </p>
             <Gallery images={['image1.JPG', 'image2.JPG']} link="/candyland" />
           </div>
 
@@ -59,6 +62,10 @@ export default function Kitchen() {
 
             <p className="mt-4 text-lg text-gray-500">
               They also offer indoor and outdoor catering services.
+            </p>
+
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 08032671011.
             </p>
             <Gallery
               images={[
