@@ -41,7 +41,7 @@ export default async function handler(
         const search = (req.query.search as string) || '';
 
         const categoryFilter = category === 'all' ? {} : { level: category };
-        console.log(sortField, sortOrder, category, categoryFilter);
+        console.log(sortField, sortOrder, category, categoryFilter, search);
 
         const searchFilter =
           search === ''
@@ -56,6 +56,8 @@ export default async function handler(
           $or: [
             { surName: { $regex: search, $options: 'i' } },
             { firstName: { $regex: search, $options: 'i' } },
+            { memberId: { $regex: search, $options: 'i' } },
+            // { tel: { $regex: parseInt(search), $options: 'i' } },
           ],
         })
           .sort(sort)
@@ -67,6 +69,8 @@ export default async function handler(
           $or: [
             { surName: { $regex: search, $options: 'i' } },
             { firstName: { $regex: search, $options: 'i' } },
+            { memberId: { $regex: search, $options: 'i' } },
+            // { tel: { $regex: parseInt(search), $options: 'i' } },
           ],
         });
         res.status(200).json({ members, totalMembers });

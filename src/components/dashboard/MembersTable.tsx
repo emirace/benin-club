@@ -32,12 +32,13 @@ function MembersTable({}: MembersTableProps): JSX.Element {
       pageNumber: number,
       sort: string,
       order: 'asc' | 'desc',
-      category: string
+      category: string,
+      search: string = ''
     ) => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `/api/dashboard/members?page=${pageNumber}&pageSize=${membersPerPage}&sort=${sort}&category=${category}&order=${order}`
+          `/api/dashboard/members?page=${pageNumber}&pageSize=${membersPerPage}&sort=${sort}&category=${category}&order=${order}&search=${search}`
         );
         const { members, totalMembers } = await response.json();
         setMembers(members);
@@ -65,11 +66,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase();
-    const filtered = members.filter((member) => {
-      const fullName = `${member.firstName} ${member.surName}`.toLowerCase();
-      return fullName.includes(searchTerm);
-    });
-    setFilteredMembers(filtered);
+    fetchMembers(1, sorting.field, sorting.order, category, searchTerm);
   };
 
   const pageNumbers = [];
