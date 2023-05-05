@@ -27,9 +27,12 @@ export default async function handler(
     switch (req.method) {
       case 'GET':
         if (req.query.status) {
-          const transactions: TransactionDocument[] = await Transaction.find({
-            status: req.query.status,
-          });
+          const transactions: TransactionDocument[] =
+            await Transaction.find().populate({
+              path: 'userId',
+              select: 'surName firstName',
+            });
+
           res.status(200).json(transactions);
         } else {
           const transactions: TransactionDocument[] = await Transaction.find();

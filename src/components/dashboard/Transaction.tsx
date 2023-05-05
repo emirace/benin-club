@@ -4,10 +4,31 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 interface TransactionProps {}
 
+interface TransactionData {
+  [key: string]: any;
+  description: string;
+  amount: number;
+  status: 'Pending' | 'Completed' | 'Failed';
+  invoiceId: string;
+  userId: {
+    _id: string;
+    firstName: string;
+    surName: string;
+  };
+  paymentMethod: string;
+  type: 'credit' | 'debit';
+  reference: string;
+  initiatedBy: {
+    _id: string;
+    firstName: string;
+    surName: string;
+  };
+}
+
 function Transaction(): JSX.Element {
-  const [transactions, setTransactions] = useState<TransactionDocument[]>([]);
+  const [transactions, setTransactions] = useState<TransactionData[]>([]);
   const [filteredTransactions, setFilteredTransactions] = useState<
-    TransactionDocument[]
+    TransactionData[]
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionsPerPage] = useState(5);
@@ -25,7 +46,7 @@ function Transaction(): JSX.Element {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/dashboard/transactions');
+      const response = await fetch('/api/dashboard/wallets/transactions');
       const data = await response.json();
       setTransactions(data);
       console.log(data);
@@ -201,7 +222,9 @@ function Transaction(): JSX.Element {
           {sortedTransactions.map((transaction) => (
             <tr key={transaction.id} className="bg-white">
               <td className="px-4 py-2">{transaction.invoiceId}</td>
-              <td className="px-4 py-2">{transaction._id?.surname}</td>
+              <td className="px-4 py-2">
+                {transaction.userId?.surName} {transaction.userId?.firstName}
+              </td>
               <td className="px-4 py-2">{transaction.createdAt}</td>
               <td className="px-4 py-2">{transaction.description}</td>
               <td className="px-4 py-2">{transaction.paymentMethod}</td>

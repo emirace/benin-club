@@ -10,6 +10,9 @@ export default async function handleFund(
   res: NextApiResponse
 ) {
   try {
+    if (req.method !== 'POST') {
+      return res.status(405).json({ message: 'Method Not Allowed' });
+    }
     const session = await getServerSession(req, res, authOptions);
 
     if (!session)
@@ -24,21 +27,21 @@ export default async function handleFund(
     }
 
     const { amount, paymentMethod } = req.body;
-    const { userId } = req.query;
+    const { id: userId } = req.query;
 
     await connectDB();
 
     const wallet: WalletDocument | null = await Wallet.findOne({ userId });
 
     if (wallet) {
-      wallet.balance += amount;
+      wallet.balance += parseInt(amount);
       await wallet.save();
 
       // Create a new transaction record
       const transaction: TransactionDocument = new Transaction({
         userId: userId,
         type: 'credit',
-        amount,
+        amount: parseInt(amount),
         reference: '',
         status: 'Completed',
         description: 'Fund wallet',
@@ -55,7 +58,7 @@ export default async function handleFund(
       // If the user does not have a wallet, create one and update the balance
       const newWallet = new Wallet({
         userId: userId,
-        balance: amount,
+        balance: parseInt(amount),
       });
 
       await newWallet.save();
@@ -64,7 +67,7 @@ export default async function handleFund(
       const transaction: TransactionDocument = new Transaction({
         userId: userId,
         type: 'credit',
-        amount,
+        amount: parseInt(amount),
         reference: '',
         status: 'Completed',
         description: 'Fund wallet',

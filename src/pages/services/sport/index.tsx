@@ -18,15 +18,17 @@ export default function SPORT() {
               SPORT SHOP
             </h2>
             <p className="mt-4 text-lg text-gray-500">
-              Benin Gol Club Pro Shop was establised to provide items needed for
-              absolute golfing experience for golfers in the club and its
+              Benin Golf Club Pro Shop was establised to provide items needed
+              for absolute golfing experience for golfers in the club and its
               environs. The sport is where all kind of quality branded apparels
-              such as shirts, face cap, arm sleeves, trousers, shorts, golf cart
-              bags of all range, golf trolleys, golf balls, umbrellas, rain
-              jackets, casino marker, towels etc, others include trophies and
-              medals.
+              such as Shirts, Face cap, Arm sleeves, Trousers, Shorts, Golf cart
+              bags of all range, Golf trolleys, Golf balls, Umbrellas, Rain
+              jackets, Casino marker, Towels etc, others include Trophies and
+              Medals.
             </p>
-            <p className="mt-4 text-lg text-gray-500"></p>
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 09073615380{' '}
+            </p>
           </div>
         </div>
       </div>

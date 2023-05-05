@@ -8,6 +8,9 @@ export default async function handlePay(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
   const session = await getServerSession(req, res, authOptions);
 
   if (!session)
@@ -29,15 +32,15 @@ export default async function handlePay(
     const wallet = await Wallet.findOne({ userId: userId });
 
     // If the user has enough balance, deduct the amount and create a transaction
-    if (wallet && wallet.balance >= amount) {
-      wallet.balance -= amount;
+    if (wallet && wallet.balance >= parseInt(amount)) {
+      wallet.balance -= parseInt(amount);
       await wallet.save();
 
       // Create a transaction record
       const transaction = new Transaction({
         userId,
         type: 'debit',
-        amount,
+        amount: parseInt(amount),
         reference: '',
         status: 'Completed',
         description,

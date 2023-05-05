@@ -201,7 +201,7 @@ interface HeaderProps {
 
 const Header = ({ handleSorting, sorting }: HeaderProps) => (
   <thead>
-    <tr className="bg-gray-200 whitespace-nowrap">
+    <tr className=" whitespace-nowrap">
       {membersTableHeader.map((header) => (
         <th
           className="py-2 px-4 text-left"

@@ -63,6 +63,9 @@ export default function Grill() {
               In Golf Section, prepares Barbecue fish, club sandwich, instant
               noodles etc.
             </p>
+            <p className="mt-4 text-lg text-gray-500">
+              You can contact them on 08056154175.
+            </p>
           </div>
         </div>
       </div>

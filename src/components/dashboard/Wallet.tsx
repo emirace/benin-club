@@ -1,15 +1,30 @@
-import { WalletDocument } from '@/models/wallet.model';
 import { useEffect, useState } from 'react';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiSearch } from 'react-icons/fi';
 import Loading from '../Loading';
+import WalletRow from './WalletRow';
+import { buttonStyle } from '@/constants/styles';
+import Modal from '../Modal';
+import CreateWallet from './wallet/CreateWallet';
+
+export type WalletDataProps = {
+  _id: string;
+  balance: number;
+  userId: {
+    _id: string;
+    firstName: string;
+    surName: string;
+  };
+};
 
 const Wallet = () => {
-  const [walletData, setWalletData] = useState<any>([]);
+  const [walletData, setWalletData] = useState<WalletDataProps[]>([]);
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(20);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
     fetchWalletData();
@@ -38,16 +53,56 @@ const Wallet = () => {
     setCurrentPage(pageNumber);
   };
 
-  const handlePreviousPage = () => {
-    setCurrentPage((prevPage) => prevPage - 1);
+  const handleUpdateWalletTable = () => {
+    fetchWalletData();
   };
 
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => prevPage + 1);
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    setCurrentPage(1);
   };
+
+  const onClose = () => {
+    setShowModal(false); // <-- update state variable to show modal
+    handleUpdateWalletTable();
+  };
+
+  const onOpen = () => {
+    console.log('hello');
+    setShowModal(true); // <-- update state variable to show modal
+  };
+
+  const filteredWalletData = walletData.filter(
+    (member) =>
+      member.userId?.firstName
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase()) ||
+      member.userId?.surName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div>
+      <div className="flex justify-between items-center">
+        <div className="flex items-center w-64 relative border border-gray rounded-md">
+          <span className="absolute pl-3 inset-y-0 left-0 flex items-center">
+            <FiSearch className="text-red" />
+          </span>
+          <input
+            className="py-2 pl-10 pr-4 w-full rounded-md focus:outline-none focus:bg-white focus:text-gray-900"
+            type="text"
+            placeholder="Search by name"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+        </div>
+        <button className={buttonStyle} onClick={onOpen}>
+          Create
+        </button>
+      </div>
+
+      <Modal isOpen={showModal} onClose={onClose}>
+        <CreateWallet onClose={onClose} />
+      </Modal>
       {error && <div className="text-red"> {error}</div>}
       {isLoading ? (
         <div>
@@ -59,19 +114,19 @@ const Wallet = () => {
         <>
           <table>
             <thead>
-              <tr>
+              <tr className="v">
                 <th className="py-2 px-4 text-left">Member Name</th>
                 <th className="py-2 px-4 text-left">Wallet Balance</th>
+                <th className="py-2 px-4 text-left">Action</th>
               </tr>
             </thead>
             <tbody>
-              {walletData.map((member: any) => (
-                <tr key={member._id} className="border-t">
-                  <td className="py-2 px-4">
-                    {member.userId?.surName} {member.userId?.firstName}
-                  </td>
-                  <td className="py-2 px-4">{member.balance}</td>
-                </tr>
+              {filteredWalletData.map((member) => (
+                <WalletRow
+                  handleUpdateWalletTable={handleUpdateWalletTable}
+                  member={member}
+                  key={member._id}
+                />
               ))}
             </tbody>
           </table>

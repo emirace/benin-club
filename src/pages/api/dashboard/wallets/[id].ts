@@ -3,6 +3,7 @@ import { connectDB } from '@/utils/mongoose';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]';
 import Wallet, { WalletDocument } from '@/models/wallet.model';
+import Transaction, { TransactionDocument } from '@/models/transaction.model';
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,17 +23,61 @@ export default async function handler(
       return res.status(401).json({ message: 'Unauthorized' });
     }
 
-    if (req.method !== 'GET') {
-      return res.status(405).json({ message: 'Method Not Allowed' });
-    }
-
     await connectDB();
 
-    const wallet: WalletDocument | null = await Wallet.findById(req.query.id);
-    if (!wallet) {
-      res.status(404).json({ message: 'Wallet not found' });
-    } else {
-      res.status(200).json(wallet);
+    switch (req.method) {
+      case 'GET':
+        const wallet: WalletDocument | null = await Wallet.findById(
+          req.query.id
+        );
+        if (!wallet) {
+          res.status(404).json({ message: 'Wallet not found' });
+        } else {
+          res.status(200).json(wallet);
+        }
+
+        break;
+      case 'POST':
+        const { id: userId } = req.query;
+        const { amount } = req.body;
+        const walletCheck: WalletDocument | null = await Wallet.findOne({
+          userId,
+        });
+
+        if (!walletCheck) {
+          // If the user does not have a wallet, create one and update the balance
+          const newWallet = new Wallet({
+            userId: userId,
+            balance: parseInt(amount),
+          });
+
+          await newWallet.save();
+
+          // Create a new transaction record
+          const transaction: TransactionDocument = new Transaction({
+            userId: userId,
+            type: 'credit',
+            amount: parseInt(amount),
+            reference: '',
+            status: 'Completed',
+            description: 'Wallet created',
+            paymentMethod: 'Admin',
+            initiatedBy: user._id,
+          });
+          await transaction.save();
+
+          // Return success message
+          return res.status(200).json({
+            message: 'Payment successful',
+          });
+        } else {
+          res
+            .status(405)
+            .json({ message: 'Wallet already created for this user' });
+        }
+        break;
+      default:
+        res.status(405).json({ message: 'Method Not Allowed' });
     }
   } catch (error) {
     console.error(error);

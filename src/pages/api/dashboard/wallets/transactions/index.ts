@@ -3,6 +3,7 @@ import Transaction from '@/models/transaction.model';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../auth/[...nextauth]';
 import { connectDB } from '@/utils/mongoose';
+import { UserDocument } from '@/models/user.model';
 
 export default async function handleGetTransactions(
   req: NextApiRequest,
@@ -24,11 +25,12 @@ export default async function handleGetTransactions(
   try {
     await connectDB();
     // Find all transactions for the given user
-    const transactions = await Transaction.find();
-
-    return res.status(200).json({
-      transactions: transactions,
+    const transactions = await Transaction.find().populate<UserDocument>({
+      path: 'userId',
+      select: 'firstName surName',
     });
+
+    return res.status(200).json(transactions);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
