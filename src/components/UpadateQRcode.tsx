@@ -108,7 +108,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
 
   return (
     <div className="flex flex-col  mr-auto ">
-      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-gray-50 p-8 rounded-lg">
+      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-gray-50 py-8 px-4 rounded-lg">
         <div className="w-full md:w-1/2 flex flex-col items-center space-y-4">
           <label htmlFor="url-input" className="text-lg font-medium">
             ID: {vehicle?.vehicle?.vehicleId}
@@ -120,7 +120,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
             placeholder="Enter car plate number"
             value={carPlateNumber}
             onChange={(event) => setCarPlateNumber(event.target.value)}
-            className="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:outline-none  focus:border-red"
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none  focus:border-red"
           />
           <input
             type="text"
@@ -128,7 +128,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
             value={vehicleType}
             onChange={(event) => setVehicleType(event.target.value)}
             placeholder="Enter vehicle type"
-            className="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:outline-none  focus:border-red"
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none  focus:border-red"
           />
           <input
             type="text"
@@ -136,7 +136,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
             value={vehicleColor}
             onChange={(event) => setVehicleColor(event.target.value)}
             placeholder="Enter vehicle color"
-            className="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:outline-none  focus:border-red"
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none  focus:border-red"
           />
           <input
             type="text"
@@ -144,7 +144,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
             value={purposeOfVehicle}
             onChange={(event) => setPurposeOfVehicle(event.target.value)}
             placeholder="Enter purpose of vehicle"
-            className="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:outline-none  focus:border-red"
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none  focus:border-red"
           />
           <input
             type="text"
@@ -152,7 +152,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
             value={regNumber}
             onChange={(event) => setRegNumber(event.target.value)}
             placeholder="Enter registration number"
-            className="border border-gray-300 rounded-lg px-4 py-2 w-72 focus:outline-none  focus:border-red"
+            className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none  focus:border-red"
           />
         </div>
         <div className="w-full md:w-1/2 flex flex-col items-center space-y-4">

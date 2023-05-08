@@ -4,6 +4,7 @@ import { Types } from 'mongoose';
 import Vehicle, { IVehicle } from '@/models/vehicle.model';
 import { connectDB } from '@/utils/mongoose';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,12 +12,20 @@ export default async function handler(
 ) {
   await connectDB();
 
-  // const session = await getServerSession({ req });
+  const session = await getServerSession(req, res, authOptions);
 
-  // if (!session) {
-  //   res.status(401).json({ message: 'Unauthorized' });
-  //   return;
-  // }
+  if (!session)
+    return res
+      .status(401)
+      .json({ message: 'You must log in to access this resource.' });
+
+  const { user } = session;
+
+  if (user.role !== 'admin' && user.role !== 'user') {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  await connectDB();
 
   switch (req.method) {
     case 'GET':

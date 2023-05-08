@@ -56,7 +56,9 @@ const VehicleList = ({}: Props) => {
   };
 
   return isLoading ? (
-    <Loading />
+    <div className="h-screen flex justify-center items-center">
+      <Loading />
+    </div>
   ) : (
     <>
       <ul className="grid grid-cols-1 gap-6 py-8 px-4 md:grid-cols-4 ">

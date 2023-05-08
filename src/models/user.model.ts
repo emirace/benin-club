@@ -47,6 +47,7 @@ export interface IUser {
   subcriptionFee: number;
   subcriptionBal: number;
   wifeId: string;
+  category: string;
   step: number;
   dob: string;
   employed: string;
@@ -195,6 +196,7 @@ const userSchema = new Schema<IUser>(
     ],
     proposerPersonality: { type: String },
     proposerKnown: { type: String },
+    category: { type: String },
     image: { type: String, default: '/images/profile.webp' },
     email: { type: String, default: null },
     status: {

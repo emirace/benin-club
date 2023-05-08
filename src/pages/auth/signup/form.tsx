@@ -56,7 +56,7 @@ const MembershipForm: NextPage<Props> = () => {
 
   const handleNext = async () => {
     setError(initialErrorData);
-    if (step === 6) {
+    if (step === 7) {
       handleSubmit();
       return;
     }

@@ -1,5 +1,5 @@
 type StepsIndicatorProps = {
-  steps: string[];
+  steps: number[];
   currentStep: number;
   setCurrentStep: (index: number) => void;
 };
@@ -12,20 +12,20 @@ const StepsIndicator = ({
   return (
     <>
       <div className="flex flex-wrap justify-center space-x-4 ">
-        {steps.map((step, index) => (
+        {steps.map((step) => (
           <div
             key={step}
             className={`${
-              currentStep === index + 1 ? 'border-red' : 'border-gray'
+              currentStep === step ? 'border-red' : 'border-gray'
             } border-2 p-2 rounded-full mb-4 md:mb-0 `}
           >
             <div
               className={`${
-                currentStep === index + 1 ? 'bg-red' : 'bg-gray'
+                currentStep === step ? 'bg-red' : 'bg-gray'
               } rounded-full h-10 w-10 flex items-center justify-center text-white cursor-pointer`}
-              onClick={() => setCurrentStep(index + 1)}
+              onClick={() => setCurrentStep(step)}
             >
-              {index + 1}
+              {step}
             </div>
           </div>
         ))}

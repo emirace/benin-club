@@ -1,13 +1,16 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import Vehicle from '@/models/vehicle.model';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]';
+import Vehicle, { IVehicle } from '@/models/vehicle.model';
 import { connectDB } from '@/utils/mongoose';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from 'next-auth';
+import getNextVehicleId from '@/utils/utils';
+import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await connectDB();
+
   const session = await getServerSession(req, res, authOptions);
 
   if (!session)
@@ -22,11 +25,51 @@ export default async function handler(
   }
 
   await connectDB();
-  try {
-    const vehicles = await Vehicle.find();
-    res.status(200).json(vehicles);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+
+  switch (req.method) {
+    case 'GET':
+      try {
+        const vehicles = await Vehicle.find().sort({ createdAt: -1 });
+        res.status(200).json(vehicles);
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Something went wrong' });
+      }
+      break;
+    case 'POST':
+      try {
+        const {
+          carPlateNumber,
+          vehicleType,
+          vehicleColor,
+          purposeOfVehicle,
+          regNumber,
+          imageUrl,
+          qrCodeUrl,
+        } = req.body;
+        const vehicleId = await getNextVehicleId();
+        const vehicle: IVehicle = new Vehicle({
+          vehicleId,
+          carPlateNumber,
+          vehicleType,
+          vehicleColor,
+          purposeOfVehicle,
+          regNumber,
+          imageUrl,
+          qrCodeUrl,
+        });
+
+        const savedVehicle = await vehicle.save();
+
+        res.status(201).json(savedVehicle);
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Something went wrong' });
+      }
+      break;
+
+    default:
+      res.setHeader('Allow', ['GET', 'POST']);
+      res.status(405).json({ message: `Method ${req.method} Not Allowed` });
   }
 }

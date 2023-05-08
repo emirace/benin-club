@@ -77,14 +77,14 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
     const response = await fetch(`/api/dashboard/members/${id2}`, {
       method: 'PUT',
       body: JSON.stringify(
-        step === 6 ? { ...formData, signupStep: 'Verification' } : formData
+        step === 7 ? { ...formData, signupStep: 'Verification' } : formData
       ),
       headers: {
         'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
-      if (step === 6) return onClose();
+      if (step === 7) return onClose();
       setStep(step + 1);
       setFormData({ ...formData, step: step + 1 });
     } else {
@@ -137,6 +137,27 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
                 <div className="h-5" />
               )}
             </div>
+
+            <div className="my-4">
+              Category
+              <select
+                className="ml-2 border border-gray rounded-md py-1 px-2 text-sm"
+                id="category"
+                name="category"
+                onChange={handleChange}
+                value={formData.category}
+              >
+                <option value="all">All</option>
+                <option value="Member">Member</option>
+                <option value="Corporate Member">Corporate Member</option>
+                <option value="Old Member">Old Member</option>
+                <option value="Deseased Member">Deseased Member</option>
+                <option value="Transfered">Transfered</option>
+                <option value="Live Member">Live Member</option>
+                <option value="Honorary Member">Honorary Member</option>
+              </select>
+            </div>
+
             <div className="flex justify-end ml-6 mt-4">
               <button
                 className={buttonStyle}
@@ -254,7 +275,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
         <StepsIndicator
           currentStep={step}
           setCurrentStep={setStep}
-          steps={steps}
+          steps={[0, ...steps]}
         />
       </div>
       <div className="flex text-base  mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-5 mb-10  w-full">

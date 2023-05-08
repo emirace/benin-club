@@ -71,6 +71,7 @@ export interface FormData {
   image: string;
   numberOfWives: string;
   educations: Education[];
+  category: string;
   workExperiences: WorkExperience[];
   proposerPersonality: string;
   proposerKnown: string;
@@ -85,6 +86,7 @@ export interface ErrorData {
   surName: string;
   wife: string;
   wifeId: string;
+  category: string;
   firstName: string;
   dob: string;
   nationality: string;

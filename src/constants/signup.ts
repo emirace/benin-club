@@ -1,14 +1,7 @@
 import { IUser } from '@/models/user.model';
 import { ErrorData } from '@/types/signup';
 
-export const steps = [
-  'Email',
-  'PersonalInfo',
-  'Section B',
-  'Section C',
-  'Section D',
-  'Section E',
-];
+export const steps = [1, 2, 3, 4, 5, 6, 7];
 const contact = { address: '', tel: '' };
 const socials = { facebook: '', twitter: '', instagram: '', linkedin: '' };
 export const initialFormData: IUser = {
@@ -24,6 +17,7 @@ export const initialFormData: IUser = {
   role: 'member',
   signupStep: 'ProfileCreation',
   subcriptionBal: 0,
+  category: 'Member',
   wifeId: '',
   dob: '',
   nationality: '',
@@ -86,6 +80,7 @@ export const initialErrorData: ErrorData = {
   occupationTel: '',
   employer: '',
   businessAddress: '',
+  category: '',
   businessAddressTel: '',
   nameOfBankers: '',
   wife: '',
