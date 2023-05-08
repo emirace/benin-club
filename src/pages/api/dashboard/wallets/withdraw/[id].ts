@@ -46,6 +46,7 @@ export default async function handlePay(
         description,
         paymentMethod: 'Wallet',
         initiatedBy: loginUser._id,
+        for: 'wallet',
       });
       await transaction.save();
 

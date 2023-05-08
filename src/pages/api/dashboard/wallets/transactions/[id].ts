@@ -20,13 +20,15 @@ export default async function handleGetTransactions(
   if (user.role !== 'admin' && user.role !== 'wallet') {
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  const { userId } = req.query;
+  const { id: userId } = req.query;
 
   try {
     await connectDB();
     // Find all transactions for the given user
-    const transactions = await Transaction.find({ userId: userId });
-
+    const transactions = await Transaction.find({
+      userId: userId,
+      for: 'wallet',
+    });
     return res.status(200).json({
       transactions: transactions,
     });

@@ -21,7 +21,7 @@ export default function ResendPassword(props: ResendPasswordProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, email1 }),
+        body: JSON.stringify({ id, email: email1 }),
       });
 
       const data = await response.json();

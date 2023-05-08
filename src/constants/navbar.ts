@@ -50,6 +50,6 @@ export const menuItems = [
   { label: 'Posts', icon: FiFileText, role: ['admin', 'user'] },
   { label: 'Wallet', icon: FiCreditCard, role: ['admin', 'wallet'] },
   { label: 'Transactions', icon: FiDollarSign, role: ['admin', 'wallet'] },
-  { label: 'Vehicles', icon: FiTruck, role: ['admin'] },
+  { label: 'Vehicles', icon: FiTruck, role: ['admin', 'user'] },
   { label: 'Settings', icon: FiSettings, role: ['admin'] },
 ];

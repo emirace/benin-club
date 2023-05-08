@@ -16,7 +16,7 @@ function Sidebar(props: SidebarProps): JSX.Element {
   );
 
   return (
-    <aside className="flex flex-col w-10 md:w-64 ">
+    <aside className="flex flex-col w-10 md:w-56 ">
       <h2 className="p-4 text-lg font-semibold hidden md:block ">
         Admin Dashboard
       </h2>

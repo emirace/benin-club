@@ -18,7 +18,7 @@ function FundWallet({ onClose, fetchBalance }: FundwalletProps) {
     try {
       setLoading(true);
       // Make a POST request to the server to fund wallet
-      const response = await fetch(`/api/wallet/fund`, {
+      const response = await fetch(`/api/account/wallet/fund`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

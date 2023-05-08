@@ -3,7 +3,7 @@ import Flutterwave from 'flutterwave-node-v3';
 import Wallet, { WalletDocument } from '@/models/wallet.model';
 import Transaction, { TransactionDocument } from '@/models/transaction.model';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]';
+import { authOptions } from '../../auth/[...nextauth]';
 import { connectDB } from '@/utils/mongoose';
 
 // Configure Flutterwave SDK with your API keys
@@ -16,6 +16,9 @@ export default async function handleFund(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
   const session = await getServerSession(req, res, authOptions);
 
   if (!session)
@@ -56,6 +59,7 @@ export default async function handleFund(
           status: 'Completed',
           description: 'Fund wallet',
           paymentMethod: 'flutterwave',
+          for: 'wallet',
           initiatedBy: userId,
         });
         await transaction.save();
@@ -83,6 +87,7 @@ export default async function handleFund(
           description: 'Fund wallet',
           paymentMethod: 'flutterwave',
           initiatedBy: userId,
+          for: 'wallet',
         });
         await transaction.save();
 
@@ -101,6 +106,7 @@ export default async function handleFund(
         status: 'Failed',
         description: 'Fund wallet',
         paymentMethod: 'flutterwave',
+        for: 'wallet',
         initiatedBy: userId,
       });
       await transaction.save();

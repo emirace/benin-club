@@ -18,7 +18,7 @@ export default async function handler(
 
     const { user: loginUser } = session;
 
-    if (loginUser.role !== 'admin' && loginUser.role !== 'wallet') {
+    if (loginUser.role !== 'admin') {
       return res.status(401).json({ message: 'Unauthorized' });
     }
 

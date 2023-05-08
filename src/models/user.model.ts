@@ -78,7 +78,7 @@ export interface IUser {
   addressYears: string;
   emergencyContact: string;
   disability: string;
-  sportSection: string;
+  sportSection: string[];
   reasonToJoin: string;
   tribe: string;
   numberOfWives: string;
@@ -173,7 +173,7 @@ const userSchema = new Schema<IUser>(
     addressYears: { type: String },
     emergencyContact: { type: String },
     disability: { type: String },
-    sportSection: { type: String },
+    sportSection: [{ type: String }],
     reasonToJoin: { type: String },
     tribe: { type: String },
     numberOfWives: { type: String },

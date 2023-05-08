@@ -6,7 +6,8 @@ import Modal from '../Modal';
 import MembershipForm from './MembershipForm';
 import { useState } from 'react';
 import ResendPassword from './ResendPassword';
-import UserProfile from './UserProfile';
+import PersonalInfo from './userProfile/PersonalInfo';
+import FinancialInformation from './userProfile/FinancialInformation';
 
 interface MemberTableRowProps {
   member: IUser;
@@ -24,6 +25,7 @@ function MemberTableRow({
   const [showConfirm, setShowConfirm] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
   const [userProfile, setUserProfile] = useState(false);
+  const [finiance, setFiniance] = useState(false);
 
   const handleDelete = () => {
     setShowConfirm(true);
@@ -63,6 +65,14 @@ function MemberTableRow({
     setUserProfile(true); // <-- update state variable to show modal
   };
 
+  const onCloseF = () => {
+    setFiniance(false); // <-- update state variable to show modal
+  };
+
+  const onOpenF = () => {
+    setFiniance(true); // <-- update state variable to show modal
+  };
+
   switch (member.status) {
     case 'Active':
       statusClassName = 'text-green';
@@ -98,7 +108,9 @@ function MemberTableRow({
           </div>
         </td>
         <td className="py-2 px-4">{member.level}</td>
-        <td className="py-2 px-4">{member.subcriptionBal}</td>
+        <td className="py-2 px-4 cursor-pointer" onClick={onOpenF}>
+          {member.subcriptionBal}
+        </td>
         <td className="py-2 px-4">{member?.occupation?.address}</td>
         <td className="py-2 px-4">{member.email}</td>
         <td className="py-2 px-4">{member?.tel}</td>
@@ -138,7 +150,14 @@ function MemberTableRow({
       </Modal>
 
       <Modal isOpen={userProfile} onClose={onCloseU}>
-        <UserProfile user={member} />
+        <PersonalInfo user={member} />
+      </Modal>
+
+      <Modal isOpen={finiance} onClose={onCloseF}>
+        <FinancialInformation
+          user={member}
+          handleUpdateMemberTable={handleUpdateMemberTable}
+        />
       </Modal>
     </>
   );

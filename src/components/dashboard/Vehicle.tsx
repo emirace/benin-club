@@ -7,11 +7,9 @@ import { GetServerSideProps } from 'next';
 import { connectDB } from '@/utils/mongoose';
 import Vehicle, { IVehicle } from '@/models/vehicle.model';
 
-interface IBarcodeProps {
-  vehicles: IVehicle[];
-}
+interface IBarcodeProps {}
 
-export default function Barcode({ vehicles }: IBarcodeProps) {
+export default function VehicleMenu({}: IBarcodeProps) {
   const [currentPage, setCurrentPage] = useState('create');
 
   const renderPage = () => {
@@ -19,7 +17,7 @@ export default function Barcode({ vehicles }: IBarcodeProps) {
       case 'create':
         return <QRCodeGenerator />;
       case 'view':
-        return <VehicleList vehicles={vehicles} />;
+        return <VehicleList />;
       default:
         return <QRCodeGenerator />;
     }
@@ -27,7 +25,11 @@ export default function Barcode({ vehicles }: IBarcodeProps) {
 
   return (
     <div>
-      <div className="h-20 bg-black" />
+      <div className="h-20 bg-red px-8 flex items-center">
+        <div className="font-bold text-white text-3xl uppercase">
+          Vehicle Sticker
+        </div>
+      </div>
       <div className="flex flex-col md:flex-row ">
         <Dashboard setCurrentPage={setCurrentPage} />
         <div className="w-full md:w-4/5 flex flex-col mb-4 ">
@@ -37,26 +39,3 @@ export default function Barcode({ vehicles }: IBarcodeProps) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<
-  IBarcodeProps
-> = async () => {
-  try {
-    await connectDB();
-
-    const vehicles = await Vehicle.find();
-
-    return {
-      props: {
-        vehicles: JSON.parse(JSON.stringify(vehicles)),
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      props: {
-        vehicles: [],
-      },
-    };
-  }
-};

@@ -47,6 +47,7 @@ export default async function handleFund(
         description: 'Fund wallet',
         paymentMethod,
         initiatedBy: loginUser._id,
+        for: 'wallet',
       });
       await transaction.save();
 
@@ -73,6 +74,7 @@ export default async function handleFund(
         description: 'Fund wallet',
         paymentMethod,
         initiatedBy: loginUser._id,
+        for: 'wallet',
       });
       await transaction.save();
 

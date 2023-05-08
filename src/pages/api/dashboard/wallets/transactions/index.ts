@@ -25,7 +25,9 @@ export default async function handleGetTransactions(
   try {
     await connectDB();
     // Find all transactions for the given user
-    const transactions = await Transaction.find().populate<UserDocument>({
+    const transactions = await Transaction.find({
+      for: 'wallet',
+    }).populate<UserDocument>({
       path: 'userId',
       select: 'firstName surName',
     });

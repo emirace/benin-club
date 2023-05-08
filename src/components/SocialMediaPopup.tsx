@@ -9,6 +9,7 @@ import {
 } from 'react-icons/fa';
 import SocialMedia from './SocialMedia';
 import Loading from './Loading';
+import { useSession } from 'next-auth/react';
 
 type SocialMediaProps = {
   facebook: string;
@@ -37,6 +38,8 @@ export default function SocialMediaPopup(props: SocialMediaProps) {
     linkedin,
   });
 
+  const { data: session, status, update } = useSession();
+
   useEffect(() => {
     if (!facebook || !twitter || !instagram || !linkedin) {
       setShowPopup(true);
@@ -54,6 +57,7 @@ export default function SocialMediaPopup(props: SocialMediaProps) {
       },
     });
     if (response.ok) {
+      await update({ socials: socialMediaLinks });
       setShowPopup(false);
     } else {
       setError('Error saving form data');
@@ -76,7 +80,7 @@ export default function SocialMediaPopup(props: SocialMediaProps) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center">
       {step === 2 &&
         showPopup &&
         (!editSocial ? (

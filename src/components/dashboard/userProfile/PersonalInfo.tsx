@@ -8,7 +8,7 @@ interface PersonalInformationProps {
 
 const PersonalInfo: React.FC<PersonalInformationProps> = ({ user }) => {
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="bg-white px-8 pt-6 pb-8 mb-4 text-base">
       <h2 className="text-red text-xl mb-4">Personal Information</h2>
       <div className="grid grid-cols-2 gap-4">
         <div className="mb-4 col-span-2">
@@ -20,14 +20,24 @@ const PersonalInfo: React.FC<PersonalInformationProps> = ({ user }) => {
               objectFit="contain"
             />
           </div>
+          <div>
+            <span className="font-bold">ID: </span>
+            {user.memberId}
+          </div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-black font-bold mb-2">Last Name</label>
+          <p className="text-black">{user.surName}</p>
         </div>
         <div className="mb-4">
           <label className="block text-black font-bold mb-2">First Name</label>
           <p className="text-black">{user.firstName}</p>
         </div>
         <div className="mb-4">
-          <label className="block text-black font-bold mb-2">Last Name</label>
-          <p className="text-black">{user.surName}</p>
+          <label className="block text-black font-bold mb-2">Wife</label>
+          <p className="text-black">
+            {user.wife} | {user.wifeId}
+          </p>
         </div>
         <div className="mb-4">
           <label className="block text-black font-bold mb-2">

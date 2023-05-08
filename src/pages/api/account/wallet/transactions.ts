@@ -1,13 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Transaction from '@/models/transaction.model';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]';
+import { authOptions } from '../../auth/[...nextauth]';
 import { connectDB } from '@/utils/mongoose';
 
 export default async function handleGetTransactions(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
   const session = await getServerSession(req, res, authOptions);
 
   if (!session)
@@ -21,7 +24,7 @@ export default async function handleGetTransactions(
   try {
     await connectDB();
     // Find all transactions for the given user
-    const transactions = await Transaction.find({ userId });
+    const transactions = await Transaction.find({ userId, for: 'wallet' });
 
     return res.status(200).json({
       transactions: transactions,

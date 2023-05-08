@@ -25,7 +25,7 @@ const WalletPage = () => {
   const fetchBalance = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/wallet/balance');
+      const response = await fetch('/api/account/wallet/balance');
       const { balance } = await response.json();
       setBalance(balance);
       setLoading(false);
@@ -39,7 +39,7 @@ const WalletPage = () => {
   const fetchTransactions = async () => {
     try {
       setLoadingT(true);
-      const response = await fetch('/api/wallet/transactions');
+      const response = await fetch('/api/account/wallet/transactions');
       const { transactions } = await response.json();
       setTransactions(transactions);
       setLoadingT(false);

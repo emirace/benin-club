@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import Loading from './Loading';
+import { useSession } from 'next-auth/react';
 
 interface ShowBioPopupProps {
   bio: string;
@@ -14,6 +15,8 @@ function ShowBioPopup({ bio, step, setStep }: ShowBioPopupProps) {
   const [newBio, setNewBio] = useState<string>(bio);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const { data: session, status, update } = useSession();
 
   useEffect(() => {
     if (!bio) {
@@ -34,6 +37,7 @@ function ShowBioPopup({ bio, step, setStep }: ShowBioPopupProps) {
       },
     });
     if (response.ok) {
+      await update({ bio: newBio });
       handleCancel();
     } else {
       setError('Error saving form data');
@@ -73,7 +77,7 @@ function ShowBioPopup({ bio, step, setStep }: ShowBioPopupProps) {
               <p className="mb-4">Please add a bio to your profile</p>
             )}
             <button
-              className="bg-red text-white py-2 px-4 rounded-md shadow-md hover:bg-white hover:text-red transition duration-300 ease-in-out"
+              className="bg-red text-white py-2 px-4 rounded-md hover:bg-white hover:text-red transition duration-300 ease-in-out"
               onClick={() => (editBio ? handleSubmitBio() : setEditBio(true))}
             >
               {loading ? <Loading /> : editBio ? 'Save' : 'Add Bio'}
@@ -81,7 +85,10 @@ function ShowBioPopup({ bio, step, setStep }: ShowBioPopupProps) {
           </div>
         </div>
       )}
-      <p className="text-sm text-center px-4 mt-4" onClick={handleAddBios}>
+      <p
+        className="text-sm text-center cursor-pointer px-4 mt-4"
+        onClick={handleAddBios}
+      >
         {bio || 'Click here to add your bio.'}
       </p>
     </div>

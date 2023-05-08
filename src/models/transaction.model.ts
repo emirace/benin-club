@@ -9,6 +9,7 @@ export interface ITransaction {
   userId: Schema.Types.ObjectId;
   paymentMethod: string;
   type: 'credit' | 'debit';
+  for: 'subscription' | 'wallet';
   reference: string;
   initiatedBy: Schema.Types.ObjectId;
 }
@@ -24,6 +25,7 @@ const transactionSchema = new Schema<TransactionDocument>(
       default: 'Pending',
     },
     type: { type: String, required: true, enum: ['credit', 'debit'] },
+    for: { type: String, required: true, enum: ['subscription', 'wallet'] },
     description: { type: String, required: true },
     userId: { type: Schema.Types.ObjectId, ref: 'User' },
     paymentMethod: { type: String, required: true },

@@ -10,6 +10,7 @@ import Transaction from './Transaction';
 import { transactions } from '@/constants/transactions';
 import { IUser } from '@/models/user.model';
 import Wallet from './Wallet';
+import VehicleMenu from './Vehicle';
 
 interface DashboardLayoutProps {
   user: IUser;
@@ -50,7 +51,7 @@ function DashboardLayout(props: DashboardLayoutProps): JSX.Element {
       content = <Transaction />;
       break;
     case 'Vehicles':
-      content = <p>Here is a list of all upcoming events.</p>;
+      content = <VehicleMenu />;
       break;
     case 'Settings':
       content = <p>Here you can change your settings.</p>;

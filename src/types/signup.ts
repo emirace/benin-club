@@ -27,6 +27,7 @@ type Contact = {
 export interface FormData {
   [key: string]:
     | string
+    | string[]
     | number
     | Child[]
     | Education[]
@@ -64,9 +65,10 @@ export interface FormData {
   addressYears: string;
   emergencyContact: string;
   disability: string;
-  sportSection: string;
+  sportSection: string[];
   reasonToJoin: string;
   tribe: string;
+  image: string;
   numberOfWives: string;
   educations: Education[];
   workExperiences: WorkExperience[];
@@ -98,6 +100,7 @@ export interface ErrorData {
   nameOfBankers: string;
   employed: string;
   married: string;
+  image: string;
   isNigeria: string;
   clubMemberRelative: string;
   dependentRelativeBenin: string;

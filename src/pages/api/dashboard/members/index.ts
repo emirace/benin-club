@@ -39,26 +39,21 @@ export default async function handler(
         const sort: [string, SortOrder][] = [[sortField, sortOrder]];
         const category = (req.query.category as string) || 'all';
         const search = (req.query.search as string) || '';
+        const searchRegex = new RegExp(search, 'i');
+        const isNumber = /^\d+$/.test(search);
 
         const categoryFilter = category === 'all' ? {} : { level: category };
         console.log(sortField, sortOrder, category, categoryFilter, search);
-
-        const searchFilter =
-          search === ''
-            ? {}
-            : {
-                name: { $regex: search, $options: 'i' }, // Regular expression for matching the search query
-              };
 
         const members: IUser[] = await User.find({
           role: 'member',
           ...categoryFilter,
           $or: [
-            { surName: { $regex: search, $options: 'i' } },
-            { firstName: { $regex: search, $options: 'i' } },
-            { memberId: { $regex: search, $options: 'i' } },
-            // { tel: { $regex: parseInt(search), $options: 'i' } },
-          ],
+            { surName: { $regex: searchRegex } },
+            { firstName: { $regex: searchRegex } },
+            { memberId: { $regex: searchRegex } },
+            // { tel: isNumber ? parseInt(search) : { $regex: searchRegex } },
+          ].filter(Boolean),
         })
           .sort(sort)
           .skip(skip)
@@ -67,11 +62,11 @@ export default async function handler(
           role: 'member',
           ...categoryFilter,
           $or: [
-            { surName: { $regex: search, $options: 'i' } },
-            { firstName: { $regex: search, $options: 'i' } },
-            { memberId: { $regex: search, $options: 'i' } },
-            // { tel: { $regex: parseInt(search), $options: 'i' } },
-          ],
+            { surName: { $regex: searchRegex } },
+            { firstName: { $regex: searchRegex } },
+            { memberId: { $regex: searchRegex } },
+            // { tel: isNumber ? parseInt(search) : { $regex: searchRegex } },
+          ].filter(Boolean),
         });
         res.status(200).json({ members, totalMembers });
 

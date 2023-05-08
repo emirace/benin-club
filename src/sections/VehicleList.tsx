@@ -6,21 +6,28 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Modal from '@/components/Modal';
 import UpdateQRcode from '@/components/UpadateQRcode';
+import Loading from '@/components/Loading';
 
-type Props = {
-  vehicles: IVehicle[];
-};
+type Props = {};
 
-const VehicleList = ({ vehicles }: Props) => {
+const VehicleList = ({}: Props) => {
   const [vehicleList, setVehicleList] = useState<IVehicle[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [currentVehicle, setCurrentVehicle] = useState<IVehicle>(
-    vehicles[3001]
+    vehicleList[3001]
   );
 
   useEffect(() => {
-    setVehicleList(vehicles);
-  }, [vehicles]);
+    const fetchData = async () => {
+      setIsLoading(true);
+      const response = await fetch('/api/dashboard/vehicles');
+      const data = await response.json();
+      setVehicleList(data);
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
 
   const handleDelete = async (id: string) => {
     try {
@@ -48,10 +55,12 @@ const VehicleList = ({ vehicles }: Props) => {
     setIsModalOpen(false);
   };
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <>
       <ul className="grid grid-cols-1 gap-6 py-8 px-4 md:grid-cols-4 ">
-        {vehicles.map((vehicle) => (
+        {vehicleList.map((vehicle) => (
           <li
             key={vehicle._id}
             className="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200 px-4"

@@ -18,13 +18,15 @@ import ShowBioPopup from '@/components/ShowBioPopup';
 import SocialMediaPopup from '@/components/SocialMediaPopup';
 import Link from 'next/link';
 import Loading from '@/components/Loading';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
-type PersonalInfoProps = {
-  user: IUser;
-};
+type PersonalInfoProps = {};
 
 export default function PersonalInfo(props: PersonalInfoProps) {
-  const { user } = props;
+  const { data: session, status, update } = useSession();
+  const router = useRouter();
+
   const [step, setStep] = useState(1);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -36,7 +38,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
   const fetchBalance = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/wallet/balance');
+      const response = await fetch('/api/account/wallet/balance');
       const { balance } = await response.json();
       setBalance(balance);
       setLoading(false);
@@ -46,6 +48,16 @@ export default function PersonalInfo(props: PersonalInfoProps) {
       setLoading(false);
     }
   };
+
+  if (status === 'loading') {
+    return <Loading />;
+  }
+  if (!session) {
+    router.replace('/auth/signin');
+    return null;
+  }
+
+  const { user } = session;
 
   return (
     <div className="flex flex-col md:flex-row bg-white ">
@@ -92,7 +104,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         </div>
         <div className="flex items-center mb-4">
           <FaPhone className="mr-2" />
-          <p>{user.home.tel}</p>
+          <p>{user.home.tel || user.tel}</p>
         </div>
         <div className="flex items-center mb-4">
           <FaEnvelope className="mr-2" />
@@ -100,13 +112,13 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         </div>
         <div className="flex items-center mb-4">
           <FaMapMarkerAlt className="mr-2" />
-          <p>{user.home.address}</p>
+          <p>{user.home.address || user.address}</p>
         </div>
 
         {/* Wallet Section */}
         <div className="flex items-center mb-4">
           <FaWallet className="mr-2" />
-          <p>
+          <p className="flex items-center">
             Wallet Balance:
             {loading ? (
               <Loading />

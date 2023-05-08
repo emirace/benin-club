@@ -1,10 +1,13 @@
 import { TransactionDocument } from '@/models/transaction.model';
+import { currency } from '@/sections/PersonalInfo';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import Loading from '../Loading';
 
 interface TransactionProps {}
 
-interface TransactionData {
+export interface TransactionData {
   [key: string]: any;
   description: string;
   amount: number;
@@ -38,6 +41,7 @@ function Transaction(): JSX.Element {
     status: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchEvents();
@@ -47,12 +51,18 @@ function Transaction(): JSX.Element {
     setIsLoading(true);
     try {
       const response = await fetch('/api/dashboard/wallets/transactions');
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message);
+      }
       const data = await response.json();
       setTransactions(data);
       console.log(data);
       setIsLoading(false);
     } catch (error) {
       setTransactions([]);
+      setError('Problem fetching transactions');
       console.error(error);
       setIsLoading(false);
     }
@@ -218,36 +228,50 @@ function Transaction(): JSX.Element {
             </th>
           </tr>
         </thead>
-        <tbody>
-          {sortedTransactions.map((transaction) => (
-            <tr key={transaction.id} className="bg-white">
-              <td className="px-4 py-2">{transaction.invoiceId}</td>
-              <td className="px-4 py-2">
-                {transaction.userId?.surName} {transaction.userId?.firstName}
-              </td>
-              <td className="px-4 py-2">{transaction.createdAt}</td>
-              <td className="px-4 py-2">{transaction.description}</td>
-              <td className="px-4 py-2">{transaction.paymentMethod}</td>
-              <td className="px-4 py-2">{transaction.amount}</td>{' '}
-              <td
-                className={`px-4 py-2 ${
-                  transaction.status === 'Completed'
-                    ? 'text-green'
-                    : transaction.status === 'Pending'
-                    ? 'text-yellow'
-                    : 'text-red'
-                }`}
-              >
-                {transaction.status}
-              </td>
-              <td className="px-4 py-2">
-                <button className="mr-2  hover:text-yellow focus:outline-none">
-                  <FaEdit />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+
+        {isLoading ? (
+          <Loading />
+        ) : error ? (
+          <div className="text-red">{error}</div>
+        ) : !transactions.length ? (
+          <div className="my-4 ml-4">No subscription history</div>
+        ) : (
+          <tbody>
+            {sortedTransactions.map((transaction) => (
+              <tr key={transaction.id} className="bg-white">
+                <td className="px-4 py-2">{transaction.invoiceId}</td>
+                <td className="px-4 py-2">
+                  {transaction.userId?.surName} {transaction.userId?.firstName}
+                </td>
+                <td className="px-4 py-2">
+                  {moment(transaction.createdAt).format('h:sa, Do MMM YY')}
+                </td>
+                <td className="px-4 py-2">{transaction.description}</td>
+                <td className="px-4 py-2">{transaction.paymentMethod}</td>
+                <td className="px-4 py-2">
+                  {currency}
+                  {transaction.amount}
+                </td>{' '}
+                <td
+                  className={`px-4 py-2 ${
+                    transaction.status === 'Completed'
+                      ? 'text-green'
+                      : transaction.status === 'Pending'
+                      ? 'text-yellow'
+                      : 'text-red'
+                  }`}
+                >
+                  {transaction.status}
+                </td>
+                <td className="px-4 py-2">
+                  <button className="mr-2  hover:text-yellow focus:outline-none">
+                    <FaEdit />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
       <div className="flex justify-start items-center mt-4">
         {pageNumbers.map((number) => (

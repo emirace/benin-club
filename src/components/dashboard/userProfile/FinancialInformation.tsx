@@ -3,17 +3,33 @@ import { IUser } from '@/models/user.model';
 import { IWallet } from '@/models/wallet.model';
 import { useState } from 'react';
 import { IconType } from 'react-icons';
-import { FaWallet, FaUniversity, FaEdit, FaCheck } from 'react-icons/fa';
+import {
+  FaWallet,
+  FaUniversity,
+  FaEdit,
+  FaCheck,
+  FaTimes,
+} from 'react-icons/fa';
+import SubscriptionTransaction from './SubscriptionTransaction';
 
 interface IFinancialInformationProps {
   user: IUser;
+  handleUpdateMemberTable: () => void;
 }
 
 const FinancialInformation: React.FC<IFinancialInformationProps> = ({
   user,
+  handleUpdateMemberTable,
 }) => {
+  const [showHistory, setShowHistory] = useState(false);
+  const handleShowHistory = () => {
+    setShowHistory(true);
+  };
+  const handleHideHistory = () => {
+    setShowHistory(false);
+  };
   return (
-    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="bg-white px-8 pt-6 pb-8 mb-4 text-base">
       <h2 className="text-red text-xl mb-4">Financial Information</h2>
       <div className="grid grid-cols-2 gap-8">
         <div className="mb-4">
@@ -23,8 +39,17 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
           <Input
             value={user.subcriptionFee}
             id={user._id}
+            handleUpdateMemberTable={handleUpdateMemberTable}
             property="subcriptionFee"
           />
+          {!showHistory && (
+            <div
+              className="text-red underline cursor-pointer"
+              onClick={handleShowHistory}
+            >
+              View subscription history
+            </div>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">
@@ -34,8 +59,17 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
             value={user.subcriptionBal}
             id={user._id}
             property="subcriptionBal"
+            handleUpdateMemberTable={handleUpdateMemberTable}
           />
         </div>
+        {showHistory && (
+          <div className="mb-4 -mt-8 col-span-2 shadow-md rounded-lg p-4">
+            <SubscriptionTransaction
+              id={user._id}
+              onClose={handleHideHistory}
+            />
+          </div>
+        )}
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">
             Entry Fee Payment
@@ -44,6 +78,7 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
             value={user.entryFeePayment}
             id={user._id}
             property="entryFeePayment"
+            handleUpdateMemberTable={handleUpdateMemberTable}
           />
         </div>
         <div className="mb-4">
@@ -53,27 +88,9 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
           <Input
             value={user.entryFeeBal}
             id={user._id}
+            handleUpdateMemberTable={handleUpdateMemberTable}
             property="entryFeeBal"
           />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">
-            Wallet Balance
-          </label>
-          <div className="flex items-center">
-            <FaWallet className="mr-2" />
-            <p className="text-gray-700">&#x20a6;{user?.wallet?.balance}</p>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">
-            Bank Account Information
-          </label>
-          <div className="flex items-center">
-            <FaUniversity className="mr-2" />
-            <p className="text-gray-700">{user.nameOfBankers || 'N/A'}</p>
-          </div>
         </div>
       </div>
     </div>
@@ -86,33 +103,50 @@ interface Props {
   value: number;
   property: string;
   id: string;
+  handleUpdateMemberTable: () => void;
 }
 
-const Input = ({ value, property, id }: Props) => {
+const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [payment, setPayment] = useState(false);
 
   const handleEditClick = () => {
     setEditing(true);
   };
+  const handleMakePayment = () => {
+    setPayment(true);
+    setEditing(true);
+  };
 
+  const handleCloseEdit = () => {
+    setPayment(false);
+    setEditing(false);
+  };
   const handleCheckClick = async () => {
     try {
       setLoading(true);
       console.log({ [property]: inputValue });
-      const response = await fetch(`/api/dashboard/members/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          [property]: inputValue, // use dynamic key here
-        }),
-      });
+      const response = await fetch(
+        payment
+          ? `/api/dashboard/members/subscription/${id}`
+          : `/api/dashboard/members/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            [property]: inputValue, // use dynamic key here
+          }),
+        }
+      );
       const data = await response.json();
       setEditing(false);
+      setPayment(false);
+      handleUpdateMemberTable();
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -136,21 +170,34 @@ const Input = ({ value, property, id }: Props) => {
             {loading ? (
               <Loading />
             ) : (
-              <FaCheck
-                className="bg-red text-white rounded-md ml-2 h-10 w-10 p-2 cursor-pointer"
-                onClick={handleCheckClick}
-              />
+              <div className="flex items-center">
+                <FaTimes
+                  className="bg-gray text-white rounded-md ml-2 h-10 w-10 p-2 cursor-pointer"
+                  onClick={handleCloseEdit}
+                />
+                <FaCheck
+                  className="bg-red text-white rounded-md ml-2 h-10 w-10 p-2 cursor-pointer"
+                  onClick={handleCheckClick}
+                />
+              </div>
             )}
           </div>
           {error && <div className="text-red">{error}</div>}
         </div>
       ) : (
         <div className="w-full flex justify-between items-center">
-          <p className="text-gray-700">&#x20a6;{value || 0}</p>
-          <FaEdit
-            className="hover:text-red cursor-pointer"
-            onClick={handleEditClick}
-          />
+          <div className="flex items-center">
+            <p className="text-gray-700">&#x20a6;{value || 0}</p>
+            <FaEdit
+              className="hover:text-red cursor-pointer mx-8"
+              onClick={handleEditClick}
+            />
+          </div>
+          {property === 'subcriptionBal' && (
+            <div className="text-red underline" onClick={handleMakePayment}>
+              Make payment
+            </div>
+          )}
         </div>
       )}
     </div>

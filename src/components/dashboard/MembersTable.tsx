@@ -23,6 +23,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState(0);
   const [category, setCategory] = useState('all');
+  const [error, setError] = useState('');
   const [sorting, setSorting] = useState<Sorting>({
     field: '_id',
     order: 'asc',
@@ -45,6 +46,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
         setTotalPages(Math.ceil(totalMembers / membersPerPage));
         setIsLoading(false);
       } catch (error) {
+        setError('Encounter an error fetching member');
         console.error(error);
         setIsLoading(false);
       }
@@ -157,6 +159,8 @@ function MembersTable({}: MembersTableProps): JSX.Element {
         <div className="w-full justify-center items-center">
           <Loading />
         </div>
+      ) : error ? (
+        <div className="text-red">{error}</div>
       ) : filteredMembers.length === 0 ? (
         <div className="text-center">No members</div>
       ) : (
@@ -201,7 +205,7 @@ const Header = ({ handleSorting, sorting }: HeaderProps) => (
     <tr className=" whitespace-nowrap">
       {membersTableHeader.map((header) => (
         <th
-          className="py-2 px-4 text-left"
+          className="py-2 px-4 text-left cursor-pointer"
           onClick={() => handleSorting(header.name)}
           key={header.label}
         >

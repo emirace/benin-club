@@ -1,48 +1,66 @@
-import { buttonStyle } from '@/constants/styles';
+import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
 import { SectionProps } from '@/types/signup';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { FaCloudUploadAlt } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
+import Loading from '../Loading';
+import { compressImageUpload } from '@/utils/compressImage';
+
+interface UploadResponse {
+  imageUrl: string;
+}
 
 const UploadForm = (props: SectionProps) => {
-  const { formData, onChange, onNext, error, handleError, setFormData } = props;
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const {
+    formData,
+    onChange,
+    onNext,
+    error,
+    handleError,
+    setFormData,
+    onPrevious,
+  } = props;
+  const [selectedImage, setSelectedImage] = useState<string>(formData.image);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target?.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setSelectedImage(e.target?.result as string);
-      };
-      reader.readAsDataURL(event.target.files[0]);
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    try {
+      const file = event.target?.files?.[0];
+      if (!file) return;
+      setIsLoading(true);
+      const compressedFile = await compressImageUpload(
+        file,
+        1024,
+        selectedImage
+      );
+      if (!compressedFile) return;
+
+      setFormData((prev) => ({ ...prev, image: compressedFile }));
+      setSelectedImage(compressedFile);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
     }
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const request = new Request('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    try {
-      const response = await fetch(request);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
+  const handleSubmit = () => {
+    if (!selectedImage) {
+      handleError('image', 'Upload a passport');
+      return;
     }
+    onNext();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="">
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2" htmlFor="image">
-          Image
+          Passport
         </label>
-        <div className="relative">
+        <div className="relative ">
           <input
             className="sr-only"
             id="image"
@@ -50,8 +68,12 @@ const UploadForm = (props: SectionProps) => {
             type="file"
             onChange={handleImageChange}
           />
-          <div className="h-48 w-full border-dashed border-2 border-gray-300">
-            {selectedImage ? (
+          <div className=" w-full h-64 border-dashed border-2 border-gray-300">
+            {isLoading ? (
+              <div className="h-64 flex justify-center items-center">
+                <Loading />
+              </div>
+            ) : selectedImage ? (
               <div className="w-64 h-64">
                 <Image
                   src={selectedImage}
@@ -72,6 +94,7 @@ const UploadForm = (props: SectionProps) => {
               </label>
             )}
           </div>
+          {error.image && <div className="text-red">{error.image}</div>}
           <div className="absolute bottom-0 right-0 p-2 bg-white rounded-md">
             <label
               htmlFor="image"
@@ -83,15 +106,24 @@ const UploadForm = (props: SectionProps) => {
           </div>
         </div>
       </div>
-      <div className="mb-4">
+
+      <div className="flex gap-4 justify-end ml-6 mt-16 w-full">
         <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className={buttonStyleOutline}
+          onClick={onPrevious}
+          disabled={props.loading}
         >
-          Upload
+          Previous
+        </button>
+        <button
+          disabled={isLoading}
+          className={buttonStyle}
+          onClick={handleSubmit}
+        >
+          Next
         </button>
       </div>
-    </form>
+    </div>
   );
 };
 

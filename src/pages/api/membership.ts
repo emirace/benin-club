@@ -42,8 +42,6 @@ export default async function handler(
       case 'PUT':
         const formData: FormData = req.body;
 
-        console.log('formData', formData);
-
         const currentUser2 = await User.findOne({
           email: session.user.email,
         }).select(
@@ -83,7 +81,6 @@ export default async function handler(
             currentUser2[key] = value;
           }
         });
-        console.log(currentUser2);
         await currentUser2.save();
         return res.status(200).json({ message: 'User updated successfully.' });
 

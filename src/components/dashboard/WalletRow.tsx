@@ -5,6 +5,7 @@ import Modal from '../Modal';
 import { currency } from '@/sections/PersonalInfo';
 import WithdrawWallet from './wallet/WithdrawWallet';
 import { WalletDataProps } from './Wallet';
+import WalletProfile from './wallet/WalletProfile';
 
 interface WalletRowProps {
   handleUpdateWalletTable: () => void;
@@ -13,6 +14,7 @@ interface WalletRowProps {
 function WalletRow({ handleUpdateWalletTable, member }: WalletRowProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showModalW, setShowModalW] = useState<boolean>(false);
+  const [showModalP, setShowModalP] = useState<boolean>(false);
 
   const onClose = () => {
     setShowModal(false); // <-- update state variable to show modal
@@ -32,9 +34,17 @@ function WalletRow({ handleUpdateWalletTable, member }: WalletRowProps) {
     setShowModalW(true); // <-- update state variable to show modal
   };
 
+  const onCloseP = () => {
+    setShowModalP(false); // <-- update state variable to show modal
+  };
+
+  const onOpenP = () => {
+    setShowModalP(true); // <-- update state variable to show modal
+  };
+
   return (
     <tr key={member._id} className="border-t">
-      <td className="py-2 px-4">
+      <td className="py-2 px-4" onClick={onOpenP}>
         {member.userId?.surName} {member.userId?.firstName}
       </td>
       <td className="py-2 px-4">
@@ -52,6 +62,10 @@ function WalletRow({ handleUpdateWalletTable, member }: WalletRowProps) {
 
       <Modal isOpen={showModalW} onClose={onCloseW}>
         <WithdrawWallet onClose={onCloseW} member={member} />
+      </Modal>
+
+      <Modal isOpen={showModalP} onClose={onCloseP}>
+        <WalletProfile wallet={member} />
       </Modal>
     </tr>
   );

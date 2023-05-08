@@ -1,5 +1,5 @@
-import React from "react";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
+import React from 'react';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 interface SocialMediaProps {
   facebook?: string;
@@ -15,10 +15,10 @@ const SocialMedia = ({
   linkedin,
 }: SocialMediaProps) => {
   const socialMediaLinks = [
-    { platform: "Facebook", link: facebook, icon: <FaFacebook /> },
-    { platform: "Twitter", link: twitter, icon: <FaTwitter /> },
-    { platform: "Instagram", link: instagram, icon: <FaInstagram /> },
-    { platform: "LinkedIn", link: linkedin, icon: <FaLinkedin /> },
+    { platform: 'Facebook', link: facebook, icon: <FaFacebook /> },
+    { platform: 'Twitter', link: twitter, icon: <FaTwitter /> },
+    { platform: 'Instagram', link: instagram, icon: <FaInstagram /> },
+    { platform: 'LinkedIn', link: linkedin, icon: <FaLinkedin /> },
   ];
 
   return (

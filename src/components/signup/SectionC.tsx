@@ -30,6 +30,18 @@ const SectionC = (props: SectionProps) => {
     }
   };
 
+  const onChangeMulti = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, options } = event.target;
+    const selectedOptions = Array.from(options)
+      .filter((option) => option.selected)
+      .map((option) => option.value);
+    console.log(selectedOptions);
+    setFormData((prev) => ({
+      ...prev,
+      [name]: selectedOptions,
+    }));
+  };
+
   return (
     <div>
       <div className="flex flex-col md:flex-row md:gap-8">
@@ -185,35 +197,33 @@ const SectionC = (props: SectionProps) => {
               <div className="h-5" />
             )}
           </div>
+
           <div className="mb-4">
             <label
               htmlFor="sportSection"
               className="block text-gray-700 font-medium mb-2"
             >
-              Which sporting section will you like to join?
+              Which sporting section(s) will you like to join?
             </label>
+            <div className="text-sm text-gray hidden md:block">
+              Hold down the Ctrl key to select multiple options.
+            </div>
             <select
               id="sportSection"
               name="sportSection"
+              multiple
               className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
-              onChange={onChange}
+              onChange={onChangeMulti}
               value={formData.sportSection}
             >
-              <option value="">Select a section</option>
               {allSections.map((section) => (
                 <option value={section} key={section}>
                   {section}
                 </option>
               ))}
             </select>
-            {error?.sportSection ? (
-              <div className="text-red-500 mt-2 text-sm">
-                {error.sportSection}
-              </div>
-            ) : (
-              <div className="h-5" />
-            )}
           </div>
+
           <div className="mb-4">
             <label
               htmlFor="reasonToJoin"
