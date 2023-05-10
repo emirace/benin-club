@@ -32,7 +32,7 @@ export default async function handler(
         const transactions = await Transaction.find({
           userId: userId,
           for: 'subscription',
-        });
+        }).sort({ createdAt: -1 });
         return res.status(200).json({ transactions });
         break;
       case 'PUT':

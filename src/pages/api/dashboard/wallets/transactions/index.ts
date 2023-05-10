@@ -27,10 +27,12 @@ export default async function handleGetTransactions(
     // Find all transactions for the given user
     const transactions = await Transaction.find({
       for: 'wallet',
-    }).populate<UserDocument>({
-      path: 'userId',
-      select: 'firstName surName',
-    });
+    })
+      .sort({ createdAt: -1 })
+      .populate<UserDocument>({
+        path: 'userId',
+        select: 'firstName surName',
+      });
 
     return res.status(200).json(transactions);
   } catch (error) {

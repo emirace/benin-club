@@ -26,7 +26,7 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const posts: PostDocument[] = await Post.find();
+        const posts: PostDocument[] = await Post.find().sort({ createdAt: -1 });
         res.status(200).json(posts);
         break;
       case 'POST':

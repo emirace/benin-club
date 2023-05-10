@@ -37,7 +37,6 @@ export default async function handler(
             .status(400)
             .json({ message: 'vehicleId address is required' });
         }
-        console.log(vehicleId.toString());
 
         if (!Types.ObjectId.isValid(vehicleId.toString())) {
           return res.status(400).json({ message: 'Invalid ID' });
@@ -107,7 +106,6 @@ export default async function handler(
           purposeOfVehicle,
           regNumber,
           imageUrl,
-          qrCodeUrl,
         } = req.body;
 
         const vehicle: IVehicle | null = await Vehicle.findById(vehicleId);
@@ -122,7 +120,6 @@ export default async function handler(
         vehicle.purposeOfVehicle = purposeOfVehicle || vehicle.purposeOfVehicle;
         vehicle.regNumber = regNumber || vehicle.regNumber;
         vehicle.imageUrl = imageUrl || vehicle.imageUrl;
-        vehicle.qrCodeUrl = qrCodeUrl || vehicle.qrCodeUrl;
 
         const updatedVehicle = await vehicle.save();
 

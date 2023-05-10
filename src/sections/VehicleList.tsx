@@ -15,19 +15,29 @@ const VehicleList = ({}: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentVehicle, setCurrentVehicle] = useState<IVehicle>(
-    vehicleList[3001]
+    vehicleList[1]
   );
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 24,
+    total: 0,
+  });
+
+  const fetchData = async (page: number, limit: number) => {
+    setIsLoading(true);
+    const response = await fetch(
+      `/api/dashboard/vehicles?page=${page}&limit=${limit}`
+    );
+    const data = await response.json();
+    console.log(data);
+    setVehicleList(data.vehicles);
+    setPagination({ ...pagination, total: data.totalPages });
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const response = await fetch('/api/dashboard/vehicles');
-      const data = await response.json();
-      setVehicleList(data);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, []);
+    fetchData(pagination.page, pagination.limit);
+  }, [pagination.page, pagination.limit]);
 
   const handleDelete = async (id: string) => {
     try {
@@ -53,6 +63,18 @@ const VehicleList = ({}: Props) => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleOnUpdate = () => {
+    fetchData(pagination.page, pagination.limit);
+    setIsModalOpen(false);
+  };
+  const handlePageChange = (page: number) => {
+    setPagination({ ...pagination, page });
+  };
+
+  const handleLimitChange = (limit: number) => {
+    setPagination({ ...pagination, limit, page: 1 });
   };
 
   return isLoading ? (
@@ -98,7 +120,7 @@ const VehicleList = ({}: Props) => {
                 </button>
                 <button
                   className="text-red-600 hover:text-red-700"
-                  onClick={() => console.log('delete')}
+                  onClick={() => handleDelete(vehicle._id)}
                 >
                   Delete
                 </button>
@@ -106,45 +128,81 @@ const VehicleList = ({}: Props) => {
             </div>
           </li>
         ))}
-
-        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <UpdateQRcode
-            vehicle={currentVehicle}
-            handleCloseModal={handleCloseModal}
-          />
-        </Modal>
-        {isModalOpen && (
-          <div
-            className="fixed top-0 left-0 right-0 bottom-0 bg-black opacity-50 z-10"
-            onClick={handleCloseModal}
-          ></div>
-        )}
       </ul>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <UpdateQRcode
+          vehicle={currentVehicle}
+          handleCloseModal={handleOnUpdate}
+        />
+      </Modal>
+      {isModalOpen && (
+        <div
+          className="fixed top-0 left-0 right-0 bottom-0 bg-black opacity-50 z-10"
+          onClick={handleCloseModal}
+        ></div>
+      )}
+      <div className="flex justify-start mt-4">
+        {pagination.page > 1 && (
+          <button
+            className=" text-red py-2 px-4 "
+            onClick={() => handlePageChange(pagination.page - 1)}
+          >
+            Previous
+          </button>
+        )}
+
+        {pagination.page > 3 && (
+          <>
+            <button className="py-2 px-4" onClick={() => handlePageChange(1)}>
+              1
+            </button>
+            {pagination.page > 4 && <span className="mx-1">...</span>}
+          </>
+        )}
+
+        {Array.from({ length: pagination.total }, (_, i) => i + 1).map(
+          (page) =>
+            page >= pagination.page - 2 &&
+            page <= pagination.page + 2 && (
+              <button
+                key={page}
+                className={`${
+                  page === pagination.page
+                    ? 'bg-red text-white font-bold py-2 px-4 rounded-md'
+                    : 'text-red py-2 px-4'
+                }`}
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </button>
+            )
+        )}
+
+        {pagination.page < pagination.total - 2 && (
+          <>
+            {pagination.page < pagination.total - 3 && (
+              <span className=" mx-1">...</span>
+            )}
+            <button
+              className=" text-red py-2 px-4"
+              onClick={() => handlePageChange(pagination.total)}
+            >
+              {pagination.total}
+            </button>
+          </>
+        )}
+
+        {pagination.page < pagination.total && (
+          <button
+            className="text-red py-2 px-4 "
+            onClick={() => handlePageChange(pagination.page + 1)}
+          >
+            Next
+          </button>
+        )}
+      </div>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
-
-  try {
-    const response = await fetch(`${process.env.BASE_URL}/api/vehicles`);
-    const vehicles = await response.json();
-    return { props: { vehicles } };
-  } catch (error) {
-    return { props: { vehicles: [] } };
-  }
 };
 
 export default VehicleList;

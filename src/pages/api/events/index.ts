@@ -11,7 +11,9 @@ export default async function handler(
 
     switch (req.method) {
       case 'GET':
-        const events: EventDocument[] = await Event.find();
+        const events: EventDocument[] = await Event.find().sort({
+          createdAt: -1,
+        });
         res.status(200).json(events);
         break;
       default:

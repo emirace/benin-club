@@ -29,13 +29,23 @@ export default async function handler(
   switch (req.method) {
     case 'GET':
       try {
-        const vehicles = await Vehicle.find().sort({ createdAt: -1 });
-        res.status(200).json(vehicles);
+        const { page, limit } = req.query;
+        const pageNumber = parseInt(req.query.page as string) || 1;
+        const pageSize = parseInt(req.query.limit as string) || 24;
+        const skip = (pageNumber - 1) * pageSize;
+
+        const totalVehicles = await Vehicle.countDocuments();
+        const totalPages = Math.ceil(totalVehicles / pageSize);
+
+        const vehicles = await Vehicle.find().skip(skip).limit(pageSize);
+
+        res.status(200).json({ vehicles, total: totalVehicles, totalPages });
       } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Something went wrong' });
       }
       break;
+
     case 'POST':
       try {
         const {

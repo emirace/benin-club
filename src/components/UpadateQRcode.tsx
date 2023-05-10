@@ -6,41 +6,50 @@ import { useEffect, useState } from 'react';
 import { FaUpload } from 'react-icons/fa';
 import QRCode from 'qrcode';
 import { generateSecureCode } from './QRCodeGenerator';
+import { compressImageUpload } from '@/utils/compressImage';
+import Loading from './Loading';
 
 interface UpdateQRcodeProps {
   vehicle: IVehicle;
   handleCloseModal: () => void;
 }
 
-const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
+const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
   vehicle,
-  handleCloseModal
-) => {
+  handleCloseModal,
+}) => {
   const [dataUrl, setDataUrl] = useState('');
   const [error, setError] = useState<Error | null>(null);
-  const [carPlateNumber, setCarPlateNumber] = useState(
-    vehicle?.vehicle?.carPlateNumber
-  );
-  const [vehicleType, setVehicleType] = useState(vehicle?.vehicle?.vehicleType);
-  const [vehicleColor, setVehicleColor] = useState(
-    vehicle?.vehicle?.vehicleColor
-  );
+  const [carPlateNumber, setCarPlateNumber] = useState(vehicle?.carPlateNumber);
+  const [vehicleType, setVehicleType] = useState(vehicle?.vehicleType);
+  const [vehicleColor, setVehicleColor] = useState(vehicle.vehicleColor);
   const [purposeOfVehicle, setPurposeOfVehicle] = useState(
-    vehicle?.vehicle?.purposeOfVehicle
+    vehicle.purposeOfVehicle
   );
-  const [regNumber, setRegNumber] = useState(vehicle?.vehicle?.regNumber);
-  const [imagePreview, setImagePreview] = useState('');
+  const [regNumber, setRegNumber] = useState(vehicle.regNumber);
+  const [imagePreview, setImagePreview] = useState(vehicle.imageUrl);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreview('');
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    try {
+      const file = event.target?.files?.[0];
+      if (!file) return;
+      setIsLoading(true);
+      const compressedFile = await compressImageUpload(
+        file,
+        1024,
+        imagePreview
+      );
+      if (!compressedFile) return;
+
+      setImagePreview(compressedFile);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -50,12 +59,9 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
 
   const generateQRCode = () => {
     const link = generateSecureCode(Math.random());
-    QRCode.toDataURL(
-      'https://beninclub1931.com/' + vehicle?.vehicle?.qrCodeUrl,
-      {
-        errorCorrectionLevel: 'H',
-      }
-    )
+    QRCode.toDataURL('https://beninclub1931.com/' + vehicle.qrCodeUrl, {
+      errorCorrectionLevel: 'H',
+    })
       .then((dataUrl: string) => {
         setDataUrl(dataUrl);
         setError(null);
@@ -67,17 +73,18 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
   };
 
   const updateQRCode = async () => {
+    setLoading(true);
     const data = {
       carPlateNumber,
       vehicleType,
       vehicleColor,
       purposeOfVehicle,
       regNumber,
-      imagePreview,
+      imageUrl: imagePreview,
     };
 
     try {
-      const response = await fetch(`/api/vehicles/${vehicle?.vehicle?._id}`, {
+      const response = await fetch(`/api/dashboard/vehicles/${vehicle._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -88,11 +95,13 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
       if (response.ok) {
         const dataUrl = await response.json();
         handleCloseModal();
+        setLoading(false);
         setDataUrl(dataUrl.dataUrl);
       } else {
         setError(new Error(`Failed to update QR code: ${response.statusText}`));
       }
     } catch (error) {
+      setLoading(false);
       setError(error as Error | null);
     }
   };
@@ -100,7 +109,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
   const downloadFile = () => {
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = vehicle.vehicle.vehicleId;
+    link.download = vehicle.vehicleId;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -111,7 +120,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 bg-gray-50 py-8 px-4 rounded-lg">
         <div className="w-full md:w-1/2 flex flex-col items-center space-y-4">
           <label htmlFor="url-input" className="text-lg font-medium">
-            ID: {vehicle?.vehicle?.vehicleId}
+            ID: {vehicle.vehicleId}
           </label>
 
           <input
@@ -160,14 +169,21 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
             <label htmlFor="image-upload" className="text-lg font-medium">
               Upload vehicle image:
             </label>
-            {imagePreview ? (
-              <Image
-                src={imagePreview}
-                alt="Vehicle Preview"
-                className="w-64 h-64 object-contain mt-4"
-                width={250}
-                height={250}
-              />
+            {isLoading ? (
+              <div className="h-64 flex items-center justify-center">
+                <Loading />
+              </div>
+            ) : imagePreview ? (
+              <>
+                <Image
+                  src={imagePreview}
+                  alt="Vehicle Preview"
+                  className="w-64 h-64 object-contain mt-4"
+                  width={250}
+                  height={250}
+                />
+                <label htmlFor="image-upload">Change</label>
+              </>
             ) : (
               <div className="w-64 h-64 border-2 border-gray-300 rounded-lg mt-4 flex items-center justify-center cursor-pointer">
                 <label htmlFor="image-upload">
@@ -201,6 +217,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = (
           </div>
         </div>
       </div>
+      {loading && <Loading />}
       <button onClick={updateQRCode} className={buttonStyle}>
         Update
       </button>

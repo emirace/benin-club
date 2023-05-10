@@ -34,6 +34,7 @@ export default async function handler(
     const skip = (page - 1) * pageSize;
 
     const wallets = await Wallet.find()
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(pageSize)
       .populate<UserDocument>({
