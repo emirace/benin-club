@@ -8,9 +8,12 @@ import QRCode from 'qrcode';
 import { generateSecureCode } from './QRCodeGenerator';
 import { compressImageUpload } from '@/utils/compressImage';
 import Loading from './Loading';
+import { UserDocument } from '@/models/user.model';
 
 interface UpdateQRcodeProps {
-  vehicle: IVehicle;
+  vehicle: IVehicle & {
+    memberId: { firstName: string; surName: string; _id: string };
+  };
   handleCloseModal: () => void;
 }
 
@@ -20,9 +23,15 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
 }) => {
   const [dataUrl, setDataUrl] = useState('');
   const [error, setError] = useState<Error | null>(null);
+  const [error1, setError1] = useState<string>('');
   const [carPlateNumber, setCarPlateNumber] = useState(vehicle?.carPlateNumber);
   const [vehicleType, setVehicleType] = useState(vehicle?.vehicleType);
-  const [vehicleColor, setVehicleColor] = useState(vehicle.vehicleColor);
+  const [vehicleColor, setVehicleColor] = useState(vehicle?.vehicleColor);
+  const [memberName, setMemberName] = useState(
+    vehicle.memberId
+      ? vehicle?.memberId?.surName + ' ' + vehicle?.memberId?.firstName
+      : ''
+  );
   const [purposeOfVehicle, setPurposeOfVehicle] = useState(
     vehicle.purposeOfVehicle
   );
@@ -30,6 +39,29 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
   const [imagePreview, setImagePreview] = useState(vehicle.imageUrl);
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [matchingMembers, setMatchingMembers] = useState<UserDocument[]>([]);
+  const [member, setMember] = useState<any>(null);
+
+  const handleMemberNameChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const name = event.target.value;
+    setMemberName(name);
+    if (name.length > 2) {
+      // Query the data via API
+      const response = await fetch(`/api/dashboard/members?search=${name}`);
+      const data = await response.json();
+      setMatchingMembers(data.members);
+    } else {
+      setMatchingMembers([]);
+    }
+  };
+
+  const handleMemberSelect = (member: UserDocument) => {
+    setMember(member);
+    setMemberName(`${member.surName} ${member.firstName}`);
+    setMatchingMembers([]);
+  };
 
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -52,7 +84,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
       setIsLoading(false);
     }
   };
-
+  console.log(vehicle);
   useEffect(() => {
     generateQRCode();
   }, [vehicle]);
@@ -73,6 +105,10 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
   };
 
   const updateQRCode = async () => {
+    if (!member) {
+      setError1('Select a member name');
+      return;
+    }
     setLoading(true);
     const data = {
       carPlateNumber,
@@ -81,6 +117,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
       purposeOfVehicle,
       regNumber,
       imageUrl: imagePreview,
+      memberId: member._id,
     };
 
     try {
@@ -123,6 +160,32 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
             ID: {vehicle.vehicleId}
           </label>
 
+          <div className="relative w-full">
+            <input
+              type="text"
+              id="memberName"
+              name="memberName"
+              value={memberName}
+              className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none  focus:border-red"
+              placeholder="Enter member name"
+              autoComplete="off"
+              onChange={handleMemberNameChange}
+            />
+            {error1 && <div className="text-red">{error1}</div>}
+            {matchingMembers.length > 0 && (
+              <div className="absolute z-10 top-full left-0 right-0 mt-1 rounded-md shadow-lg bg-white divide-y divide-gray-200">
+                {matchingMembers.map((member) => (
+                  <div
+                    key={member._id}
+                    className="px-4 py-3 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleMemberSelect(member)}
+                  >
+                    {member.surName} {member.firstName}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           <input
             type="text"
             id="car-plate-input"

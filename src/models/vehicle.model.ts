@@ -11,6 +11,7 @@ export interface IVehicle extends Document {
   qrCodeUrl: string;
   createdAt?: Date;
   updatedAt?: Date;
+  memberId: Schema.Types.ObjectId;
 }
 
 const vehicleSchema: Schema = new Schema(
@@ -19,6 +20,8 @@ const vehicleSchema: Schema = new Schema(
       type: String,
       required: true,
     },
+    memberId: { type: Schema.Types.ObjectId, ref: 'User' },
+
     carPlateNumber: {
       type: String,
     },

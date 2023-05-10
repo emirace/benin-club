@@ -29,7 +29,6 @@ export default async function handler(
   switch (req.method) {
     case 'GET':
       try {
-        const { page, limit } = req.query;
         const pageNumber = parseInt(req.query.page as string) || 1;
         const pageSize = parseInt(req.query.limit as string) || 24;
         const skip = (pageNumber - 1) * pageSize;
@@ -37,7 +36,10 @@ export default async function handler(
         const totalVehicles = await Vehicle.countDocuments();
         const totalPages = Math.ceil(totalVehicles / pageSize);
 
-        const vehicles = await Vehicle.find().skip(skip).limit(pageSize);
+        const vehicles = await Vehicle.find()
+          .populate({ path: 'memberId', select: 'firstName surName' })
+          .skip(skip)
+          .limit(pageSize);
 
         res.status(200).json({ vehicles, total: totalVehicles, totalPages });
       } catch (error) {

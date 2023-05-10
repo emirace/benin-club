@@ -10,11 +10,15 @@ import Loading from '@/components/Loading';
 
 type Props = {};
 
+type IVehicleM = IVehicle & {
+  memberId: { firstName: string; surName: string; _id: string };
+};
+
 const VehicleList = ({}: Props) => {
-  const [vehicleList, setVehicleList] = useState<IVehicle[]>([]);
+  const [vehicleList, setVehicleList] = useState<IVehicleM[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentVehicle, setCurrentVehicle] = useState<IVehicle>(
+  const [currentVehicle, setCurrentVehicle] = useState<IVehicleM>(
     vehicleList[1]
   );
   const [pagination, setPagination] = useState({
@@ -41,7 +45,14 @@ const VehicleList = ({}: Props) => {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`/api/vehicles/${id}`, {
+      const shouldDelete = window.confirm(
+        'Are you sure you want to delete this vehicle?'
+      );
+      if (!shouldDelete) {
+        return;
+      }
+
+      const response = await fetch(`/api/dashboard/vehicles/${id}`, {
         method: 'DELETE',
       });
 
@@ -56,7 +67,7 @@ const VehicleList = ({}: Props) => {
     }
   };
 
-  const handleEdit = (id: IVehicle) => {
+  const handleEdit = (id: IVehicleM) => {
     setIsModalOpen(true);
     setCurrentVehicle(id);
   };
@@ -102,6 +113,14 @@ const VehicleList = ({}: Props) => {
               <h2 className="text-lg font-medium text-gray-900 truncate">
                 {vehicle.vehicleId}
               </h2>
+
+              {vehicle.memberId && (
+                <p className="mt-1 text-sm text-gray-500">
+                  {vehicle?.memberId?.surName +
+                    ' ' +
+                    vehicle?.memberId?.firstName}
+                </p>
+              )}
               <p className="mt-1 text-sm text-gray-500">
                 {vehicle.vehicleType}
               </p>

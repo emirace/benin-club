@@ -106,6 +106,7 @@ export default async function handler(
           purposeOfVehicle,
           regNumber,
           imageUrl,
+          memberId,
         } = req.body;
 
         const vehicle: IVehicle | null = await Vehicle.findById(vehicleId);
@@ -120,6 +121,7 @@ export default async function handler(
         vehicle.purposeOfVehicle = purposeOfVehicle || vehicle.purposeOfVehicle;
         vehicle.regNumber = regNumber || vehicle.regNumber;
         vehicle.imageUrl = imageUrl || vehicle.imageUrl;
+        vehicle.memberId = memberId || vehicle.memberId;
 
         const updatedVehicle = await vehicle.save();
 
