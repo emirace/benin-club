@@ -1,4 +1,4 @@
-import { IUser } from '@/models/user.model';
+import { IUser } from "@/models/user.model";
 
 export interface SectionProps {
   formData: IUser;
@@ -13,6 +13,7 @@ export interface SectionProps {
   onPrevious: () => void;
   handleError: (name: string, value: string) => void;
   setFormData: SetFormData;
+  isAdmin?: boolean;
 }
 
 export type SetFormData = (
@@ -133,7 +134,7 @@ export interface Child {
   name: string;
   age: number;
   school: string;
-  sex: 'male' | 'female';
+  sex: "male" | "female";
 }
 export interface Education {
   school: string;

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import PersonalInfo from '@/components/signup/PersonalInfo';
-import StepsIndicator from '@/components/signup/StepsIndicator';
-import { initialErrorData, initialFormData, steps } from '@/constants/signup';
-import { ErrorData, FormData } from '@/types/signup';
-import SectionB from '@/components/signup/SectionB';
-import SectionC from '@/components/signup/SectionC';
-import SectionD from '@/components/signup/SectionD';
-import SectionE from '@/components/signup/SectionE';
-import Declaration from '@/components/signup/Declaration';
-import { NextPage } from 'next';
-import Loading from '@/components/Loading';
-import { buttonStyle } from '@/constants/styles';
-import UploadForm from '../signup/UploadForm';
-import { IUser } from '@/models/user.model';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import PersonalInfo from "@/components/signup/PersonalInfo";
+import StepsIndicator from "@/components/signup/StepsIndicator";
+import { initialErrorData, initialFormData, steps } from "@/constants/signup";
+import { ErrorData, FormData } from "@/types/signup";
+import SectionB from "@/components/signup/SectionB";
+import SectionC from "@/components/signup/SectionC";
+import SectionD from "@/components/signup/SectionD";
+import SectionE from "@/components/signup/SectionE";
+import Declaration from "@/components/signup/Declaration";
+import { NextPage } from "next";
+import Loading from "@/components/Loading";
+import { buttonStyle } from "@/constants/styles";
+import UploadForm from "../signup/UploadForm";
+import { IUser } from "@/models/user.model";
 
 interface Props {
   onClose: () => void;
@@ -25,7 +25,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
   const [formData, setFormData] = useState<IUser>(initialFormData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorData>(initialErrorData);
-  const [id2, setId] = useState(id || '');
+  const [id2, setId] = useState(id || "");
 
   useEffect(() => {
     // Load saved form data from database when the component mounts
@@ -34,7 +34,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
       const response = await fetch(`/api/dashboard/members/${id}`);
       if (response.ok) {
         const savedData = await response.json();
-        console.log('savedData', savedData);
+        console.log("savedData", savedData);
         setFormData((prev) => ({ ...prev, ...savedData }));
         setStep(savedData.step);
       }
@@ -45,15 +45,15 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
   const handleSubmit = async () => {
     setError(initialErrorData);
     if (!formData.memberId) {
-      handleError('memberId', 'Enter member Id');
+      handleError("memberId", "Enter member Id");
       return;
     }
     setLoading(true);
     const response = await fetch(`/api/dashboard/members`, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ memberId: formData.memberId }),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     if (response.ok) {
@@ -64,7 +64,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
       setStep(step + 1);
       setFormData({ ...formData, step: step + 1 });
     } else {
-      handleError('general', 'Error submitting form');
+      handleError("general", "Error submitting form");
     }
     setLoading(false);
   };
@@ -75,12 +75,12 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
     //save current step
     setLoading(true);
     const response = await fetch(`/api/dashboard/members/${id2}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(
-        step === 7 ? { ...formData, signupStep: 'Verification' } : formData
+        step === 7 ? { ...formData, signupStep: "Verification" } : formData
       ),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     if (response.ok) {
@@ -88,7 +88,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
       setStep(step + 1);
       setFormData({ ...formData, step: step + 1 });
     } else {
-      handleError('general', 'Error saving form data');
+      handleError("general", "Error saving form data");
     }
     setLoading(false);
   };
@@ -104,7 +104,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
   ) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
-    handleError('general', '');
+    handleError("general", "");
   };
 
   const handleError = (name: string, value: string) => {
@@ -128,8 +128,8 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
                 type="text"
                 name="memberId"
                 onChange={handleChange}
-                value={formData?.memberId || ''}
-                onFocus={() => handleError('memberId', '')}
+                value={formData?.memberId || ""}
+                onFocus={() => handleError("memberId", "")}
               />
               {error?.memberId ? (
                 <div className="text-red text-sm">{error.memberId}</div>
@@ -181,6 +181,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
             onChange={handleChange}
             onNext={handleNext}
             handleError={handleError}
+            isAdmin={true}
           />
         );
 
@@ -220,6 +221,7 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
             onChange={handleChange}
             onNext={handleNext}
             handleError={handleError}
+            isAdmin={true}
             setFormData={setFormData}
           />
         );

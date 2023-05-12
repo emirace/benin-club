@@ -8,24 +8,27 @@ import { useState } from "react";
 import ResendPassword from "./ResendPassword";
 import PersonalInfo from "./userProfile/PersonalInfo";
 import FinancialInformation from "./userProfile/FinancialInformation";
+import Loading from "../Loading";
 
-interface MemberTableRowProps {
+interface NewMemberTableRowProps {
   member: IUser;
   onDelete: (id: string) => void;
   handleUpdateMemberTable: () => void;
 }
 
-function MemberTableRow({
+function NewMemberTableRow({
   member,
   onDelete,
   handleUpdateMemberTable,
-}: MemberTableRowProps): JSX.Element {
+}: NewMemberTableRowProps): JSX.Element {
   let statusClassName = "";
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
   const [userProfile, setUserProfile] = useState(false);
   const [finiance, setFiniance] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleDelete = () => {
     setShowConfirm(true);
@@ -38,6 +41,24 @@ function MemberTableRow({
 
   const handleCancelDelete = () => {
     setShowConfirm(false);
+  };
+
+  const handleChange = async (value: string) => {
+    setLoading(true);
+    const response = await fetch(`/api/dashboard/members/${member._id}`, {
+      method: "PUT",
+      body: JSON.stringify({ signupStep: value }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.ok) {
+      const savedData = await response.json();
+      handleUpdateMemberTable();
+    } else {
+      setError("Error updating status");
+    }
+    setLoading(false);
   };
 
   const onClose = () => {
@@ -73,17 +94,6 @@ function MemberTableRow({
     setFiniance(true); // <-- update state variable to show modal
   };
 
-  switch (member.status) {
-    case "Active":
-      statusClassName = "text-green";
-      break;
-    case "Inactive":
-      statusClassName = "text-red";
-      break;
-    default:
-      statusClassName = "text-gray";
-      break;
-  }
   return (
     <>
       <tr className="border-t">
@@ -111,11 +121,29 @@ function MemberTableRow({
         <td className="py-2 px-4 cursor-pointer" onClick={onOpenF}>
           {member.subcriptionBal}
         </td>
-        <td className="py-2 px-4">{member?.occupation?.address}</td>
         <td className="py-2 px-4">{member.email}</td>
         <td className="py-2 px-4">{member?.tel}</td>
         <td className="py-2 px-4">{member.gender}</td>
-        <td className={`py-2 px-4 ${statusClassName}`}>{member.status}</td>
+        <td className="py-2 px-4">
+          <span className="text-red">{member.signupStep}</span>
+          {loading ? (
+            <Loading />
+          ) : (
+            <select
+              className="ml-2 border border-gray rounded-md py-1 px-2 w-5 text-sm"
+              onChange={(e) => handleChange(e.target.value)}
+            >
+              <option value="">--select--</option>
+              <option value="EmailVerification">Email Verification</option>
+              <option value="VerifyingEmail">Verifying Email</option>
+              <option value="Payment">Form Payment</option>
+              <option value="ProfileCreation">Profile Creation</option>
+              <option value="Verification">Verification</option>
+              <option value="ClubPayment">ClubPayment</option>
+              <option value="Completed">Completed</option>
+            </select>
+          )}
+        </td>
         <td className="py-2 px-4">
           {!showConfirm ? (
             <div className="flex items-center">
@@ -163,4 +191,4 @@ function MemberTableRow({
   );
 }
 
-export default MemberTableRow;
+export default NewMemberTableRow;

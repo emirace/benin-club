@@ -6,14 +6,15 @@ import { IUser } from "@/models/user.model";
 import Loading from "../Loading";
 import Modal from "../Modal";
 import MembershipForm from "./MembershipForm";
+import NewMemberTableRow from "./NewMemberTableRow";
 
-interface MembersTableProps {}
+interface NewMembersTableProps {}
 interface Sorting {
   field: string;
   order: "asc" | "desc";
 }
 
-function MembersTable({}: MembersTableProps): JSX.Element {
+function NewMembersTable({}: NewMembersTableProps): JSX.Element {
   const [filteredMembers, setFilteredMembers] = useState<IUser[]>([]);
   const [members, setMembers] = useState<IUser[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -33,16 +34,15 @@ function MembersTable({}: MembersTableProps): JSX.Element {
       pageNumber: number,
       sort: string,
       order: "asc" | "desc",
-      category: string,
       search: string = ""
     ) => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `/api/dashboard/members?page=${pageNumber}&pageSize=${membersPerPage}&sort=${sort}&category=${category}&order=${order}&search=${search}`
+          `/api/dashboard/members/new?page=${pageNumber}&pageSize=${membersPerPage}&sort=${sort}&order=${order}&search=${search}`
         );
-        const { members, totalMembers } = await response.json();
         if (response.ok) {
+          const { members, totalMembers } = await response.json();
           setMembers(members);
           setTotalPages(Math.ceil(totalMembers / membersPerPage));
         } else {
@@ -59,12 +59,12 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   );
 
   useEffect(() => {
-    fetchMembers(currentPage, sorting.field, sorting.order, category);
+    fetchMembers(currentPage, sorting.field, sorting.order);
   }, [currentPage, fetchMembers]);
 
   useEffect(() => {
-    fetchMembers(1, sorting.field, sorting.order, category);
-  }, [category, fetchMembers, sorting]);
+    fetchMembers(1, sorting.field, sorting.order);
+  }, [, fetchMembers, sorting]);
 
   useEffect(() => {
     setFilteredMembers(members);
@@ -72,7 +72,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchTerm = event.target.value.toLowerCase();
-    fetchMembers(1, sorting.field, sorting.order, category, searchTerm);
+    fetchMembers(1, sorting.field, sorting.order, searchTerm);
   };
 
   const pageNumbers = [];
@@ -88,7 +88,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    fetchMembers(pageNumber, sorting.field, sorting.order, category);
+    fetchMembers(pageNumber, sorting.field, sorting.order);
   };
 
   const handleAddMember = () => {
@@ -108,7 +108,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
     }
   };
   const handleUpdateMemberTable = async () => {
-    fetchMembers(currentPage, sorting.field, sorting.order, category);
+    fetchMembers(currentPage, sorting.field, sorting.order);
   };
 
   const isMobile = window.matchMedia("(max-width: 640px)").matches;
@@ -140,22 +140,6 @@ function MembersTable({}: MembersTableProps): JSX.Element {
           )}
         </div>
       </div>
-      <div className="my-4">
-        Category
-        <select
-          className="ml-2 border border-gray rounded-md py-1 px-2 text-sm"
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="all">All</option>
-          <option value="Member">Member</option>
-          <option value="Corporate Member">Corporate Member</option>
-          <option value="Old Member">Old Member</option>
-          <option value="Deseased Member">Deseased Member</option>
-          <option value="Transfered">Transfered</option>
-          <option value="Live Member">Live Member</option>
-          <option value="Honorary Member">Honorary Member</option>
-        </select>
-      </div>
       <Modal isOpen={showModal} onClose={onClose}>
         <MembershipForm onClose={onClose} />
       </Modal>
@@ -174,7 +158,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
               <Header handleSorting={handleSorting} sorting={sorting} />
               <tbody>
                 {filteredMembers.map((member) => (
-                  <MemberTableRow
+                  <NewMemberTableRow
                     key={member.id}
                     member={member}
                     onDelete={handleDelete}
@@ -197,7 +181,7 @@ function MembersTable({}: MembersTableProps): JSX.Element {
   );
 }
 
-export default MembersTable;
+export default NewMembersTable;
 
 interface HeaderProps {
   handleSorting: (header: string) => void;
@@ -322,10 +306,9 @@ const membersTableHeader = [
   { label: "Member Name", name: "surName" },
   { label: "Category", name: "category" },
   { label: "Subcription Fee Bal.", name: "subcriptionBal" },
-  { label: "Occupation", name: "occupation" },
   { label: "Email", name: "email" },
   { label: "Phone Number", name: "tel" },
   { label: "Gender", name: "gender" },
-  { label: "Status", name: "status" },
+  { label: "Step", name: "signupStep" },
   { label: "Actions", name: "_id" },
 ];

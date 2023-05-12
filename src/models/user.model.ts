@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 interface IContact {
   address: string;
@@ -9,7 +9,7 @@ interface IChild {
   name: string;
   age: number;
   school: string;
-  sex: 'male' | 'female';
+  sex: "male" | "female";
 }
 
 interface IEducation {
@@ -89,29 +89,30 @@ export interface IUser {
   proposerKnown: string;
   image: string;
   email: string;
-  status: 'Active' | 'Inactive';
+  status: "Active" | "Inactive";
   level:
-    | 'Member'
-    | 'Corporate Member'
-    | 'Old Member'
-    | 'Deseased Member'
-    | 'Transfered'
-    | 'Live Member'
-    | 'Honorary Member';
+    | "Member"
+    | "Corporate Member"
+    | "Old Member"
+    | "Deseased Member"
+    | "Transfered"
+    | "Live Member"
+    | "Honorary Member";
   joinDate: Date;
   password?: string;
-  gender: 'Male' | 'Female';
-  position: 'Member' | 'President' | 'Vice President';
+  gender: "Male" | "Female";
+  position: "Member" | "President" | "Vice President";
   verificationToken?: IVerificationToken | null;
-  role: 'admin' | 'wallet' | 'user' | 'member';
+  role: "admin" | "wallet" | "user" | "member";
   signupStep:
-    | 'EmailVerification'
-    | 'VerifyingEmail'
-    | 'Verification'
-    | 'ClubPayment'
-    | 'Payment'
-    | 'ProfileCreation'
-    | 'Completed';
+    | "EmailVerification"
+    | "VerifyingEmail"
+    | "Verification"
+    | "ClubPayment"
+    | "Payment"
+    | "ProfileCreation"
+    | "Completed";
+  lastPamentYear?: number;
 }
 
 const VerificationTokenSchema = new Schema({
@@ -168,7 +169,7 @@ const userSchema = new Schema<IUser>(
         name: { type: String },
         age: { type: Number },
         school: { type: String },
-        sex: { type: String, enum: ['male', 'female'] },
+        sex: { type: String, enum: ["male", "female"] },
       },
     ],
     addressYears: { type: String },
@@ -197,39 +198,39 @@ const userSchema = new Schema<IUser>(
     proposerPersonality: { type: String },
     proposerKnown: { type: String },
     category: { type: String },
-    image: { type: String, default: '/images/profile.webp' },
+    image: { type: String, default: "/images/profile.webp" },
     email: { type: String, default: null },
     status: {
       type: String,
       required: true,
-      enum: ['Active', 'Inactive'],
-      default: 'Inactive',
+      enum: ["Active", "Inactive"],
+      default: "Inactive",
     },
     gender: {
       type: String,
       required: true,
-      enum: ['Male', 'Female'],
-      default: 'Male',
+      enum: ["Male", "Female"],
+      default: "Male",
     },
     level: {
       type: String,
       required: true,
       enum: [
-        'Member',
-        'Corporate Member',
-        'Old Member',
-        'Deseased Member',
-        'Transfered',
-        'Live Member',
-        'Honorary Member',
+        "Member",
+        "Corporate Member",
+        "Old Member",
+        "Deseased Member",
+        "Transfered",
+        "Live Member",
+        "Honorary Member",
       ],
-      default: 'Member',
+      default: "Member",
     },
     position: {
       type: String,
       required: true,
-      enum: ['Member', 'President', 'Vice President'],
-      default: 'Member',
+      enum: ["Member", "President", "Vice President"],
+      default: "Member",
     },
 
     joinDate: { type: Date },
@@ -240,21 +241,21 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
       enum: [
-        'EmailVerification',
-        'VerifyingEmail',
-        'Payment',
-        'ProfileCreation',
-        'Verification',
-        'ClubPayment',
-        'Completed',
+        "EmailVerification",
+        "VerifyingEmail",
+        "Payment",
+        "ProfileCreation",
+        "Verification",
+        "ClubPayment",
+        "Completed",
       ],
-      default: 'EmailVerification',
+      default: "EmailVerification",
     },
     role: {
       type: String,
       required: true,
-      enum: ['admin', 'wallet', 'user', 'member'],
-      default: 'member',
+      enum: ["admin", "wallet", "user", "member"],
+      default: "member",
     },
     step: { type: Number, default: 1 },
     bio: { type: String },
@@ -264,11 +265,12 @@ const userSchema = new Schema<IUser>(
       instagram: { type: String },
       linkedin: { type: String },
     },
+    lastPamentYear: { type: Number, default: 1 },
   },
   {
     timestamps: true,
   }
 );
-const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
+const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
 export default User;

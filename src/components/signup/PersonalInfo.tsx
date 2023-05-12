@@ -1,8 +1,16 @@
-import { buttonStyle } from '@/constants/styles';
-import { SectionProps } from '@/types/signup';
+import { buttonStyle } from "@/constants/styles";
+import { SectionProps } from "@/types/signup";
 
 const PersonalInfo = (props: SectionProps) => {
-  const { formData, onChange, onNext, error, handleError, setFormData } = props;
+  const {
+    formData,
+    onChange,
+    onNext,
+    error,
+    handleError,
+    setFormData,
+    isAdmin = false,
+  } = props;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => {
@@ -11,21 +19,21 @@ const PersonalInfo = (props: SectionProps) => {
       let updatedPermanent = { ...prevFormData.permanent };
       let updatedOccupation = { ...prevFormData.occupation };
 
-      if (name === 'address') {
+      if (name === "address") {
         updatedHome = { ...updatedHome, address: value };
-      } else if (name === 'tel') {
+      } else if (name === "tel") {
         updatedHome = { ...updatedHome, tel: value };
-      } else if (name === 'permanentAddress') {
+      } else if (name === "permanentAddress") {
         updatedPermanent = { ...updatedPermanent, address: value };
-      } else if (name === 'permanentAddressTel') {
+      } else if (name === "permanentAddressTel") {
         updatedPermanent = { ...updatedPermanent, tel: value };
-      } else if (name === 'occupationAddress') {
+      } else if (name === "occupationAddress") {
         updatedOccupation = { ...updatedOccupation, address: value };
-      } else if (name === 'occupationTel') {
+      } else if (name === "occupationTel") {
         updatedOccupation = { ...updatedOccupation, tel: value };
-      } else if (name === 'businessAddress') {
+      } else if (name === "businessAddress") {
         updatedBusiness = { ...updatedBusiness, address: value };
-      } else if (name === 'businessTel') {
+      } else if (name === "businessTel") {
         updatedBusiness = { ...updatedBusiness, tel: value };
       }
 
@@ -37,74 +45,74 @@ const PersonalInfo = (props: SectionProps) => {
         business: updatedBusiness,
       };
     });
-    handleError('general', '');
+    handleError("general", "");
   };
 
   const handleNext = () => {
     let isValid = true;
     if (!formData?.surName) {
-      handleError('surName', 'Please enter your surname');
+      handleError("surName", "Please enter your surname");
       isValid = false;
     }
     if (!formData?.firstName) {
-      handleError('firstName', 'Please enter your first name');
+      handleError("firstName", "Please enter your first name");
       isValid = false;
     }
     if (!formData?.dob) {
-      handleError('dob', 'Please enter your date of birth');
+      handleError("dob", "Please enter your date of birth");
       isValid = false;
     }
     if (!formData?.nationality) {
-      handleError('nationality', 'Please enter your nationality');
+      handleError("nationality", "Please enter your nationality");
       isValid = false;
     }
     if (!formData?.home.address) {
-      handleError('address', 'Please enter your home address');
+      handleError("address", "Please enter your home address");
       isValid = false;
     }
     if (!formData?.home.tel) {
-      handleError('tel', 'Please enter your home telephone number');
+      handleError("tel", "Please enter your home telephone number");
       isValid = false;
     }
     if (!formData?.permanent.address) {
-      handleError('permanentAddress', 'Please enter your permanent address');
+      handleError("permanentAddress", "Please enter your permanent address");
       isValid = false;
     }
     if (!formData?.permanent.tel) {
       handleError(
-        'permanentAddressTel',
-        'Please enter your permanent address telephone number'
+        "permanentAddressTel",
+        "Please enter your permanent address telephone number"
       );
       isValid = false;
     }
     if (!formData?.occupation.address) {
-      handleError('occupation', 'Please enter your occupation');
+      handleError("occupation", "Please enter your occupation");
       isValid = false;
     }
     if (!formData?.occupation.tel) {
       handleError(
-        'occupationTel',
-        'Please enter your occupation telephone number'
+        "occupationTel",
+        "Please enter your occupation telephone number"
       );
       isValid = false;
     }
     if (!formData?.employer) {
-      handleError('employer', 'Please enter your employer');
+      handleError("employer", "Please enter your employer");
       isValid = false;
     }
     if (!formData?.business.address) {
-      handleError('businessAddress', 'Please enter your business address');
+      handleError("businessAddress", "Please enter your business address");
       isValid = false;
     }
     if (!formData?.business.tel) {
       handleError(
-        'businessAddressTel',
-        'Please enter your business address telephone number'
+        "businessAddressTel",
+        "Please enter your business address telephone number"
       );
       isValid = false;
     }
     if (!formData?.nameOfBankers) {
-      handleError('nameOfBankers', 'Please enter the name of your bankers');
+      handleError("nameOfBankers", "Please enter the name of your bankers");
       isValid = false;
     }
 
@@ -130,8 +138,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="surName"
             onChange={onChange}
-            value={formData?.surName || ''}
-            onFocus={() => handleError('surName', '')}
+            value={formData?.surName || ""}
+            onFocus={() => handleError("surName", "")}
           />
           {error?.surName ? (
             <div className="text-red text-sm">{error.surName}</div>
@@ -151,8 +159,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="firstName"
             onChange={onChange}
-            value={formData?.firstName || ''}
-            onFocus={() => handleError('firstName', '')}
+            value={formData?.firstName || ""}
+            onFocus={() => handleError("firstName", "")}
           />
           {error?.firstName ? (
             <div className="text-red text-sm">{error.firstName}</div>
@@ -171,8 +179,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="date"
             name="dob"
             onChange={onChange}
-            value={formData?.dob || ''}
-            onFocus={() => handleError('dob', '')}
+            value={formData?.dob || ""}
+            onFocus={() => handleError("dob", "")}
           />
           {error?.dob ? (
             <div className="text-red text-sm">{error.dob}</div>
@@ -192,8 +200,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="nationality"
             onChange={onChange}
-            value={formData?.nationality || ''}
-            onFocus={() => handleError('nationality', '')}
+            value={formData?.nationality || ""}
+            onFocus={() => handleError("nationality", "")}
           />
           {error?.nationality ? (
             <div className="text-red text-sm">{error.nationality}</div>
@@ -216,8 +224,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="address"
             onChange={handleChange}
-            value={formData.home.address || ''}
-            onFocus={() => handleError('address', '')}
+            value={formData.home.address || ""}
+            onFocus={() => handleError("address", "")}
           />
           {error?.address ? (
             <div className="text-red text-sm">{error.address}</div>
@@ -234,8 +242,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="tel"
             onChange={handleChange}
-            value={formData.home.tel || ''}
-            onFocus={() => handleError('tel', '')}
+            value={formData.home.tel || ""}
+            onFocus={() => handleError("tel", "")}
           />
           {error?.tel ? (
             <div className="text-red text-sm">{error.tel}</div>
@@ -258,8 +266,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="permanentAddress"
             onChange={handleChange}
-            value={formData.permanent.address || ''}
-            onFocus={() => handleError('permanentAddress', '')}
+            value={formData.permanent.address || ""}
+            onFocus={() => handleError("permanentAddress", "")}
           />
           {error?.permanentAddress ? (
             <div className="text-red text-sm">{error.permanentAddress}</div>
@@ -279,8 +287,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="permanentAddressTel"
             onChange={handleChange}
-            value={formData.permanent.tel || ''}
-            onFocus={() => handleError('permanentAddressTel', '')}
+            value={formData.permanent.tel || ""}
+            onFocus={() => handleError("permanentAddressTel", "")}
           />
           {error?.permanentAddressTel ? (
             <div className="text-red text-sm">{error.permanentAddressTel}</div>
@@ -303,8 +311,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="occupationAddress"
             onChange={handleChange}
-            value={formData.occupation.address || ''}
-            onFocus={() => handleError('occupation', '')}
+            value={formData.occupation.address || ""}
+            onFocus={() => handleError("occupation", "")}
           />
           {error?.occupation ? (
             <div className="text-red text-sm">{error.occupation}</div>
@@ -324,8 +332,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="occupationTel"
             onChange={handleChange}
-            value={formData.occupation.tel || ''}
-            onFocus={() => handleError('occupationTel', '')}
+            value={formData.occupation.tel || ""}
+            onFocus={() => handleError("occupationTel", "")}
           />
           {error?.occupationTel ? (
             <div className="text-red text-sm">{error.occupationTel}</div>
@@ -347,8 +355,8 @@ const PersonalInfo = (props: SectionProps) => {
           type="text"
           name="employer"
           onChange={onChange}
-          value={formData?.employer || ''}
-          onFocus={() => handleError('employer', '')}
+          value={formData?.employer || ""}
+          onFocus={() => handleError("employer", "")}
         />
         {error?.employer ? (
           <div className="text-red text-sm">{error.employer}</div>
@@ -370,8 +378,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="businessAddress"
             onChange={handleChange}
-            value={formData.business.address || ''}
-            onFocus={() => handleError('businessAddress', '')}
+            value={formData.business.address || ""}
+            onFocus={() => handleError("businessAddress", "")}
           />
           {error?.businessAddress ? (
             <div className="text-red text-sm">{error.businessAddress}</div>
@@ -391,8 +399,8 @@ const PersonalInfo = (props: SectionProps) => {
             type="text"
             name="businessTel"
             onChange={handleChange}
-            value={formData.business.tel || ''}
-            onFocus={() => handleError('businessAddressTel', '')}
+            value={formData.business.tel || ""}
+            onFocus={() => handleError("businessAddressTel", "")}
           />
           {error?.businessAddressTel ? (
             <div className="text-red text-sm">{error.businessAddressTel}</div>
@@ -414,8 +422,8 @@ const PersonalInfo = (props: SectionProps) => {
           type="text"
           name="nameOfBankers"
           onChange={onChange}
-          value={formData?.nameOfBankers || ''}
-          onFocus={() => handleError('nameOfBankers', '')}
+          value={formData?.nameOfBankers || ""}
+          onFocus={() => handleError("nameOfBankers", "")}
         />
         {error?.nameOfBankers ? (
           <div className="text-red text-sm">{error.nameOfBankers}</div>
@@ -426,7 +434,7 @@ const PersonalInfo = (props: SectionProps) => {
       <div className="flex justify-end ml-6 mt-4">
         <button
           className={buttonStyle}
-          onClick={handleNext}
+          onClick={() => (isAdmin ? onNext() : handleNext())}
           disabled={props.loading}
         >
           Next

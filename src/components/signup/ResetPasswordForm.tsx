@@ -1,7 +1,7 @@
-import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import Loading from '../Loading';
+import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import Loading from "../Loading";
 
 interface ResetPasswordFormProps {
   token: string | string[] | undefined;
@@ -9,12 +9,12 @@ interface ResetPasswordFormProps {
 
 const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
   const { token } = props;
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [passwordStrengthMsg, setPasswordStrengthMsg] = useState('');
+  const [passwordStrengthMsg, setPasswordStrengthMsg] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,21 +22,21 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
     if (passwordStrengthMsg) return;
 
     if (!password || !confirmPassword) {
-      setErrorMsg('Please fill in all fields.');
+      setErrorMsg("Please fill in all fields.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMsg('Passwords do not match.');
+      setErrorMsg("Passwords do not match.");
       return;
     }
     setLoading(true);
 
     try {
       const res = await fetch(`/api/auth/reset-password?token=${token}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           password,
@@ -44,7 +44,7 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
       });
 
       if (res.ok) {
-        router.push('/auth/signin');
+        router.push("/auth/signin");
         setLoading(false);
       } else {
         const data = await res.json();
@@ -54,22 +54,22 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
     } catch (error) {
       console.error(error);
       setLoading(false);
-      setErrorMsg('Error resetting password');
+      setErrorMsg("Error resetting password");
     }
   };
 
   const checkPasswordStrength = (password: string): string => {
     // Password strength validation rules here
     if (password.length < 8) {
-      return 'Password must be at least 8 characters long.';
+      return "Password must be at least 8 characters long.";
     }
     if (!/\d/.test(password)) {
-      return 'Password must contain at least one digit.';
+      return "Password must contain at least one digit.";
     }
     if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-      return 'Password must contain at least one special character.';
+      return "Password must contain at least one special character !@#$%^&*()_+-=";
     }
-    return '';
+    return "";
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,7 +104,7 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
                 type="password"
                 id="password"
                 name="password"
-                onFocus={() => setErrorMsg('')}
+                onFocus={() => setErrorMsg("")}
                 value={password}
                 onChange={onChange}
                 className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
@@ -137,7 +137,7 @@ const ResetPasswordForm = (props: ResetPasswordFormProps): JSX.Element => {
                 } mt-5 md:mt-0 md:ml-5`}
                 disabled={loading}
               >
-                {loading ? 'Creating...' : 'Create Password'}
+                {loading ? "Creating..." : "Create Password"}
               </button>
             </div>
           </form>
