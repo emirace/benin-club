@@ -32,7 +32,7 @@ export default async function handlePay(
     const wallet = await Wallet.findOne({ userId: userId });
 
     // If the user has enough balance, deduct the amount and create a transaction
-    if (wallet && wallet.balance >= parseInt(amount)) {
+    if (wallet) {
       wallet.balance -= parseInt(amount);
       await wallet.save();
 
