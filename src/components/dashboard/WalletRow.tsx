@@ -47,7 +47,15 @@ function WalletRow({ handleUpdateWalletTable, member }: WalletRowProps) {
       <td className="py-2 px-4" onClick={onOpenP}>
         {member.userId?.surName} {member.userId?.firstName}
       </td>
-      <td className="py-2 px-4">
+      <td
+        className={`py-2 px-4 ${
+          member.balance > 0
+            ? 'text-green'
+            : member.balance < 0
+            ? 'text-red'
+            : ''
+        }`}
+      >
         {currency}
         {member.balance}
       </td>

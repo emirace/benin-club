@@ -63,6 +63,7 @@ export default async function handler(
             description: 'Wallet created',
             paymentMethod: 'Admin',
             initiatedBy: user._id,
+            for: 'wallet',
           });
           await transaction.save();
 
