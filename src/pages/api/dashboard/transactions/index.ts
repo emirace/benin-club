@@ -1,8 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connectDB } from '@/utils/mongoose';
-import Transaction, { TransactionDocument } from '@/models/transaction.model';
+import Transaction, {
+  ITransaction,
+  TransactionDocument,
+} from '@/models/transaction.model';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]';
+import User from '@/models/user.model';
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,14 +22,12 @@ export default async function handler(
 
     const { user: loginUser } = session;
 
-    if (loginUser.role !== 'admin' && loginUser.role !== 'wallet') {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
-
-    await connectDB();
-
     switch (req.method) {
       case 'GET':
+        if (loginUser.role !== 'admin' && loginUser.role !== 'wallet') {
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+        await connectDB();
         if (req.query.status) {
           const transactions: TransactionDocument[] = await Transaction.find()
             .sort({ createdAt: -1 })
@@ -41,16 +43,56 @@ export default async function handler(
         }
         break;
       case 'POST':
-        // const { memberName, description, paymentMethod, amount } = req.body;
-        // const newTransaction: TransactionDocument = new Transaction({
-        //   memberName,
-        //   description,
-        //   paymentMethod,
-        //   amount,
-        // });
-        // console.log(newTransaction);
-        // await newTransaction.save();
-        // res.status(201).json(newTransaction);
+        if (loginUser.role !== 'admin' && loginUser.role !== 'bar') {
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+        await connectDB();
+
+        if (!req.body || typeof req.body !== 'object') {
+          return res.status(400).json({ message: 'Invalid request body' });
+        }
+
+        const { description, amount, memberId } = req.body;
+
+        // Validate the transaction data
+        const errors: string[] = [];
+
+        if (!description) {
+          errors.push('Description is required.');
+        }
+
+        if (!amount || typeof amount !== 'number' || amount <= 0) {
+          errors.push('Amount should be a positive number.');
+        }
+
+        if (!memberId) {
+          errors.push('member ID is required.');
+        }
+
+        const member = await User.findOne({ memberId });
+        if (!member) {
+          errors.push('Invalid member ID');
+        }
+
+        if (errors.length > 0) {
+          return res.status(400).json({ message: 'Validation error', errors });
+        }
+
+        const transaction = new Transaction({
+          description,
+          amount,
+          status: 'Pending',
+          userId: member._id,
+          paymentMethod: 'Wallet',
+          type: 'debit',
+          for: 'Wallet',
+          reference: '',
+          initiatedBy: loginUser,
+          createdAt: new Date(),
+        });
+
+        res.status(201).json(transaction);
+
         break;
       default:
         res.status(405).json({ message: 'Method Not Allowed' });
