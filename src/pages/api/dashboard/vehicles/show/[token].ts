@@ -30,9 +30,9 @@ export default async function handler(
   }
 
   try {
-    const vehicle: IVehicle | null = await Vehicle.findOne({
+    const vehicle = await Vehicle.findOne({
       qrCodeUrl: token,
-    });
+    }).populate({ path: 'memberId', select: 'surName firstName' });
 
     if (vehicle) {
       res.status(200).json(vehicle);

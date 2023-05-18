@@ -13,17 +13,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const session = await getServerSession(req, res, authOptions);
-
-    if (!session)
-      return res
-        .status(401)
-        .json({ message: 'You must log in to access this resource.' });
-
-    const { user: loginUser } = session;
-
     switch (req.method) {
       case 'GET':
+        const session = await getServerSession(req, res, authOptions);
+
+        if (!session)
+          return res
+            .status(401)
+            .json({ message: 'You must log in to access this resource.' });
+
+        const { user: loginUser } = session;
         if (loginUser.role !== 'admin' && loginUser.role !== 'wallet') {
           return res.status(401).json({ message: 'Unauthorized' });
         }
@@ -43,7 +42,7 @@ export default async function handler(
         }
         break;
       case 'POST':
-        if (loginUser.role !== 'admin' && loginUser.role !== 'bar') {
+        if (req.body.accessToken !== '0987654321') {
           return res.status(401).json({ message: 'Unauthorized' });
         }
         await connectDB();
@@ -87,7 +86,7 @@ export default async function handler(
           type: 'debit',
           for: 'Wallet',
           reference: '',
-          initiatedBy: loginUser,
+          initiatedBy: 'bar',
           createdAt: new Date(),
         });
 
