@@ -10,8 +10,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await connectDB();
-
   const session = await getServerSession(req, res, authOptions);
 
   if (!session)
