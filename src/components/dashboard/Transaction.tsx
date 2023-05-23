@@ -34,7 +34,7 @@ function Transaction(): JSX.Element {
     TransactionData[]
   >([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [transactionsPerPage] = useState(5);
+  const [transactionsPerPage] = useState(20);
   const [sortConfig, setSortConfig] = useState({
     key: '',
     direction: '',

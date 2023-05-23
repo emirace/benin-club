@@ -1,16 +1,16 @@
-import Loading from "@/components/Loading";
-import { IUser } from "@/models/user.model";
-import { IWallet } from "@/models/wallet.model";
-import { useState } from "react";
-import { IconType } from "react-icons";
+import Loading from '@/components/Loading';
+import { IUser } from '@/models/user.model';
+import { IWallet } from '@/models/wallet.model';
+import { useState } from 'react';
+import { IconType } from 'react-icons';
 import {
   FaWallet,
   FaUniversity,
   FaEdit,
   FaCheck,
   FaTimes,
-} from "react-icons/fa";
-import SubscriptionTransaction from "./SubscriptionTransaction";
+} from 'react-icons/fa';
+import SubscriptionTransaction from './SubscriptionTransaction';
 
 interface IFinancialInformationProps {
   user: IUser;
@@ -116,7 +116,7 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [payment, setPayment] = useState(false);
 
   const handleEditClick = () => {
@@ -133,6 +133,12 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
   };
   const handleCheckClick = async () => {
     try {
+      if (payment && inputValue > value) {
+        setError(
+          'You are making a payment higher than the subscription balance'
+        );
+        return;
+      }
       setLoading(true);
       console.log({ [property]: inputValue });
       const response = await fetch(
@@ -140,9 +146,9 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
           ? `/api/dashboard/members/subscription/${id}`
           : `/api/dashboard/members/${id}`,
         {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             [property]: inputValue, // use dynamic key here
@@ -157,7 +163,7 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
     } catch (error) {
       console.error(error);
       setLoading(false);
-      setError("Error updating value, try again");
+      setError('Error updating value, try again');
     }
   };
 
@@ -171,7 +177,7 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
               type="number"
               name={property}
               onChange={(e) => setInputValue(parseInt(e.target.value))}
-              value={inputValue || ""}
+              value={inputValue || ''}
             />
             {loading ? (
               <Loading />
@@ -199,7 +205,7 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
               onClick={handleEditClick}
             />
           </div>
-          {property === "subcriptionBal" && (
+          {property === 'subcriptionBal' && (
             <div
               className="text-red underline cursor-pointer"
               onClick={handleMakePayment}
