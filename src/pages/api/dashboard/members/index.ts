@@ -43,7 +43,6 @@ export default async function handler(
         const isNumber = /^\d+$/.test(search);
 
         const categoryFilter = category === "all" ? {} : { level: category };
-        console.log(sortField, sortOrder, category, categoryFilter, search);
 
         const members: IUser[] = await User.find({
           role: "member",
@@ -73,11 +72,17 @@ export default async function handler(
         break;
 
       case "POST":
-        const { memberId } = req.body;
-        console.log(memberId);
-        const newUser: IUser = new User({ memberId });
-        await newUser.save();
-        res.status(201).json(newUser);
+        const { memberId, category: memberCategory } = req.body;
+        const isExist = await User.findOne({ memberId });
+        if (isExist) {
+          isExist.level = memberCategory;
+          await isExist.save();
+          res.status(201).json(isExist);
+        } else {
+          const newUser: IUser = new User({ memberId });
+          await newUser.save();
+          res.status(201).json(newUser);
+        }
         break;
       default:
         res.status(405).json({ message: "Method Not Allowed" });
@@ -99,7 +104,6 @@ async function updateMemberIdsToString() {
     // Iterate over users and update memberId field
     for (const user of users) {
       if (user.memberId) {
-        console.log("upddating members id");
         user.memberId = user.memberId.toString(); // Convert memberId to string
         await User.findByIdAndUpdate(user._id, { memberId: user.memberId });
       }

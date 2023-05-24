@@ -51,7 +51,10 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
     setLoading(true);
     const response = await fetch(`/api/dashboard/members`, {
       method: "POST",
-      body: JSON.stringify({ memberId: formData.memberId }),
+      body: JSON.stringify({
+        memberId: formData.memberId,
+        category: formData.category,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -147,7 +150,6 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
                 onChange={handleChange}
                 value={formData.category}
               >
-                <option value="all">All</option>
                 <option value="Member">Member</option>
                 <option value="Corporate Member">Corporate Member</option>
                 <option value="Old Member">Old Member</option>
