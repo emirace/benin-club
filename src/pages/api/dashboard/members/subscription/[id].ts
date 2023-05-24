@@ -66,7 +66,7 @@ export default async function handler(
             initiatedBy: loginUser._id,
             for: "subscription",
           });
-          // await transaction.save();
+          await transaction.save();
 
           res.status(200).json(newUser);
         }

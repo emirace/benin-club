@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import User, { IUser } from '@/models/user.model';
-import { connectDB } from '@/utils/mongoose';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]';
-import { SortOrder } from 'mongoose';
+import { NextApiRequest, NextApiResponse } from "next";
+import User, { IUser } from "@/models/user.model";
+import { connectDB } from "@/utils/mongoose";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]";
+import { SortOrder } from "mongoose";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,38 +15,38 @@ export default async function handler(
     if (!session)
       return res
         .status(401)
-        .json({ message: 'You must log in to access this resource.' });
+        .json({ message: "You must log in to access this resource." });
 
     const { user: loginUser } = session;
 
     if (
-      loginUser.role !== 'admin' &&
-      loginUser.role !== 'user' &&
-      loginUser.role !== 'wallet'
+      loginUser.role !== "admin" &&
+      loginUser.role !== "user" &&
+      loginUser.role !== "wallet"
     ) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     await connectDB();
 
     switch (req.method) {
-      case 'GET':
+      case "GET":
         const page = parseInt(req.query.page as string) || 1;
         const pageSize = parseInt(req.query.pageSize as string) || 20;
         const skip = (page - 1) * pageSize;
-        const sortField = (req.query.sort as string) || '_id';
-        const sortOrder = ((req.query.order as string) || 'asc') as SortOrder;
+        const sortField = (req.query.sort as string) || "_id";
+        const sortOrder = ((req.query.order as string) || "asc") as SortOrder;
         const sort: [string, SortOrder][] = [[sortField, sortOrder]];
-        const category = (req.query.category as string) || 'all';
-        const search = (req.query.search as string) || '';
-        const searchRegex = new RegExp(search, 'i');
+        const category = (req.query.category as string) || "all";
+        const search = (req.query.search as string) || "";
+        const searchRegex = new RegExp(search, "i");
         const isNumber = /^\d+$/.test(search);
 
-        const categoryFilter = category === 'all' ? {} : { level: category };
+        const categoryFilter = category === "all" ? {} : { level: category };
         console.log(sortField, sortOrder, category, categoryFilter, search);
 
         const members: IUser[] = await User.find({
-          role: 'member',
+          role: "member",
           ...categoryFilter,
           $or: [
             { surName: { $regex: searchRegex } },
@@ -59,7 +59,7 @@ export default async function handler(
           .skip(skip)
           .limit(pageSize);
         const totalMembers: number = await User.countDocuments({
-          role: 'member',
+          role: "member",
           ...categoryFilter,
           $or: [
             { surName: { $regex: searchRegex } },
@@ -72,7 +72,7 @@ export default async function handler(
 
         break;
 
-      case 'POST':
+      case "POST":
         const { memberId } = req.body;
         console.log(memberId);
         const newUser: IUser = new User({ memberId });
@@ -80,10 +80,48 @@ export default async function handler(
         res.status(201).json(newUser);
         break;
       default:
-        res.status(405).json({ message: 'Method Not Allowed' });
+        res.status(405).json({ message: "Method Not Allowed" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 }
+
+async function updateMemberIdsToString() {
+  try {
+    // Establish database connection
+    connectDB();
+
+    // Retrieve all users
+    const users = await User.find({});
+
+    // Iterate over users and update memberId field
+    for (const user of users) {
+      if (user.memberId) {
+        console.log("upddating members id");
+        user.memberId = user.memberId.toString(); // Convert memberId to string
+        await User.findByIdAndUpdate(user._id, { memberId: user.memberId });
+      }
+    }
+
+    // Close the database connection
+    // await mongoose.connection.close();
+
+    // Return resolved promise
+    return Promise.resolve();
+  } catch (error) {
+    // Handle errors and reject the promise
+    return Promise.reject(error);
+  }
+}
+
+// Call the function to update memberIds
+
+// await updateMemberIdsToString()
+//   .then(() => {
+//     console.log("MemberIds updated successfully");
+//   })
+//   .catch((error) => {
+//     console.error("Error updating memberIds:", error);
+//   });
