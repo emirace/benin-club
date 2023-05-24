@@ -1,16 +1,16 @@
-import Loading from '@/components/Loading';
-import { IUser } from '@/models/user.model';
-import { IWallet } from '@/models/wallet.model';
-import { useState } from 'react';
-import { IconType } from 'react-icons';
+import Loading from "@/components/Loading";
+import { IUser } from "@/models/user.model";
+import { IWallet } from "@/models/wallet.model";
+import { useState } from "react";
+import { IconType } from "react-icons";
 import {
   FaWallet,
   FaUniversity,
   FaEdit,
   FaCheck,
   FaTimes,
-} from 'react-icons/fa';
-import SubscriptionTransaction from './SubscriptionTransaction';
+} from "react-icons/fa";
+import SubscriptionTransaction from "./SubscriptionTransaction";
 
 interface IFinancialInformationProps {
   user: IUser;
@@ -66,6 +66,7 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
             id={user._id}
             property="subcriptionBal"
             handleUpdateMemberTable={handleUpdateMemberTable}
+            lastYear={user.lastPamentYear}
           />
         </div>
         {showHistory && (
@@ -109,14 +110,25 @@ interface Props {
   value: number;
   property: string;
   id: string;
+  lastYear?: number;
   handleUpdateMemberTable: () => void;
 }
 
-const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
+const Input = ({
+  value = 0,
+  property,
+  id,
+  handleUpdateMemberTable,
+  lastYear,
+}: Props) => {
+  const currentDate: Date = new Date();
+  const currentYear: number = currentDate.getFullYear();
+
   const [editing, setEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
+  const [year, setYear] = useState(lastYear || currentYear);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [payment, setPayment] = useState(false);
 
   const handleEditClick = () => {
@@ -135,7 +147,7 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
     try {
       if (payment && inputValue > value) {
         setError(
-          'You are making a payment higher than the subscription balance'
+          "You are making a payment higher than the subscription balance"
         );
         return;
       }
@@ -146,12 +158,13 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
           ? `/api/dashboard/members/subscription/${id}`
           : `/api/dashboard/members/${id}`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            [property]: inputValue, // use dynamic key here
+            [property]: inputValue, // use dynamic key here,
+            year,
           }),
         }
       );
@@ -163,7 +176,7 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
     } catch (error) {
       console.error(error);
       setLoading(false);
-      setError('Error updating value, try again');
+      setError("Error updating value, try again");
     }
   };
 
@@ -176,9 +189,20 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
               className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               type="number"
               name={property}
+              placeholder="Amount"
               onChange={(e) => setInputValue(parseInt(e.target.value))}
-              value={inputValue || ''}
+              value={inputValue || ""}
             />
+            {payment && (
+              <input
+                className="mt-1 block w-24 ml-4 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                type="number"
+                name="year"
+                placeholder="Year"
+                onChange={(e) => setYear(parseInt(e.target.value))}
+                value={year || ""}
+              />
+            )}
             {loading ? (
               <Loading />
             ) : (
@@ -205,7 +229,7 @@ const Input = ({ value = 0, property, id, handleUpdateMemberTable }: Props) => {
               onClick={handleEditClick}
             />
           </div>
-          {property === 'subcriptionBal' && (
+          {property === "subcriptionBal" && (
             <div
               className="text-red underline cursor-pointer"
               onClick={handleMakePayment}

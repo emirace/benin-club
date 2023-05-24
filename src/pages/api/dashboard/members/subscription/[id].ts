@@ -35,18 +35,23 @@ export default async function handler(
         }).sort({ createdAt: -1 });
         return res.status(200).json({ transactions });
         break;
+
       case "PUT":
-        const { subcriptionBal: amount } = req.body;
-        console.log(amount);
+        const { subcriptionBal: amount, year } = req.body;
+
+        if (!year) {
+          return res.status(400).json({ message: "Enter payment year" });
+        }
+
         const updatedUser: IUser | null = await User.findById(userId);
         if (!updatedUser) {
           res.status(404).json({ message: "User not found" });
         } else {
-          const currentDate: Date = new Date();
-          const currentYear: number = currentDate.getFullYear();
+          // const currentDate: Date = new Date();
+          // const currentYear: number = currentDate.getFullYear();
 
           updatedUser.subcriptionBal -= amount;
-          updatedUser.lastPamentYear = currentYear;
+          updatedUser.lastPamentYear = year;
           const newUser = updatedUser.save();
 
           // Create a new transaction record
@@ -61,7 +66,7 @@ export default async function handler(
             initiatedBy: loginUser._id,
             for: "subscription",
           });
-          await transaction.save();
+          // await transaction.save();
 
           res.status(200).json(newUser);
         }

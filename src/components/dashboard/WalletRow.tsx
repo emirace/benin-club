@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { FaMinus, FaPlus } from 'react-icons/fa';
-import FundWallet from './wallet/FundWallet';
-import Modal from '../Modal';
-import { currency } from '@/sections/PersonalInfo';
-import WithdrawWallet from './wallet/WithdrawWallet';
-import { WalletDataProps } from './Wallet';
-import WalletProfile from './wallet/WalletProfile';
+import React, { useState } from "react";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import FundWallet from "./wallet/FundWallet";
+import Modal from "../Modal";
+import { currency } from "@/sections/PersonalInfo";
+import WithdrawWallet from "./wallet/WithdrawWallet";
+import { WalletDataProps } from "./Wallet";
+import WalletProfile from "./wallet/WalletProfile";
 
 interface WalletRowProps {
   handleUpdateWalletTable: () => void;
@@ -44,16 +44,16 @@ function WalletRow({ handleUpdateWalletTable, member }: WalletRowProps) {
 
   return (
     <tr key={member._id} className="border-t">
-      <td className="py-2 px-4" onClick={onOpenP}>
+      <td className="py-2 px-4 cursor-pointer" onClick={onOpenP}>
         {member.userId?.surName} {member.userId?.firstName}
       </td>
       <td
         className={`py-2 px-4 ${
           member.balance > 0
-            ? 'text-green'
+            ? "text-green"
             : member.balance < 0
-            ? 'text-red'
-            : ''
+            ? "text-red"
+            : ""
         }`}
       >
         {currency}

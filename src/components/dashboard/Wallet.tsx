@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { FiChevronLeft, FiChevronRight, FiSearch } from 'react-icons/fi';
-import Loading from '../Loading';
-import WalletRow from './WalletRow';
-import { buttonStyle } from '@/constants/styles';
-import Modal from '../Modal';
-import CreateWallet from './wallet/CreateWallet';
+import { useCallback, useEffect, useState } from "react";
+import { FiChevronLeft, FiChevronRight, FiSearch } from "react-icons/fi";
+import Loading from "../Loading";
+import WalletRow from "./WalletRow";
+import { buttonStyle } from "@/constants/styles";
+import Modal from "../Modal";
+import CreateWallet from "./wallet/CreateWallet";
 
 export type WalletDataProps = {
   _id: string;
@@ -22,42 +22,45 @@ type FetchWalletDataProps = {
 
 const Wallet = () => {
   const [walletData, setWalletData] = useState<WalletDataProps[]>([]);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [pageSize, setPageSize] = useState<number>(20);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    fetchWalletData({ query: '', page: currentPage });
-  }, [currentPage, pageSize]);
-
-  const fetchWalletData = async ({ query, page }: FetchWalletDataProps) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `/api/dashboard/wallets?page=${page}&pageSize=${pageSize}&search=${query}`
-      );
-      if (!response.ok) {
-        throw new Error('Unable to fetch wallet data.');
+  const fetchWalletData = useCallback(
+    async ({ query, page }: FetchWalletDataProps) => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `/api/dashboard/wallets?page=${page}&pageSize=${pageSize}&search=${query}`
+        );
+        if (!response.ok) {
+          throw new Error("Unable to fetch wallet data.");
+        }
+        const { filteredWalletData, totalWallets } = await response.json();
+        setWalletData(filteredWalletData);
+        setTotalPages(Math.ceil(totalWallets / pageSize));
+      } catch (error: any) {
+        setError(error.message);
+        console.log(error);
       }
-      const { filteredWalletData, totalWallets } = await response.json();
-      setWalletData(filteredWalletData);
-      setTotalPages(Math.ceil(totalWallets / pageSize));
-    } catch (error: any) {
-      setError(error.message);
-      console.log(error);
-    }
-    setIsLoading(false);
-  };
+      setIsLoading(false);
+    },
+    [pageSize]
+  );
+
+  useEffect(() => {
+    fetchWalletData({ query: "", page: currentPage });
+  }, [currentPage, fetchWalletData, pageSize]);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
 
   const handleUpdateWalletTable = () => {
-    fetchWalletData({ query: '', page: currentPage });
+    fetchWalletData({ query: "", page: currentPage });
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +74,7 @@ const Wallet = () => {
   };
 
   const onOpen = () => {
-    console.log('hello');
+    console.log("hello");
     setShowModal(true); // <-- update state variable to show modal
   };
 
@@ -145,8 +148,8 @@ const Wallet = () => {
                       key={pageNumber}
                       className={`mx-2 px-3 py-1 rounded-lg ${
                         pageNumber === currentPage
-                          ? 'bg-red text-white cursor-not-allowed'
-                          : 'text-red '
+                          ? "bg-red text-white cursor-not-allowed"
+                          : "text-red "
                       }`}
                       onClick={() => handlePageChange(pageNumber)}
                       disabled={pageNumber === currentPage}
