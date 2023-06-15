@@ -1,9 +1,13 @@
-import { buttonStyleOutline } from '@/constants/styles';
-import { currency } from '@/sections/PersonalInfo';
-import React, { useState } from 'react';
-import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
-import Loading from './Loading';
+import { buttonStyleOutline } from "@/constants/styles";
+import { currency } from "@/sections/PersonalInfo";
+import React, { useState } from "react";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
+import Loading from "./Loading";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { IUser } from "@/models/user.model";
+import { initialFormData } from "@/constants/signup";
 
 interface FundwalletProps {
   onClose: () => void;
@@ -11,17 +15,20 @@ interface FundwalletProps {
 }
 
 function FundWallet({ onClose, fetchBalance }: FundwalletProps) {
+  const { data: session, status, update } = useSession();
+  const router = useRouter();
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<IUser>(initialFormData);
 
   const handleAddFunds = async (transactionId: number) => {
     try {
       setLoading(true);
       // Make a POST request to the server to fund wallet
       const response = await fetch(`/api/account/wallet/fund`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ transactionId }),
       });
@@ -46,28 +53,38 @@ function FundWallet({ onClose, fetchBalance }: FundwalletProps) {
   const apiKey = process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY;
 
   const config = {
-    public_key: apiKey || 'try',
+    public_key: apiKey || "try",
     tx_ref: generateID(),
     amount,
-    currency: 'NGN',
-    payment_options: 'card,mobilemoney,ussd',
+    currency: "NGN",
+    payment_options: "card,mobilemoney,ussd",
     customer: {
-      email: 'user@gmail.com',
-      phone_number: '070********',
-      name: 'john doe',
+      email: user.email,
+      phone_number: `${user.tel}`,
+      name: user.surName + " " + user.firstName,
     },
     customizations: {
-      title: 'Fund Wallet',
-      description: 'Funding your Benin Club member',
-      logo: '/images/logo.png',
+      title: "Fund Wallet",
+      description: "Funding your Benin Club member",
+      logo: "/images/logo.png",
     },
   };
 
   const handleFlutterPayment = useFlutterwave(config);
 
+  if (status === "loading") {
+    return <Loading />;
+  }
+  if (!session) {
+    router.replace("/auth/signin");
+    return null;
+  } else {
+    setUser(session.user);
+  }
+
   function generateID() {
     return (
-      'BENCLUB_tx_ref_' +
+      "BENCLUB_tx_ref_" +
       Date.now().toString(36) +
       Math.random().toString(36).slice(2)
     );
