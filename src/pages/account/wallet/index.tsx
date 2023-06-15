@@ -1,21 +1,26 @@
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
-import { currency } from '@/sections/PersonalInfo';
-import Modal from '@/components/Modal';
-import FundWallet from '@/components/FundWallet';
-import Loading from '@/components/Loading';
-import { TransactionDocument } from '@/models/transaction.model';
-import moment from 'moment';
+import { useEffect, useState } from "react";
+import Head from "next/head";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
+import { currency } from "@/sections/PersonalInfo";
+import Modal from "@/components/Modal";
+import FundWallet from "@/components/FundWallet";
+import Loading from "@/components/Loading";
+import { TransactionDocument } from "@/models/transaction.model";
+import moment from "moment";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const WalletPage = () => {
+  const router = useRouter();
   const [balance, setBalance] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadingT, setLoadingT] = useState(true);
   const [transactions, setTransactions] = useState<TransactionDocument[]>([]);
   const [refresh, setRefresh] = useState(true);
+
+  const { data: session, status, update } = useSession();
 
   useEffect(() => {
     fetchBalance();
@@ -25,7 +30,7 @@ const WalletPage = () => {
   const fetchBalance = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/account/wallet/balance');
+      const response = await fetch("/api/account/wallet/balance");
       const { balance } = await response.json();
       setBalance(balance);
       setLoading(false);
@@ -39,7 +44,7 @@ const WalletPage = () => {
   const fetchTransactions = async () => {
     try {
       setLoadingT(true);
-      const response = await fetch('/api/account/wallet/transactions');
+      const response = await fetch("/api/account/wallet/transactions");
       const { transactions } = await response.json();
       setTransactions(transactions);
       setLoadingT(false);
@@ -60,6 +65,16 @@ const WalletPage = () => {
   const handleRefresh = () => {
     setRefresh(!refresh);
   };
+
+  if (status === "loading") {
+    return <Loading />;
+  }
+  if (!session) {
+    router.replace("/auth/signin");
+    return null;
+  }
+
+  const { user } = session;
 
   return (
     <>
@@ -94,7 +109,11 @@ const WalletPage = () => {
           </div>
         </div>
         <Modal isOpen={showModal} onClose={onClose}>
-          <FundWallet onClose={onClose} fetchBalance={handleRefresh} />
+          <FundWallet
+            onClose={onClose}
+            fetchBalance={handleRefresh}
+            user={user}
+          />
         </Modal>
 
         <div className="bg-white shadow-lg rounded-md p-4 mt-4">
@@ -125,31 +144,31 @@ const WalletPage = () => {
                   <div className="flex items-center">
                     <div
                       className={`w-3 h-3 ${
-                        transaction.type === 'debit' ? 'bg-red' : 'bg-green'
+                        transaction.type === "debit" ? "bg-red" : "bg-green"
                       } rounded-full flex-shrink-0 mr-4`}
                     ></div>
                     <div>
                       <p className="text-gray">{transaction.description}</p>
                       <p className="text-sm text-gray-400">
                         {moment(transaction.createdAt).format(
-                          'h:sa, Do MMM YY'
+                          "h:sa, Do MMM YY"
                         )}
                       </p>
                     </div>
                   </div>
                   <p
                     className={
-                      transaction.status === 'Completed'
-                        ? 'text-green'
-                        : transaction.status === 'Pending'
-                        ? 'text-yellow'
-                        : 'text-red'
+                      transaction.status === "Completed"
+                        ? "text-green"
+                        : transaction.status === "Pending"
+                        ? "text-yellow"
+                        : "text-red"
                     }
                   >
                     {transaction.status}
                   </p>
                   <p className=" font-semibold">
-                    {transaction.type === 'debit' ? '-' : '+'}
+                    {transaction.type === "debit" ? "-" : "+"}
                     {transaction.amount}
                   </p>
                 </li>

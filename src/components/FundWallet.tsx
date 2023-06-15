@@ -7,19 +7,16 @@ import Loading from "./Loading";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { IUser } from "@/models/user.model";
-import { initialFormData } from "@/constants/signup";
 
 interface FundwalletProps {
   onClose: () => void;
   fetchBalance: () => void;
+  user: IUser;
 }
 
-function FundWallet({ onClose, fetchBalance }: FundwalletProps) {
-  const { data: session, status, update } = useSession();
-  const router = useRouter();
+function FundWallet({ onClose, fetchBalance, user }: FundwalletProps) {
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<IUser>(initialFormData);
 
   const handleAddFunds = async (transactionId: number) => {
     try {
@@ -71,16 +68,6 @@ function FundWallet({ onClose, fetchBalance }: FundwalletProps) {
   };
 
   const handleFlutterPayment = useFlutterwave(config);
-
-  if (status === "loading") {
-    return <Loading />;
-  }
-  if (!session) {
-    router.replace("/auth/signin");
-    return null;
-  } else {
-    setUser(session.user);
-  }
 
   function generateID() {
     return (
