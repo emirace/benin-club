@@ -91,7 +91,9 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
       setStep(step + 1);
       setFormData({ ...formData, step: step + 1 });
     } else {
-      handleError("general", "Error saving form data");
+      const errorResponse = await response.json();
+      const errorMessage = errorResponse.message || "Error saving form data";
+      handleError("general", errorMessage);
     }
     setLoading(false);
   };
@@ -136,6 +138,28 @@ const MembershipForm: NextPage<Props> = ({ onClose, id }) => {
               />
               {error?.memberId ? (
                 <div className="text-red text-sm">{error.memberId}</div>
+              ) : (
+                <div className="h-5" />
+              )}
+            </div>
+
+            <div className="w-full md:w-1/2 md:pr-2">
+              <label
+                htmlFor="wifeId"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Wife ID
+              </label>
+              <input
+                className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                type="text"
+                name="wifeId"
+                onChange={handleChange}
+                value={formData?.wifeId || ""}
+                onFocus={() => handleError("wifeId", "")}
+              />
+              {error?.wifeId ? (
+                <div className="text-red text-sm">{error.wifeId}</div>
               ) : (
                 <div className="h-5" />
               )}

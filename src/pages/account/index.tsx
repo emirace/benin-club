@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import PersonalInfo from '@/sections/PersonalInfo';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
+import React from "react";
+import PersonalInfo from "@/sections/PersonalInfo";
 
 const Account = () => {
   return (

@@ -1,22 +1,19 @@
-'use client';
-import { useState } from 'react';
-import QRCodeGenerator from '@/components/QRCodeGenerator';
-import Dashboard from '@/components/Dashboard';
-import VehicleList from '@/sections/VehicleList';
-import { GetServerSideProps } from 'next';
-import { connectDB } from '@/utils/mongoose';
-import Vehicle, { IVehicle } from '@/models/vehicle.model';
+"use client";
+import { useState } from "react";
+import QRCodeGenerator from "@/components/QRCodeGenerator";
+import Dashboard from "@/components/Dashboard";
+import VehicleList from "@/sections/VehicleList";
 
 interface IBarcodeProps {}
 
 export default function VehicleMenu({}: IBarcodeProps) {
-  const [currentPage, setCurrentPage] = useState('create');
+  const [currentPage, setCurrentPage] = useState("create");
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'create':
+      case "create":
         return <QRCodeGenerator />;
-      case 'view':
+      case "view":
         return <VehicleList />;
       default:
         return <QRCodeGenerator />;

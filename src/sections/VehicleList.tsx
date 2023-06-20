@@ -1,12 +1,9 @@
-import { useState, useEffect } from 'react';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
-import { IVehicle } from '@/models/vehicle.model';
-import Image from 'next/image';
-import Link from 'next/link';
-import Modal from '@/components/Modal';
-import UpdateQRcode from '@/components/UpadateQRcode';
-import Loading from '@/components/Loading';
+import { useState, useEffect } from "react";
+import { IVehicle } from "@/models/vehicle.model";
+import Image from "next/image";
+import Modal from "@/components/Modal";
+import UpdateQRcode from "@/components/UpadateQRcode";
+import Loading from "@/components/Loading";
 
 type Props = {};
 
@@ -46,14 +43,14 @@ const VehicleList = ({}: Props) => {
   const handleDelete = async (id: string) => {
     try {
       const shouldDelete = window.confirm(
-        'Are you sure you want to delete this vehicle?'
+        "Are you sure you want to delete this vehicle?"
       );
       if (!shouldDelete) {
         return;
       }
 
       const response = await fetch(`/api/dashboard/vehicles/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
@@ -117,7 +114,7 @@ const VehicleList = ({}: Props) => {
               {vehicle.memberId && (
                 <p className="mt-1 text-sm text-gray-500">
                   {vehicle?.memberId?.surName +
-                    ' ' +
+                    " " +
                     vehicle?.memberId?.firstName}
                 </p>
               )}
@@ -187,8 +184,8 @@ const VehicleList = ({}: Props) => {
                 key={page}
                 className={`${
                   page === pagination.page
-                    ? 'bg-red text-white font-bold py-2 px-4 rounded-md'
-                    : 'text-red py-2 px-4'
+                    ? "bg-red text-white font-bold py-2 px-4 rounded-md"
+                    : "text-red py-2 px-4"
                 }`}
                 onClick={() => handlePageChange(page)}
               >

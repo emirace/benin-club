@@ -1,11 +1,20 @@
-import LoginForm from '@/components/LoginForm';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { getServerSession } from 'next-auth';
+import Loading from "@/components/Loading";
+import LoginForm from "@/components/LoginForm";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 interface Props {}
 
 const SignIn: React.FC<Props> = () => {
+  const { data: session, status, update } = useSession();
+  const router = useRouter();
+  if (status === "loading") {
+    return <Loading />;
+  }
+  if (session) {
+    router.replace("/");
+    return null;
+  }
   return (
     <>
       <div className="h-24 w-full bg-black" />
@@ -17,22 +26,3 @@ const SignIn: React.FC<Props> = () => {
 };
 
 export default SignIn;
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

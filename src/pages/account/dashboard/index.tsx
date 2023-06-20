@@ -1,12 +1,9 @@
-import Loading from '@/components/Loading';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
-import { IUser } from '@/models/user.model';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import { getServerSession } from 'next-auth';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import React from 'react';
+import Loading from "@/components/Loading";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import { NextPage } from "next";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React from "react";
 
 interface DashboardProps {}
 
@@ -14,11 +11,11 @@ const Dashboard: NextPage<DashboardProps> = () => {
   const { data: session, status, update } = useSession();
   const router = useRouter();
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return <Loading />;
   }
   if (!session) {
-    router.replace('/auth/signin');
+    router.replace("/auth/signin");
     return null;
   }
 

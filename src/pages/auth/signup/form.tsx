@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import PersonalInfo from '@/components/signup/PersonalInfo';
-import StepsIndicator from '@/components/signup/StepsIndicator';
-import { initialErrorData, initialFormData, steps } from '@/constants/signup';
-import { ErrorData, FormData } from '@/types/signup';
-import SectionB from '@/components/signup/SectionB';
-import SectionC from '@/components/signup/SectionC';
-import SectionD from '@/components/signup/SectionD';
-import SectionE from '@/components/signup/SectionE';
-import Declaration from '@/components/signup/Declaration';
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import Loading from '@/components/Loading';
-import { IUser } from '@/models/user.model';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import PersonalInfo from "@/components/signup/PersonalInfo";
+import StepsIndicator from "@/components/signup/StepsIndicator";
+import { initialErrorData, initialFormData, steps } from "@/constants/signup";
+import { ErrorData, FormData } from "@/types/signup";
+import SectionB from "@/components/signup/SectionB";
+import SectionC from "@/components/signup/SectionC";
+import SectionD from "@/components/signup/SectionD";
+import SectionE from "@/components/signup/SectionE";
+import Declaration from "@/components/signup/Declaration";
+import { NextPage } from "next";
+import Loading from "@/components/Loading";
+import { IUser } from "@/models/user.model";
+import { useSession } from "next-auth/react";
 
 interface Props {}
 const MembershipForm: NextPage<Props> = () => {
@@ -26,10 +25,10 @@ const MembershipForm: NextPage<Props> = () => {
   useEffect(() => {
     // Load saved form data from database when the component mounts
     const fetchSavedData = async () => {
-      const response = await fetch('/api/membership');
+      const response = await fetch("/api/membership");
       if (response.ok) {
         const savedData = await response.json();
-        console.log('savedData', savedData);
+        console.log("savedData", savedData);
         setFormData((prev) => ({ ...prev, ...savedData }));
         setStep(savedData.step);
       }
@@ -37,19 +36,32 @@ const MembershipForm: NextPage<Props> = () => {
     fetchSavedData();
   }, []);
 
+  const { data: session, status, update } = useSession();
+  if (status === "loading") {
+    return <Loading />;
+  }
+  if (!session) {
+    router.replace("/auth/signin");
+    return null;
+  }
+  if (session.user.signupStep !== "ProfileCreation") {
+    router.replace("/");
+    return null;
+  }
+
   const handleSubmit = async () => {
     setLoading(true);
-    const response = await fetch('/api/membership', {
-      method: 'POST',
+    const response = await fetch("/api/membership", {
+      method: "POST",
       body: JSON.stringify(formData),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     if (response.ok) {
-      router.push('/auth/success');
+      router.push("/auth/success");
     } else {
-      alert('Error submitting form');
+      alert("Error submitting form");
     }
     setLoading(false);
   };
@@ -62,18 +74,18 @@ const MembershipForm: NextPage<Props> = () => {
     }
     //save current step
     setLoading(true);
-    const response = await fetch('/api/membership', {
-      method: 'PUT',
+    const response = await fetch("/api/membership", {
+      method: "PUT",
       body: JSON.stringify(formData),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     if (response.ok) {
       setStep(step + 1);
       setFormData({ ...formData, step: step + 1 });
     } else {
-      handleError('general', 'Error saving form data');
+      handleError("general", "Error saving form data");
     }
     setLoading(false);
   };
@@ -89,7 +101,7 @@ const MembershipForm: NextPage<Props> = () => {
   ) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
-    handleError('general', '');
+    handleError("general", "");
   };
 
   const handleError = (name: string, value: string) => {
@@ -211,31 +223,3 @@ const MembershipForm: NextPage<Props> = () => {
 };
 
 export default MembershipForm;
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-
-  if (session.user.signupStep !== 'ProfileCreation') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};

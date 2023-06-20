@@ -1,16 +1,28 @@
-import RegistrationCompleted from '@/components/RegistrationSuccess';
-import { SuccessAnimation } from '@/components/signup/VerificationSuccess';
-import { motion } from 'framer-motion';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
-import { getServerSession } from 'next-auth';
-import React from 'react';
-import { authOptions } from '../api/auth/[...nextauth]';
-import { IUser } from '@/models/user.model';
+import RegistrationCompleted from "@/components/RegistrationSuccess";
+import { SuccessAnimation } from "@/components/signup/VerificationSuccess";
+import { motion } from "framer-motion";
+import React from "react";
+import { IUser } from "@/models/user.model";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import Loading from "@/components/Loading";
 
-interface Props {
-  user: IUser;
-}
-export default function Success({ user }: Props) {
+interface Props {}
+export default function Success() {
+  const { data: session, status, update } = useSession();
+  const router = useRouter();
+  if (status === "loading") {
+    return <Loading />;
+  }
+  if (!session) {
+    router.replace("/auth/signin");
+    return null;
+  }
+  if (session.user.signupStep !== "Verification") {
+    router.replace("/");
+    return null;
+  }
+  const { user } = session;
   return (
     <>
       <div className="h-20 w-full bg-black" />
@@ -26,7 +38,7 @@ export default function Success({ user }: Props) {
               Registration Completed
             </h2>
             <RegistrationCompleted
-              name={user.firstName + ' ' + user.surName}
+              name={user.firstName + " " + user.surName}
               verificationTime="2 to 3 days"
             />
           </div>
@@ -35,32 +47,3 @@ export default function Success({ user }: Props) {
     </>
   );
 }
-
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-  console.log(session);
-
-  if (session.user.signupStep !== 'Verification') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: { user: session.user },
-  };
-};
