@@ -144,7 +144,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
       setLoading(false);
       onClose();
       setPost(initialPost);
-    } catch (error) {
+    } catch (error: any) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         general: error,
