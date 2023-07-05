@@ -6,14 +6,19 @@ import { useEffect, useState } from 'react';
 
 const NewsSection = () => {
   const [news, setNews] = useState<News[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch('<API_URL_HERE>');
+        setLoading(true);
+        const response = await fetch('/api/posts');
         const data = await response.json();
+        console.log(data);
         setNews(data);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         console.error('Error fetching news:', error);
       }
     };

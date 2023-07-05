@@ -53,15 +53,18 @@ const SectionC = (props: SectionProps) => {
             >
               If you are married, how long have you been married?
             </label>
-            <input
-              type="text"
-              id="marriageDuration"
-              name="marriageDuration"
-              placeholder="Enter duration of marriage"
-              className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
-              onChange={onChange}
-              value={formData.marriageDuration || ''}
-            />
+            <div className="flex  items-center">
+              <input
+                type="number"
+                id="marriageDuration"
+                name="marriageDuration"
+                placeholder="Enter duration of marriage"
+                className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                onChange={onChange}
+                value={formData.marriageDuration || ''}
+              />
+              <span className="ml-2">year(s)</span>
+            </div>
             {error?.marriageDuration ? (
               <div className="text-red-500 mt-2 text-sm">
                 {error.marriageDuration}

@@ -1,4 +1,4 @@
-import { IUser } from "@/models/user.model";
+import { IUser } from '@/models/user.model';
 
 export interface SectionProps {
   formData: IUser;
@@ -134,11 +134,12 @@ export interface Child {
   name: string;
   age: number;
   school: string;
-  sex: "male" | "female";
+  sex: 'male' | 'female';
 }
 export interface Education {
   school: string;
-  date: string;
+  from: string;
+  to: string;
   degree: string;
 }
 

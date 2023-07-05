@@ -45,9 +45,9 @@ export default function PostRow(props: PostRowProps) {
           <div className="flex items-center">
             <div className="relative w-16 h-16 rounded-md mr-4 overflow-hidden">
               <Image
-                src={post.image}
-                layout="fill"
-                objectFit="cover"
+                src={post.images[0]}
+                fill
+                style={{ objectFit: 'cover' }}
                 alt={post.title}
               />
             </div>
@@ -57,7 +57,7 @@ export default function PostRow(props: PostRowProps) {
           </div>
         </td>
         <td className="px-4 py-2">
-          {moment(post.date).format('MMMM Do YYYY, h:mm:ss a')}
+          {moment(post.date).format('MMMM Do YYYY')}
         </td>
         <td className="px-4 py-2">
           {post.tags.map((tag, index) => (
@@ -69,7 +69,7 @@ export default function PostRow(props: PostRowProps) {
             </span>
           ))}
         </td>
-        <td className="px-4 py-2">{post.description}</td>
+        <td className="px-4 py-2 line-clamp-2">{post.description}</td>
         <td className="px-4 py-2">
           {!showConfirm ? (
             <>

@@ -30,9 +30,14 @@ export default async function handler(
         res.status(200).json(posts);
         break;
       case 'POST':
-        console.log(req.body);
-        const newPost: PostDocument = new Post(req.body);
-        console.log(newPost);
+        const { title } = req.body;
+        // Check if the title already exists
+        const existingPost = await Post.findOne({ title });
+        if (existingPost) {
+          return res.status(400).json({ message: 'Title already exists' });
+        }
+
+        const newPost: PostDocument = new Post({ ...req.body });
         await newPost.save();
         res.status(201).json(newPost);
         break;

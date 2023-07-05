@@ -1,6 +1,6 @@
-import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
-import { Education, SectionProps, WorkExperience } from "@/types/signup";
-import React, { useState, useEffect, useCallback } from "react";
+import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import { Education, SectionProps, WorkExperience } from '@/types/signup';
+import React, { useState, useEffect, useCallback } from 'react';
 
 const SectionD = (props: SectionProps) => {
   const {
@@ -15,12 +15,12 @@ const SectionD = (props: SectionProps) => {
   } = props;
 
   const [educations, setEducations] = useState<Education[]>(
-    formData.educations || [{ school: "", date: "", degree: "" }]
+    formData.educations || [{ school: '', from: '', to: '', degree: '' }]
   );
 
   const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>(
     formData.workExperiences || [
-      { from: "", to: "", employee: "", position: "", jobDescription: "" },
+      { from: '', to: '', employee: '', position: '', jobDescription: '' },
     ]
   );
 
@@ -39,7 +39,7 @@ const SectionD = (props: SectionProps) => {
   const handleAddWorkExperience = () => {
     setWorkExperiences((prev) => [
       ...prev,
-      { from: "", to: "", employee: "", position: "", jobDescription: "" },
+      { from: '', to: '', employee: '', position: '', jobDescription: '' },
     ]);
   };
 
@@ -57,12 +57,15 @@ const SectionD = (props: SectionProps) => {
         i === index ? { ...education, [field]: value } : education
       )
     );
-    handleError("workExperiences", "");
+    handleError('workExperiences', '');
   };
 
   const handleAddEducation = () => {
-    setEducations((prev) => [...prev, { school: "", date: "", degree: "" }]);
-    handleError("educations", "");
+    setEducations((prev) => [
+      ...prev,
+      { school: '', from: '', to: '', degree: '' },
+    ]);
+    handleError('educations', '');
   };
 
   const handleRemoveEducation = (index: number) => {
@@ -92,16 +95,21 @@ const SectionD = (props: SectionProps) => {
     // Validate education
     if (!formData.educations.length) {
       handleError(
-        "educations",
-        "Please enter at least one educational qualification"
+        'educations',
+        'Please enter at least one educational qualification'
       );
       isValid = false;
     } else {
       for (let i = 0; i < formData.educations.length; i++) {
         const education = formData.educations[i];
-        if (!education.school || !education.date || !education.degree) {
+        if (
+          !education.school ||
+          !education.from ||
+          !education.to ||
+          !education.degree
+        ) {
           handleError(
-            "educations",
+            'educations',
             `Please fill in all fields for educational qualification ${i + 1}`
           );
           isValid = false;
@@ -111,8 +119,8 @@ const SectionD = (props: SectionProps) => {
     }
     if (!formData.workExperiences.length) {
       handleError(
-        "workExperiences",
-        "Please enter at least one work experience"
+        'workExperiences',
+        'Please enter at least one work experience'
       );
       isValid = false;
     } else {
@@ -126,7 +134,7 @@ const SectionD = (props: SectionProps) => {
           !workExperience.jobDescription
         ) {
           handleError(
-            "workExperiences",
+            'workExperiences',
             `Please fill in all fields for work experience ${i + 1}`
           );
           isValid = false;
@@ -162,7 +170,7 @@ const SectionD = (props: SectionProps) => {
               <button
                 type="button"
                 onClick={() => handleRemoveEducation(index)}
-                className={"absolute top-2 right-2"}
+                className={'absolute top-2 right-2'}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -190,14 +198,14 @@ const SectionD = (props: SectionProps) => {
                     School Attended
                   </label>
                   <input
-                    onFocus={() => handleError("educations", "")}
+                    onFocus={() => handleError('educations', '')}
                     type="text"
                     id={`school-${index}`}
                     name={`school-${index}`}
                     placeholder="Enter school name"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
-                      handleEducationChange(index, "school", e.target.value)
+                      handleEducationChange(index, 'school', e.target.value)
                     }
                     value={education.school}
                   />
@@ -207,19 +215,45 @@ const SectionD = (props: SectionProps) => {
                     htmlFor={`date-${index}`}
                     className="block text-gray-700 font-medium mb-2"
                   >
-                    Dates Attended
+                    From
                   </label>
                   <input
-                    onFocus={() => handleError("educations", "")}
-                    type="date"
+                    onFocus={() => handleError('educations', '')}
+                    type="number"
                     id={`date-${index}`}
                     name={`date-${index}`}
                     placeholder="Enter date attended"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
-                      handleEducationChange(index, "date", e.target.value)
+                      handleEducationChange(index, 'from', e.target.value)
                     }
-                    value={education.date}
+                    value={education.from}
+                    min="1900" // Specify the minimum year
+                    max="2099" // Specify the maximum year
+                    step="1" // Specify the increment for year selection
+                  />
+                </div>
+                <div className="mb-4">
+                  <label
+                    htmlFor={`date-${index}`}
+                    className="block text-gray-700 font-medium mb-2"
+                  >
+                    To
+                  </label>
+                  <input
+                    onFocus={() => handleError('educations', '')}
+                    type="number"
+                    id={`date-${index}`}
+                    name={`date-${index}`}
+                    placeholder="Enter date attended"
+                    className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                    onChange={(e) =>
+                      handleEducationChange(index, 'to', e.target.value)
+                    }
+                    value={education.to}
+                    min="1900" // Specify the minimum year
+                    max="2099" // Specify the maximum year
+                    step="1" // Specify the increment for year selection
                   />
                 </div>
                 <div className="mb-4">
@@ -230,14 +264,14 @@ const SectionD = (props: SectionProps) => {
                     Qualifications Obtained
                   </label>
                   <input
-                    onFocus={() => handleError("educations", "")}
+                    onFocus={() => handleError('educations', '')}
                     type="text"
                     id={`degree-${index}`}
                     name={`degree-${index}`}
                     placeholder="Enter degree obtained"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
-                      handleEducationChange(index, "degree", e.target.value)
+                      handleEducationChange(index, 'degree', e.target.value)
                     }
                     value={education.degree}
                   />
@@ -270,7 +304,7 @@ const SectionD = (props: SectionProps) => {
               <button
                 type="button"
                 onClick={() => handleRemoveWorkExperience(index)}
-                className={"absolute top-2 right-2"}
+                className={'absolute top-2 right-2'}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -298,14 +332,14 @@ const SectionD = (props: SectionProps) => {
                     From
                   </label>
                   <input
-                    onFocus={() => handleError("workExperience", "")}
+                    onFocus={() => handleError('workExperience', '')}
                     type="date"
                     id={`from-${index}`}
                     name={`from-${index}`}
                     placeholder="Enter date started "
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
-                      handleWorkExperienceChange(index, "from", e.target.value)
+                      handleWorkExperienceChange(index, 'from', e.target.value)
                     }
                     value={workExperience.from}
                   />
@@ -319,14 +353,14 @@ const SectionD = (props: SectionProps) => {
                     To
                   </label>
                   <input
-                    onFocus={() => handleError("woworkExperiences", "")}
+                    onFocus={() => handleError('woworkExperiences', '')}
                     type="date"
                     id={`to-${index}`}
                     name={`to-${index}`}
                     placeholder="Enter date ended"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
-                      handleWorkExperienceChange(index, "to", e.target.value)
+                      handleWorkExperienceChange(index, 'to', e.target.value)
                     }
                     value={workExperience.to}
                   />
@@ -339,7 +373,7 @@ const SectionD = (props: SectionProps) => {
                     Employee
                   </label>
                   <input
-                    onFocus={() => handleError("workExperiences", "")}
+                    onFocus={() => handleError('workExperiences', '')}
                     type="text"
                     id={`employee-${index}`}
                     name={`employee-${index}`}
@@ -348,7 +382,7 @@ const SectionD = (props: SectionProps) => {
                     onChange={(e) =>
                       handleWorkExperienceChange(
                         index,
-                        "employee",
+                        'employee',
                         e.target.value
                       )
                     }
@@ -363,7 +397,7 @@ const SectionD = (props: SectionProps) => {
                     Position
                   </label>
                   <input
-                    onFocus={() => handleError("educations", "")}
+                    onFocus={() => handleError('educations', '')}
                     type="text"
                     id={`position-${index}`}
                     name={`position-${index}`}
@@ -372,7 +406,7 @@ const SectionD = (props: SectionProps) => {
                     onChange={(e) =>
                       handleWorkExperienceChange(
                         index,
-                        "position",
+                        'position',
                         e.target.value
                       )
                     }
@@ -388,7 +422,7 @@ const SectionD = (props: SectionProps) => {
                     Job Description
                   </label>
                   <input
-                    onFocus={() => handleError("workExperiences", "")}
+                    onFocus={() => handleError('workExperiences', '')}
                     type="text"
                     id={`jobDescription-${index}`}
                     name={`jobDescription-${index}`}
@@ -397,7 +431,7 @@ const SectionD = (props: SectionProps) => {
                     onChange={(e) =>
                       handleWorkExperienceChange(
                         index,
-                        "jobDescription",
+                        'jobDescription',
                         e.target.value
                       )
                     }

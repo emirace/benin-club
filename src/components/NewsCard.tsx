@@ -1,5 +1,6 @@
-import { News } from "@/types/newsCard";
-import Image from "next/image";
+import { News } from '@/types/newsCard';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface NewsCardProps {
   news: News;
@@ -8,16 +9,19 @@ interface NewsCardProps {
 const NewsCard: React.FC<NewsCardProps> = ({ news }) => {
   const date = new Date(news.date);
   const day = date.getDate();
-  const month = date.toLocaleString("default", { month: "short" });
+  const month = date.toLocaleString('default', { month: 'short' });
 
   return (
-    <div className="rounded-lg shadow-lg overflow-hidden">
+    <Link
+      href={`/post/${news.slug}`}
+      className="rounded-lg shadow-lg overflow-hidden"
+    >
       <div className="relative h-56">
         <Image
-          src={news.image}
+          src={news.images[0]}
           alt={news.title}
-          layout="fill"
-          objectFit="cover"
+          fill
+          style={{ objectFit: 'cover' }}
         />
         <div className="absolute bottom-0 left-0 bg-white text-black">
           <p className="text-lg font-bold  px-4">{day}</p>
@@ -29,16 +33,16 @@ const NewsCard: React.FC<NewsCardProps> = ({ news }) => {
           {news.tags.map((tag) => (
             <span
               key={tag}
-              className="bg-gray-200 text-gray-700 py-1 px-2 rounded-full text-sm"
+              className="border border-red text-red  rounded-md px-2  text-sm"
             >
               {tag}
             </span>
           ))}
         </div>
-        <h2 className="text-xl font-bold mt-2">{news.title}</h2>
-        <p className="text-gray-600 mt-2">{news.description}</p>
+        <h2 className="text-xl font-bold mt-2 capitalize">{news.title}</h2>
+        <p className="text-gray-600 mt-2 line-clamp-2">{news.description}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 

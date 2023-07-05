@@ -15,7 +15,8 @@ interface IChild {
 interface IEducation {
   degree: string;
   school: string;
-  date: string;
+  from: string;
+  to: string;
 }
 
 interface IWorkExperience {
@@ -183,7 +184,8 @@ const userSchema = new Schema<IUser>(
       {
         degree: { type: String },
         school: { type: String },
-        date: { type: String },
+        from: { type: String },
+        to: { type: String },
       },
     ],
     workExperiences: [

@@ -1,10 +1,11 @@
-import { buttonStyle } from '@/constants/styles';
+import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
 import { useEffect, useState } from 'react';
 import Loading from '../Loading';
 import Image from 'next/image';
-import { FiUpload } from 'react-icons/fi';
+import { FiTrash, FiUpload } from 'react-icons/fi';
 import moment from 'moment';
 import { IPost } from '@/models/post.model';
+import { compressImageUpload } from '@/utils/compressImage';
 
 interface PostFormProps {
   id?: string;
@@ -16,7 +17,7 @@ const initialPost = {
   tags: [],
   date: new Date(),
   description: '',
-  image: '',
+  images: [],
 };
 const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
   const [post, setPost] = useState<IPost>(initialPost);
@@ -53,6 +54,60 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
     }));
   };
 
+  const handleImageChange = (e: EventTarget & HTMLInputElement) => {
+    setLoading(true);
+    const files = Array.from(e.files || []);
+    const imagePromises = files.map((file) => {
+      return compressImageUpload(file, 1024);
+    });
+
+    Promise.all(imagePromises)
+      .then((results) => {
+        const images = results.filter((result) => result) as string[];
+        setPost((prevPost) => ({
+          ...prevPost,
+          images: [...prevPost.images, ...images],
+        }));
+        setLoading(false);
+      })
+      .catch((error) => {
+        // Handle error appropriately, e.g., display an error message
+        console.error('Error compressing images:', error);
+        setLoading(false);
+      });
+  };
+
+  const handleImageRemoval = async (image: string, index: number) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/images/delete`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image }),
+      });
+
+      if (response.ok) {
+        await response.json();
+        setPost((prevPost) => {
+          const newImages = [...prevPost.images];
+          newImages.splice(index, 1);
+          return {
+            ...prevPost,
+            images: newImages,
+          };
+        });
+        setLoading(false);
+      } else {
+        const errorData = await response.json();
+        console.log(errorData);
+        setLoading(false);
+        throw new Error(errorData.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -63,32 +118,16 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
       e.target instanceof HTMLInputElement &&
       e.target?.files
     ) {
-      const file = e.target?.files[0];
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-
-      reader.onload = () => {
-        setPost((prevPost) => ({
-          ...prevPost,
-          [name]: reader.result as string,
-        }));
-      };
+      handleImageChange(e.target);
     } else {
       setPost((prevPost) => ({
         ...prevPost,
         [name]: value,
       }));
     }
-
-    // clear the error message for the input field when user starts typing
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: '',
-    }));
   };
 
-  const onSubmit = async (post: IPost) => {
+  const createPost = async (post: IPost) => {
     try {
       setLoading(true);
       const res = await fetch('/api/dashboard/posts', {
@@ -96,16 +135,27 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(post),
       });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message);
+      }
+
       setLoading(false);
       onClose();
       setPost(initialPost);
     } catch (error) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        general: error,
+      }));
       console.error(error);
       setLoading(false);
+      // Handle the error appropriately, e.g., show an error message to the user
     }
   };
 
-  const handleUpdate = async (post: IPost) => {
+  const updatePost = async (post: IPost) => {
     try {
       setLoading(true);
       // Make a POST request to the server to create the post
@@ -128,34 +178,49 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newErrors: Record<string, string> = {};
+    const validationErrors: Record<string, string> = {};
 
-    if (!post.title.trim()) {
-      newErrors.name = 'Please enter an post name';
+    if (!post.title) {
+      validationErrors.title = 'Title is required';
     }
 
-    if (!post.date) {
-      newErrors.date = 'Please enter a valid post date';
+    if (!post.description) {
+      validationErrors.description = 'Description is required';
     }
+
     if (post.tags.length === 0) {
-      errors.tags = 'At least one tag is required';
+      validationErrors.tags = 'At least one tag is required';
     }
 
-    if (!post.description.trim()) {
-      newErrors.description = 'Please enter an post description';
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      // update the error messages for the input fields
-      setErrors(newErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    id ? handleUpdate(post) : onSubmit(post);
-    setErrors({});
+    setLoading(true);
+
+    try {
+      if (id) {
+        // Update existing post logic
+        await updatePost(post);
+      } else {
+        // Create new post logic
+        await createPost(post);
+      }
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        general: 'Error submitting the form',
+      }));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -250,50 +315,42 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
             />
           </div>
 
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="image"
-            >
-              Image
+          <div>
+            <label className="block text-gray-700 font-bold mb-4">Images</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              multiple
+              onChange={handleChange}
+              className="py-2 sr-only"
+            />
+            <label htmlFor="image" className={`${buttonStyleOutline}`}>
+              Add image
             </label>
-            <div className="relative">
-              <input
-                className="sr-only"
-                id="image"
-                name="image"
-                type="file"
-                onChange={handleChange}
-              />
-              <div className="h-48 w-full border-dashed border-2 border-gray-300">
-                {post.image ? (
-                  <Image
-                    src={post.image}
-                    alt={`Preview of ${post.title} post`}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                ) : (
-                  <label
-                    htmlFor="image"
-                    className="flex flex-col items-center justify-center h-full text-gray-400"
-                  >
-                    <p className="mb-2">
-                      <FiUpload className="h-8 w-8" />
-                    </p>
-                    <p className="text-sm">Upload a preview image</p>
-                  </label>
-                )}
-              </div>
-              <div className="absolute bottom-0 right-0 p-2 bg-white rounded-md">
-                <label
-                  htmlFor="image"
-                  className="cursor-pointer flex items-center justify-center"
+            <div className="mt-2">
+              {post.images.map((image, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 border p-2 rounded-md mb-2"
                 >
-                  <FiUpload className="h-6 w-6 mr-2" />
-                  Change
-                </label>
-              </div>
+                  <div className="relative w-16 h-16 rounded-md mr-4 overflow-hidden">
+                    <Image
+                      src={image}
+                      fill
+                      alt={post.title}
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleImageRemoval(image, index)}
+                    className="text-red-500"
+                  >
+                    <FiTrash />
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </>

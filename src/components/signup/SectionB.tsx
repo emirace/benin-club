@@ -22,7 +22,7 @@ const SectionB = (props: SectionProps) => {
           >
             <div className="flex">
               <label className="block text-gray-700 font-medium mr-4">
-                Are you employed?
+                Are you self employed?
               </label>
               <CustomRadio
                 name="employed"
