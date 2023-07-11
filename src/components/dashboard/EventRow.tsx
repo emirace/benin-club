@@ -48,6 +48,7 @@ export default function EventRow(props: EventRowProps) {
               layout="fill"
               objectFit="cover"
               alt={event.name}
+              unoptimized
             />
           </div>
           <div>

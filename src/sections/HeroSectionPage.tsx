@@ -34,6 +34,7 @@ const HeroSectionPage: React.FC<HeroSectionPageProps> = ({
         fill
         className="object-cover"
         quality={100}
+        unoptimized
       />
 
       <motion.div

@@ -79,6 +79,7 @@ export default function PostDetailPage() {
                     alt="post image"
                     fill
                     style={{ objectFit: 'cover' }}
+                    unoptimized
                   />
                 </button>
               </div>
@@ -117,6 +118,7 @@ export default function PostDetailPage() {
                   objectFit="contain"
                   width={1920}
                   height={1080}
+                  unoptimized
                 />
               </div>
             </div>

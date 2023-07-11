@@ -37,6 +37,7 @@ const Gallery = () => {
                   alt="Gallery image"
                   layout="fill"
                   objectFit="cover"
+                  unoptimized
                 />
               </button>
             </div>
@@ -71,6 +72,7 @@ const Gallery = () => {
               <Image
                 src={`/images/billiards/${expandedImage}`}
                 alt="Expanded image"
+                unoptimized
                 layout="responsive"
                 objectFit="contain"
                 width={1920}

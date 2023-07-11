@@ -32,6 +32,7 @@ export default function Gallery({ images, link }: Props) {
                   alt="Gallery image"
                   layout="fill"
                   objectFit="cover"
+                  unoptimized
                 />
               </button>
             </div>
@@ -72,6 +73,7 @@ export default function Gallery({ images, link }: Props) {
                 width={1920}
                 height={1080}
                 className="object-contain"
+                unoptimized
               />
             </div>
           </div>

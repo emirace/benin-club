@@ -340,6 +340,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
                       fill
                       alt={post.title}
                       style={{ objectFit: 'cover' }}
+                      unoptimized
                     />
                   </div>
                   <button

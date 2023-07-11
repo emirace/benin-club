@@ -91,6 +91,7 @@ function Dashboard(): JSX.Element {
                     layout="fill"
                     objectFit="cover"
                     className="rounded-full"
+                    unoptimized
                   />
                 </div>
                 <div className="flex flex-col justify-center ml-4">

@@ -90,7 +90,12 @@ const VehicleDetailsPage: React.FC = () => {
         <h1 className="text-2xl font-bold mb-4">Vehicle Details</h1>
         <div className="flex items-center mb-4">
           <div className="w-48 h-48 relative rounded-full overflow-hidden mr-4">
-            <Image src={vehicle.imageUrl} alt="Vehicle Image" layout="fill" />
+            <Image
+              src={vehicle.imageUrl}
+              unoptimized
+              alt="Vehicle Image"
+              layout="fill"
+            />
           </div>
           <div className="flex flex-col">
             <h2 className="text-xl font-bold">{vehicle.carPlateNumber}</h2>

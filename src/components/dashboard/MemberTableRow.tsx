@@ -1,13 +1,13 @@
-import { IUser } from "@/models/user.model";
-import Image from "next/image";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
-import { RiRefreshLine } from "react-icons/ri";
-import Modal from "../Modal";
-import MembershipForm from "./MembershipForm";
-import { useState } from "react";
-import ResendPassword from "./ResendPassword";
-import PersonalInfo from "./userProfile/PersonalInfo";
-import FinancialInformation from "./userProfile/FinancialInformation";
+import { IUser } from '@/models/user.model';
+import Image from 'next/image';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { RiRefreshLine } from 'react-icons/ri';
+import Modal from '../Modal';
+import MembershipForm from './MembershipForm';
+import { useState } from 'react';
+import ResendPassword from './ResendPassword';
+import PersonalInfo from './userProfile/PersonalInfo';
+import FinancialInformation from './userProfile/FinancialInformation';
 
 interface MemberTableRowProps {
   member: IUser;
@@ -20,7 +20,7 @@ function MemberTableRow({
   onDelete,
   handleUpdateMemberTable,
 }: MemberTableRowProps): JSX.Element {
-  let statusClassName = "";
+  let statusClassName = '';
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
@@ -74,14 +74,14 @@ function MemberTableRow({
   };
 
   switch (member.status) {
-    case "Active":
-      statusClassName = "text-green";
+    case 'Active':
+      statusClassName = 'text-green';
       break;
-    case "Inactive":
-      statusClassName = "text-red";
+    case 'Inactive':
+      statusClassName = 'text-red';
       break;
     default:
-      statusClassName = "text-gray";
+      statusClassName = 'text-gray';
       break;
   }
   return (
@@ -100,6 +100,7 @@ function MemberTableRow({
               objectFit="cover"
               objectPosition="center"
               className="rounded-full"
+              unoptimized
             />
           </div>
           <div>

@@ -49,6 +49,7 @@ export default function PostRow(props: PostRowProps) {
                 fill
                 style={{ objectFit: 'cover' }}
                 alt={post.title}
+                unoptimized
               />
             </div>
             <div>

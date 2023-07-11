@@ -1,14 +1,14 @@
-import { IUser } from "@/models/user.model";
-import Image from "next/image";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
-import { RiRefreshLine } from "react-icons/ri";
-import Modal from "../Modal";
-import MembershipForm from "./MembershipForm";
-import { useState } from "react";
-import ResendPassword from "./ResendPassword";
-import PersonalInfo from "./userProfile/PersonalInfo";
-import FinancialInformation from "./userProfile/FinancialInformation";
-import Loading from "../Loading";
+import { IUser } from '@/models/user.model';
+import Image from 'next/image';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { RiRefreshLine } from 'react-icons/ri';
+import Modal from '../Modal';
+import MembershipForm from './MembershipForm';
+import { useState } from 'react';
+import ResendPassword from './ResendPassword';
+import PersonalInfo from './userProfile/PersonalInfo';
+import FinancialInformation from './userProfile/FinancialInformation';
+import Loading from '../Loading';
 
 interface NewMemberTableRowProps {
   member: IUser;
@@ -21,14 +21,14 @@ function NewMemberTableRow({
   onDelete,
   handleUpdateMemberTable,
 }: NewMemberTableRowProps): JSX.Element {
-  let statusClassName = "";
+  let statusClassName = '';
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [resetPassword, setResetPassword] = useState(false);
   const [userProfile, setUserProfile] = useState(false);
   const [finiance, setFiniance] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleDelete = () => {
     setShowConfirm(true);
@@ -46,17 +46,17 @@ function NewMemberTableRow({
   const handleChange = async (value: string) => {
     setLoading(true);
     const response = await fetch(`/api/dashboard/members/${member._id}`, {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify({ signupStep: value }),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
       const savedData = await response.json();
       handleUpdateMemberTable();
     } else {
-      setError("Error updating status");
+      setError('Error updating status');
     }
     setLoading(false);
   };
@@ -110,6 +110,7 @@ function NewMemberTableRow({
               objectFit="cover"
               objectPosition="center"
               className="rounded-full"
+              unoptimized
             />
           </div>
           <div>

@@ -69,6 +69,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
             alt={user.firstName}
             fill
             className="rounded-full object-cover"
+            unoptimized
           />
         </div>
         <h1 className="text-2xl font-bold mt-4 uppercase">

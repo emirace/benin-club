@@ -41,6 +41,7 @@ const UpcomingEventCard: React.FC<Props> = ({
           src={image}
           alt={name}
           fill
+          unoptimized
           className=" object-cover transition duration-500 ease-in-out transform hover:scale-105"
         />
         <div

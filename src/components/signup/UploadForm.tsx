@@ -79,6 +79,7 @@ const UploadForm = (props: SectionProps) => {
                   src={selectedImage}
                   alt={`passPort`}
                   layout="fill"
+                  unoptimized
                   className="object-contain mx-auto"
                 />
               </div>

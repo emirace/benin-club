@@ -22,6 +22,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news }) => {
           alt={news.title}
           fill
           style={{ objectFit: 'cover' }}
+          unoptimized
         />
         <div className="absolute bottom-0 left-0 bg-white text-black">
           <p className="text-lg font-bold  px-4">{day}</p>

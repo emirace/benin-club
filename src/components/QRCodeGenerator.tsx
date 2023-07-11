@@ -151,6 +151,7 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = () => {
                 className="w-64 h-64 object-contain mt-4"
                 width={250}
                 height={250}
+                unoptimized
               />
             ) : (
               <div className="w-64 h-64 border-2 border-gray-300 rounded-lg mt-4 flex items-center justify-center cursor-pointer">
@@ -178,7 +179,13 @@ const QRCodeGenerator: React.FC<QRCodeGeneratorProps> = () => {
       )}
       {dataUrl && (
         <div className="mt-4 mx-auto items-center justify-center">
-          <Image src={dataUrl} alt="QR code" width={300} height={300} />
+          <Image
+            src={dataUrl}
+            alt="QR code"
+            unoptimized
+            width={300}
+            height={300}
+          />
           <div className="font-bold text-center text-xl">{vehicleId}</div>
           <button
             className="p-2 border-2 rounded-lg m-4 border-red text-red"

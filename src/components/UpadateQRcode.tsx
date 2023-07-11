@@ -244,6 +244,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
                   className="w-64 h-64 object-contain mt-4"
                   width={250}
                   height={250}
+                  unoptimized
                 />
                 <label htmlFor="image-upload">Change</label>
               </>
@@ -268,6 +269,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
                   className="w-64 h-64 object-contain mt-4"
                   width={250}
                   height={250}
+                  unoptimized
                 />
                 <button
                   className="p-2 border-2 rounded-lg m-4 border-red text-red"

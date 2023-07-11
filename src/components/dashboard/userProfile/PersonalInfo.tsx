@@ -18,6 +18,7 @@ const PersonalInfo: React.FC<PersonalInformationProps> = ({ user }) => {
               alt="Avatar"
               layout="fill"
               objectFit="contain"
+              unoptimized
             />
           </div>
           <div>

@@ -309,6 +309,7 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
                     alt={`Preview of ${event.name} event`}
                     layout="fill"
                     objectFit="cover"
+                    unoptimized
                   />
                 ) : (
                   <label
