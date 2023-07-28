@@ -12,19 +12,129 @@ const SectionC = (props: SectionProps) => {
     onNext,
     error,
     handleError,
+    isAdmin = false,
   } = props;
   const handleNext = () => {
+    if (isAdmin) {
+      onNext();
+      return;
+    }
     let isValid = true;
 
     // Validate marriage duration
-    // if (!formData.marriageDuration) {
-    //   handleError(
-    //     'marriageDuration',
-    //     'Please enter the duration of your marriage'
-    //   );
-    //   isValid = false;
-    // }
+    if (!formData.marriageDuration) {
+      handleError(
+        'marriageDuration',
+        'Please enter the duration of your marriage.'
+      );
+      isValid = false;
+    } else if (formData.marriageDuration <= 0) {
+      handleError(
+        'marriageDuration',
+        'Please enter a valid duration of marriage (greater than 0).'
+      );
+      isValid = false;
+    }
 
+    // Validate number of wives
+    if (!formData.numberOfWives) {
+      handleError(
+        'numberOfWives',
+        'Please enter the number of wives you have.'
+      );
+      isValid = false;
+    } else if (formData.numberOfWives < 0) {
+      handleError(
+        'numberOfWives',
+        'Please enter a valid number of wives (greater than or equal to 0).'
+      );
+      isValid = false;
+    }
+
+    // Validate number of children
+    if (!formData.numberOfChildren) {
+      handleError(
+        'numberOfChildren',
+        'Please enter the number of children you have.'
+      );
+      isValid = false;
+    } else if (formData.numberOfChildren < 0) {
+      handleError(
+        'numberOfChildren',
+        'Please enter a valid number of children (greater than or equal to 0).'
+      );
+      isValid = false;
+    }
+
+    // Validate children data (if applicable)
+    if (
+      formData.numberOfChildren > 0 &&
+      (!formData.children ||
+        formData.children.length.toString() !==
+          formData.numberOfChildren.toString())
+    ) {
+      handleError('children', 'Please provide details for all your children.');
+      isValid = false;
+    }
+
+    // Validate address years
+    if (!formData.addressYears) {
+      handleError(
+        'addressYears',
+        'Please enter the number of years you have lived at your current address.'
+      );
+      isValid = false;
+    } else if (formData.addressYears < 0) {
+      handleError(
+        'addressYears',
+        'Please enter a valid number of years (greater than or equal to 0).'
+      );
+      isValid = false;
+    }
+
+    // Validate emergency contact
+    if (!formData.emergencyContact) {
+      handleError(
+        'emergencyContact',
+        'Please enter the person to contact in case of an emergency.'
+      );
+      isValid = false;
+    }
+
+    // Validate disability details (if applicable)
+    if (formData.disability && formData.disability.trim() === '') {
+      handleError('disability', 'Please enter details of your disability.');
+      isValid = false;
+    }
+
+    // Validate sport sections selection
+    if (formData.sportSection && formData.sportSection.length === 0) {
+      handleError(
+        'sportSection',
+        'Please select at least one sporting section you would like to join.'
+      );
+      isValid = false;
+    }
+
+    // Validate reason for joining
+    if (!formData.reasonToJoin) {
+      handleError(
+        'reasonToJoin',
+        'Please enter the reason for joining Benin Club.'
+      );
+      isValid = false;
+    }
+
+    // Validate tribe (if applicable)
+    if (
+      formData.isNigeria === 'Yes' &&
+      (!formData.tribe || formData.tribe.trim() === '')
+    ) {
+      handleError('tribe', 'Please enter your tribe.');
+      isValid = false;
+    }
+
+    // If all validations pass, proceed to the next section
     if (isValid) {
       onNext();
     }
@@ -66,7 +176,7 @@ const SectionC = (props: SectionProps) => {
               <span className="ml-2">year(s)</span>
             </div>
             {error?.marriageDuration ? (
-              <div className="text-red-500 mt-2 text-sm">
+              <div className="text-red mt-2 text-sm">
                 {error.marriageDuration}
               </div>
             ) : (
@@ -90,9 +200,7 @@ const SectionC = (props: SectionProps) => {
               value={formData.numberOfWives || ''}
             />
             {error?.numberOfWives ? (
-              <div className="text-red-500 mt-2 text-sm">
-                {error.numberOfWives}
-              </div>
+              <div className="text-red mt-2 text-sm">{error.numberOfWives}</div>
             ) : (
               <div className="h-5" />
             )}
@@ -114,7 +222,7 @@ const SectionC = (props: SectionProps) => {
               value={formData.numberOfChildren || ''}
             />
             {error?.numberOfChildren ? (
-              <div className="text-red-500 mt-2 text-sm">
+              <div className="text-red mt-2 text-sm">
                 {error.numberOfChildren}
               </div>
             ) : (
@@ -122,7 +230,17 @@ const SectionC = (props: SectionProps) => {
             )}
           </div>
           <div className="mb-4">
-            <ChildrenField formData={formData} setFormData={setFormData} />
+            <ChildrenField
+              formData={formData}
+              setFormData={setFormData}
+              updateError={handleError}
+            />
+
+            {error?.children ? (
+              <div className="text-red mt-2 text-sm">{error.children}</div>
+            ) : (
+              <div className="h-5" />
+            )}
           </div>
           <div className="mb-4">
             <label
@@ -141,9 +259,7 @@ const SectionC = (props: SectionProps) => {
               value={formData.addressYears || ''}
             />
             {error?.addressYears ? (
-              <div className="text-red-500 mt-2 text-sm">
-                {error.addressYears}
-              </div>
+              <div className="text-red mt-2 text-sm">{error.addressYears}</div>
             ) : (
               <div className="h-5" />
             )}
@@ -166,7 +282,7 @@ const SectionC = (props: SectionProps) => {
               value={formData.emergencyContact || ''}
             />
             {error?.emergencyContact ? (
-              <div className="text-red-500 mt-2 text-sm">
+              <div className="text-red mt-2 text-sm">
                 {error.emergencyContact}
               </div>
             ) : (
@@ -193,9 +309,7 @@ const SectionC = (props: SectionProps) => {
               value={formData.disability || ''}
             />
             {error?.disability ? (
-              <div className="text-red-500 mt-2 text-sm">
-                {error.disability}
-              </div>
+              <div className="text-red mt-2 text-sm">{error.disability}</div>
             ) : (
               <div className="h-5" />
             )}
@@ -243,9 +357,7 @@ const SectionC = (props: SectionProps) => {
               value={formData.reasonToJoin}
             />
             {error?.reasonToJoin ? (
-              <div className="text-red-500 mt-2 text-sm">
-                {error.reasonToJoin}
-              </div>
+              <div className="text-red mt-2 text-sm">{error.reasonToJoin}</div>
             ) : (
               <div className="h-5" />
             )}
@@ -267,7 +379,7 @@ const SectionC = (props: SectionProps) => {
               value={formData.tribe}
             />
             {error?.tribe ? (
-              <div className="text-red-500 mt-2 text-sm">{error.tribe}</div>
+              <div className="text-red mt-2 text-sm">{error.tribe}</div>
             ) : (
               <div className="h-4" />
             )}

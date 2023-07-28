@@ -50,20 +50,20 @@ export const initialFormData: IUser = {
   marriageDuration: 0,
   numberOfChildren: 0,
   children: [],
-  addressYears: '',
+  addressYears: 0,
   emergencyContact: '',
   disability: '',
   sportSection: ['Darts', 'Squash'],
   reasonToJoin: '',
   tribe: '',
-  numberOfWives: '',
+  numberOfWives: 0,
   educations: [],
   workExperiences: [],
   proposerPersonality: '',
   proposerKnown: '',
   bio: '',
   socials: socials,
-  // add more fields as needed
+  proposerName: '',
 };
 
 export const initialErrorData: ErrorData = {
@@ -113,5 +113,5 @@ export const initialErrorData: ErrorData = {
   workExperiences: '',
   proposerPersonality: '',
   proposerKnown: '',
-  // add more fields as needed
+  proposerName: '',
 };

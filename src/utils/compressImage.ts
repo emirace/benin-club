@@ -61,6 +61,5 @@ export const compressImageUpload = async (
   });
   const response = await fetch(request);
   const data: UploadResponse = await response.json();
-  console.log(data);
   return data.imageUrl;
 };

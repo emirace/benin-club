@@ -26,7 +26,7 @@ const VerificationSuccess = (props: VerificationSuccessProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="bg-black h-24 w-full" />
+      {/* <div className="bg-black h-24 w-full" /> */}
       <div className="flex justify-center items-center h-screen">
         <div className="flex flex-col items-center w-full max-w-lg p-4 mx-4 rounded-lg shadow-lg bg-white">
           <SuccessAnimation />

@@ -1,11 +1,11 @@
-"use client";
-import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
-import Link from "next/link";
-import { useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Loading from "./Loading";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useRouter } from "next/router";
+'use client';
+import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import Link from 'next/link';
+import { useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Loading from './Loading';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 type Props = {
   handleCloseModal?: () => void;
@@ -13,17 +13,26 @@ type Props = {
 
 export default function LoginForm({ handleCloseModal }: Props) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const { data: session, status } = useSession();
+  if (status === 'loading') {
+    return (
+      <>
+        <div className="w-full h-96 flex items-center justify-center">
+          <Loading />
+        </div>
+      </>
+    );
+  }
   if (session) {
     if (handleCloseModal) handleCloseModal();
-    router.replace("/account");
+    router.replace('/account');
     return null;
   }
 
@@ -35,8 +44,8 @@ export default function LoginForm({ handleCloseModal }: Props) {
     event.preventDefault();
     try {
       setLoading(true);
-      setError("");
-      const result = await signIn("credentials", {
+      setError('');
+      const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
@@ -44,17 +53,17 @@ export default function LoginForm({ handleCloseModal }: Props) {
       });
       if (result?.ok) {
         //redirect to accouct
-        router.replace("/account");
+        router.replace('/account');
         if (handleCloseModal) return handleCloseModal();
       } else {
-        setError("The password or email you entered is incorrect.");
+        setError('The password or email you entered is incorrect.');
 
         console.log(result);
         setLoading(false);
       }
     } catch (error) {
       console.log(error);
-      setError("Something went wrong, please try again later.");
+      setError('Something went wrong, please try again later.');
       setLoading(false);
     }
   };
@@ -100,23 +109,23 @@ export default function LoginForm({ handleCloseModal }: Props) {
         </label>
         <input
           type="text"
-          onFocus={() => setError("")}
+          onFocus={() => setError('')}
           id="email"
           name="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           className="mt-1 block w-full rounded-md p-2 mb-2  shadow-lg  focus:border-red focus:ring-red focus:outline-red"
         />
-      </div>{" "}
+      </div>{' '}
       <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
         Password
       </label>
       <div className="relative">
         <input
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           id="password"
           name="password"
-          onFocus={() => setError("")}
+          onFocus={() => setError('')}
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           className="mt-1 block w-full p-2 mb-2 rounded-md md:w-96 shadow-lg focus:border-red focus:ring-red focus:outline-red"
@@ -147,7 +156,7 @@ export default function LoginForm({ handleCloseModal }: Props) {
       </div>
       <div className="flex justify-end ml-6">
         <div className="flex flex-col w-full justify-center items-center ">
-          {(status === "loading" || loading) && <Loading />}
+          {loading && <Loading />}
         </div>
         <button
           type="button"
@@ -161,7 +170,7 @@ export default function LoginForm({ handleCloseModal }: Props) {
         </button>
       </div>
       <p className="text-gray-600 text-sm mt-6">
-        Don&apos;t have an account yet?{" "}
+        Don&apos;t have an account yet?{' '}
         <Link
           href="/auth/signup"
           onClick={handleCloseModal}

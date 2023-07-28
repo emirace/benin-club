@@ -1,18 +1,25 @@
-import Loading from "@/components/Loading";
-import LoginForm from "@/components/LoginForm";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import Loading from '@/components/Loading';
+import LoginForm from '@/components/LoginForm';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 interface Props {}
 
 const SignIn: React.FC<Props> = () => {
-  const { data: session, status, update } = useSession();
   const router = useRouter();
-  if (status === "loading") {
-    return <Loading />;
+  const { data: session, status } = useSession();
+  if (status === 'loading') {
+    return (
+      <>
+        <div className="bg-black h-24 w-full" />
+        <div className="w-full h-96 flex items-center justify-center">
+          <Loading />
+        </div>
+      </>
+    );
   }
   if (session) {
-    router.replace("/");
+    router.replace('/account');
     return null;
   }
   return (

@@ -6,9 +6,135 @@ import { fieldVariants } from '@/utils/motion';
 import { motion } from 'framer-motion';
 
 const SectionB = (props: SectionProps) => {
-  const { formData, onPrevious, onChange, onNext, error, handleError } = props;
+  const {
+    formData,
+    onPrevious,
+    onChange,
+    onNext,
+    error,
+    handleError,
+    isAdmin = false,
+  } = props;
   const handleNext = () => {
-    onNext();
+    if (isAdmin) {
+      onNext();
+      return;
+    }
+
+    let isValid = true;
+
+    // Validate employment status
+    if (!formData.employed) {
+      handleError(
+        'employed',
+        'Please select whether you are self-employed or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate marriage status and wife's name (if applicable)
+    if (!formData.married) {
+      handleError('married', 'Please select whether you are married or not.');
+      isValid = false;
+    } else if (formData.married === 'Yes' && !formData.wife) {
+      handleError('wife', "Please enter your wife's full name.");
+      isValid = false;
+    }
+
+    // Validate Nigerian citizenship
+    if (!formData.isNigeria) {
+      handleError(
+        'isNigeria',
+        'Please select whether you are a Nigerian or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate club member relative
+    if (!formData.clubMemberRelative) {
+      handleError(
+        'clubMemberRelative',
+        'Please select whether any club member is your relative or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate dependent relative in Benin
+    if (!formData.dependentRelativeBenin) {
+      handleError(
+        'dependentRelativeBenin',
+        'Please select whether you have any dependent relative in Benin or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate permanent residence in Benin
+    if (!formData.residePermanentlyBenin) {
+      handleError(
+        'residePermanentlyBenin',
+        'Please select whether you reside permanently in Benin or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate membership of any other club
+    if (!formData.otherClubMember) {
+      handleError(
+        'otherClubMember',
+        'Please select whether you are a member of any other club or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate playing any sport
+    if (!formData.playSport) {
+      handleError(
+        'playSport',
+        'Please select whether you play any sport or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate known ailment
+    if (!formData.knownAilment) {
+      handleError(
+        'knownAilment',
+        'Please select whether you have any known ailment or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate transfer out of Benin
+    if (!formData.transferOutOfBenin) {
+      handleError(
+        'transferOutOfBenin',
+        'Please select whether you can be transferred out of Benin or not.'
+      );
+      isValid = false;
+    }
+
+    // Validate charged with criminal offense
+    if (!formData.chargedWithCriminalOffense) {
+      handleError(
+        'chargedWithCriminalOffense',
+        'Please select whether you have ever been charged with a criminal offense or not.'
+      );
+      isValid = false;
+    } else if (
+      formData.chargedWithCriminalOffense === 'Yes' &&
+      !formData.criminalOffenseDetails
+    ) {
+      handleError(
+        'criminalOffenseDetails',
+        'Please provide details of the criminal offense.'
+      );
+      isValid = false;
+    }
+
+    // If all validations pass, proceed to the next section
+    if (isValid) {
+      onNext();
+    }
   };
   return (
     <div>
@@ -73,15 +199,22 @@ const SectionB = (props: SectionProps) => {
               <div className="h-5" />
             )}
             {formData.married === 'Yes' && (
-              <input
-                className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
-                type="text"
-                name="wife"
-                placeholder="Enter wife full name"
-                onChange={onChange}
-                value={formData.wife || ''}
-                onFocus={() => handleError('address', '')}
-              />
+              <>
+                <input
+                  className="mt-1 block w-full  rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                  type="text"
+                  name="wife"
+                  placeholder="Enter wife full name"
+                  onChange={onChange}
+                  value={formData.wife || ''}
+                  onFocus={() => handleError('address', '')}
+                />
+                {error?.wife ? (
+                  <div className="text-red text-sm">{error.wife}</div>
+                ) : (
+                  <div className="h-5" />
+                )}
+              </>
             )}
           </motion.div>
 

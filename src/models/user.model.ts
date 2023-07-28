@@ -5,11 +5,12 @@ interface IContact {
   tel: string;
 }
 
-interface IChild {
+export interface IChild {
   name: string;
   age: number;
   school: string;
   sex: 'male' | 'female';
+  image: string;
 }
 
 interface IEducation {
@@ -19,12 +20,13 @@ interface IEducation {
   to: string;
 }
 
-interface IWorkExperience {
+export interface IWorkExperience {
   position: string;
   employee: string;
-  to: string;
+  to?: string;
   from: string;
   jobDescription: string;
+  isCurrentJob: boolean;
 }
 
 interface IVerificationToken {
@@ -77,17 +79,18 @@ export interface IUser {
   marriageDuration: number;
   numberOfChildren: number;
   children: IChild[];
-  addressYears: string;
+  addressYears: number;
   emergencyContact: string;
   disability: string;
   sportSection: string[];
   reasonToJoin: string;
   tribe: string;
-  numberOfWives: string;
+  numberOfWives: number;
   educations: IEducation[];
   workExperiences: IWorkExperience[];
   proposerPersonality: string;
   proposerKnown: string;
+  proposerName: string;
   image: string;
   email: string;
   status: 'Active' | 'Inactive';
@@ -108,10 +111,10 @@ export interface IUser {
   signupStep:
     | 'EmailVerification'
     | 'VerifyingEmail'
-    | 'Verification'
-    | 'ClubPayment'
     | 'Payment'
     | 'ProfileCreation'
+    | 'Verification'
+    | 'ClubPayment'
     | 'Completed';
   lastPamentYear?: number;
 }
@@ -171,15 +174,16 @@ const userSchema = new Schema<IUser>(
         age: { type: Number },
         school: { type: String },
         sex: { type: String, enum: ['male', 'female'] },
+        image: { type: String },
       },
     ],
-    addressYears: { type: String },
+    addressYears: { type: Number },
     emergencyContact: { type: String },
     disability: { type: String },
     sportSection: [{ type: String }],
     reasonToJoin: { type: String },
     tribe: { type: String },
-    numberOfWives: { type: String },
+    numberOfWives: { type: Number },
     educations: [
       {
         degree: { type: String },
@@ -195,10 +199,12 @@ const userSchema = new Schema<IUser>(
         from: { type: String },
         to: { type: String },
         jobDescription: { type: String },
+        isCurrentJob: { type: Boolean },
       },
     ],
     proposerPersonality: { type: String },
     proposerKnown: { type: String },
+    proposerName: { type: String },
     category: { type: String },
     image: { type: String, default: '/images/profile.webp' },
     email: { type: String, default: null },

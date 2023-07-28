@@ -1,4 +1,5 @@
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
+import { IWorkExperience } from '@/models/user.model';
 import { Education, SectionProps, WorkExperience } from '@/types/signup';
 import React, { useState, useEffect, useCallback } from 'react';
 
@@ -18,7 +19,7 @@ const SectionD = (props: SectionProps) => {
     formData.educations || [{ school: '', from: '', to: '', degree: '' }]
   );
 
-  const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>(
+  const [workExperiences, setWorkExperiences] = useState<IWorkExperience[]>(
     formData.workExperiences || [
       { from: '', to: '', employee: '', position: '', jobDescription: '' },
     ]
@@ -39,7 +40,14 @@ const SectionD = (props: SectionProps) => {
   const handleAddWorkExperience = () => {
     setWorkExperiences((prev) => [
       ...prev,
-      { from: '', to: '', employee: '', position: '', jobDescription: '' },
+      {
+        from: '',
+        to: '',
+        employee: '',
+        position: '',
+        jobDescription: '',
+        isCurrentJob: false,
+      },
     ]);
   };
 
@@ -49,8 +57,8 @@ const SectionD = (props: SectionProps) => {
 
   const handleWorkExperienceChange = (
     index: number,
-    field: keyof WorkExperience,
-    value: string
+    field: keyof IWorkExperience,
+    value: string | boolean
   ) => {
     setWorkExperiences(
       workExperiences.map((education, i) =>
@@ -91,7 +99,7 @@ const SectionD = (props: SectionProps) => {
   };
   const validation = () => {
     let isValid = true;
-    console.log(formData.workExperiences);
+
     // Validate education
     if (!formData.educations.length) {
       handleError(
@@ -128,7 +136,7 @@ const SectionD = (props: SectionProps) => {
         const workExperience = formData.workExperiences[i];
         if (
           !workExperience.from ||
-          !workExperience.to ||
+          (!workExperience.to && !workExperience.isCurrentJob) ||
           !workExperience.employee ||
           !workExperience.position ||
           !workExperience.jobDescription
@@ -222,7 +230,7 @@ const SectionD = (props: SectionProps) => {
                     type="number"
                     id={`date-${index}`}
                     name={`date-${index}`}
-                    placeholder="Enter date attended"
+                    placeholder="Year"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
                       handleEducationChange(index, 'from', e.target.value)
@@ -245,7 +253,7 @@ const SectionD = (props: SectionProps) => {
                     type="number"
                     id={`date-${index}`}
                     name={`date-${index}`}
-                    placeholder="Enter date attended"
+                    placeholder="Year"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
                       handleEducationChange(index, 'to', e.target.value)
@@ -333,10 +341,10 @@ const SectionD = (props: SectionProps) => {
                   </label>
                   <input
                     onFocus={() => handleError('workExperience', '')}
-                    type="date"
+                    type="number"
                     id={`from-${index}`}
                     name={`from-${index}`}
-                    placeholder="Enter date started "
+                    placeholder="Year"
                     className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                     onChange={(e) =>
                       handleWorkExperienceChange(index, 'from', e.target.value)
@@ -345,25 +353,56 @@ const SectionD = (props: SectionProps) => {
                   />
                 </div>
 
-                <div className="mb-4">
-                  <label
-                    htmlFor={`to-${index}`}
-                    className="block text-gray-700 font-medium mb-2"
-                  >
-                    To
-                  </label>
+                {!workExperience.isCurrentJob && (
+                  <div className="mb-4">
+                    <label
+                      htmlFor={`to-${index}`}
+                      className="block text-gray-700 font-medium mb-2"
+                    >
+                      To
+                    </label>
+                    <input
+                      onFocus={() => handleError('woworkExperiences', '')}
+                      type="number"
+                      id={`to-${index}`}
+                      name={`to-${index}`}
+                      placeholder="Year"
+                      className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                      onChange={(e) =>
+                        handleWorkExperienceChange(index, 'to', e.target.value)
+                      }
+                      value={workExperience.to}
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center ">
                   <input
-                    onFocus={() => handleError('woworkExperiences', '')}
-                    type="date"
-                    id={`to-${index}`}
-                    name={`to-${index}`}
-                    placeholder="Enter date ended"
-                    className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                    type="checkbox"
+                    id={`isCurrentJob-${index}`}
+                    name={`isCurrentJob-${index}`}
+                    className="mr-2 hidden"
+                    checked={workExperience.isCurrentJob}
                     onChange={(e) =>
-                      handleWorkExperienceChange(index, 'to', e.target.value)
+                      handleWorkExperienceChange(
+                        index,
+                        'isCurrentJob',
+                        e.target.checked
+                      )
                     }
-                    value={workExperience.to}
                   />
+
+                  <div
+                    className={`border-2 border-gray h-4 w-4 mx-2 ${
+                      workExperience.isCurrentJob ? 'border-red bg-red' : ''
+                    }`}
+                  ></div>
+                  <label
+                    htmlFor={`isCurrentJob-${index}`}
+                    className="whitespace-nowrap"
+                  >
+                    Current Job
+                  </label>
                 </div>
                 <div className="mb-4">
                   <label

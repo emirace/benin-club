@@ -1,28 +1,36 @@
-import RegistrationCompleted from "@/components/RegistrationSuccess";
-import { SuccessAnimation } from "@/components/signup/VerificationSuccess";
-import { motion } from "framer-motion";
-import React from "react";
-import { IUser } from "@/models/user.model";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import Loading from "@/components/Loading";
+import RegistrationCompleted from '@/components/RegistrationSuccess';
+import { SuccessAnimation } from '@/components/signup/VerificationSuccess';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { IUser } from '@/models/user.model';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import Loading from '@/components/Loading';
 
 interface Props {}
 export default function Success() {
   const { data: session, status, update } = useSession();
   const router = useRouter();
-  if (status === "loading") {
-    return <Loading />;
+  if (status === 'loading') {
+    return (
+      <>
+        <div className="h-20 w-full bg-black" />
+        <div className="w-full flex h-96 items-center justify-center">
+          <Loading />
+        </div>
+      </>
+    );
   }
   if (!session) {
-    router.replace("/auth/signin");
+    router.replace('/auth/signin');
     return null;
   }
-  if (session.user.signupStep !== "Verification") {
-    router.replace("/");
+  if (session.user.signupStep !== 'Verification') {
+    router.replace('/');
     return null;
   }
   const { user } = session;
+  console.log(user);
   return (
     <>
       <div className="h-20 w-full bg-black" />
@@ -38,7 +46,7 @@ export default function Success() {
               Registration Completed
             </h2>
             <RegistrationCompleted
-              name={user.firstName + " " + user.surName}
+              name={user.firstName + ' ' + user.surName}
               verificationTime="2 to 3 days"
             />
           </div>

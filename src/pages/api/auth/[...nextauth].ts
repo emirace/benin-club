@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
           'position',
           'verificationToken',
           'role',
-          'signupStep',
+          // 'signupStep',
           'wallet',
           'nameOfBankers',
         ];

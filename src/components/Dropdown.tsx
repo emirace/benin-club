@@ -30,23 +30,22 @@ const Dropdown = (User: Props) => {
         className="flex items-center justify-center cursor-pointer"
         onClick={handleToggle}
       >
-        <button className="h-14 w-14">
+        <button className="h-10 w-10">
           {user?.image ? (
             <Image
               src={user.image}
               alt={user.firstName || 'profile image'}
-              width={40}
-              height={40}
-              className="rounded-full"
+              fill
+              className="rounded-full bg-white object-cover"
               unoptimized
             />
           ) : (
             <Image
               src="/images/profile.webp"
               alt="profile image"
-              width={40}
-              height={40}
-              className="rounded-full"
+              fill
+              className="rounded-full object-cover"
+              unoptimized
             />
           )}
         </button>

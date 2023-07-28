@@ -52,17 +52,17 @@ export default async function handler(
       });
     });
     const { key } = req.file as any;
-    const { deleteImage } = req.body;
-    if (deleteImage) {
-      const deleteKey = deleteImage.substring(deleteImage.lastIndexOf('/') + 1);
-      const params = {
-        Bucket: bucket,
-        Key: deleteKey as string,
-      };
-      console.log('deleteKey', deleteKey);
-      const command = new DeleteObjectCommand(params);
-      await s3.send(command);
-    }
+    // const { deleteImage } = req.body;
+    // if (deleteImage) {
+    //   const deleteKey = deleteImage.substring(deleteImage.lastIndexOf('/') + 1);
+    //   const params = {
+    //     Bucket: bucket,
+    //     Key: deleteKey as string,
+    //   };
+    //   console.log('deleteKey', deleteKey);
+    //   const command = new DeleteObjectCommand(params);
+    //   await s3.send(command);
+    // }
     const imageUrl = `/api/images/${key}`;
     console.log(imageUrl);
     res.status(200).send({ imageUrl });

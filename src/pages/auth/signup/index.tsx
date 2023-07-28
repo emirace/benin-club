@@ -50,7 +50,7 @@ const SignUp: NextPage<Props> = ({ sent }) => {
   };
   return (
     <>
-      <div className="h-20 w-full bg-black" />
+      <div className="h-24 w-full bg-black" />
       {!emailSent ? (
         <div className="flex mx-auto lg:max-w-7xl px-4 md:px-8 justify-center items-center mt-20 mb-10 w-full">
           <div className="bg-white px-4 shadow-md rounded-lg md:px-8 pt-5 pb-4 sm:p-6 sm:pb-4">

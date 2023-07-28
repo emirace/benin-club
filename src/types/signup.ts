@@ -76,6 +76,7 @@ export interface FormData {
   workExperiences: WorkExperience[];
   proposerPersonality: string;
   proposerKnown: string;
+  proposerName: string;
   step: number;
   // add more fields as needed
 }
@@ -127,6 +128,7 @@ export interface ErrorData {
   workExperiences: string;
   proposerPersonality: string;
   proposerKnown: string;
+  proposerName: string;
   // add more fields as needed
 }
 
@@ -135,6 +137,7 @@ export interface Child {
   age: number;
   school: string;
   sex: 'male' | 'female';
+  image: string;
 }
 export interface Education {
   school: string;
@@ -149,4 +152,5 @@ export interface WorkExperience {
   employee: string;
   position: string;
   jobDescription: string;
+  isCurrentJob: boolean;
 }

@@ -2,12 +2,14 @@ type StepsIndicatorProps = {
   steps: number[];
   currentStep: number;
   setCurrentStep: (index: number) => void;
+  isAdmin?: boolean;
 };
 
 const StepsIndicator = ({
   steps,
   currentStep,
   setCurrentStep,
+  isAdmin = false,
 }: StepsIndicatorProps) => {
   return (
     <>
@@ -23,7 +25,7 @@ const StepsIndicator = ({
               className={`${
                 currentStep === step ? 'bg-red' : 'bg-gray'
               } rounded-full h-10 w-10 flex items-center justify-center text-white cursor-pointer`}
-              onClick={() => setCurrentStep(step)}
+              onClick={() => (isAdmin ? setCurrentStep(step) : null)}
             >
               {step}
             </div>

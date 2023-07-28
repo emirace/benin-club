@@ -19,6 +19,7 @@ const UploadForm = (props: SectionProps) => {
     handleError,
     setFormData,
     onPrevious,
+    isAdmin = false,
   } = props;
   const [selectedImage, setSelectedImage] = useState<string>(formData.image);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +28,7 @@ const UploadForm = (props: SectionProps) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     try {
+      handleError('image', '');
       const file = event.target?.files?.[0];
       if (!file) return;
       setIsLoading(true);
@@ -47,7 +49,7 @@ const UploadForm = (props: SectionProps) => {
   };
 
   const handleSubmit = () => {
-    if (!selectedImage) {
+    if (!formData.image || formData.image === '/images/profile.webp') {
       handleError('image', 'Upload a passport');
       return;
     }
@@ -95,7 +97,6 @@ const UploadForm = (props: SectionProps) => {
               </label>
             )}
           </div>
-          {error.image && <div className="text-red">{error.image}</div>}
           <div className="absolute bottom-0 right-0 p-2 bg-white rounded-md">
             <label
               htmlFor="image"
@@ -106,6 +107,7 @@ const UploadForm = (props: SectionProps) => {
             </label>
           </div>
         </div>
+        {error.image && <div className="text-red">{error.image}</div>}
       </div>
 
       <div className="flex gap-4 justify-end ml-6 mt-16 w-full">
@@ -119,7 +121,7 @@ const UploadForm = (props: SectionProps) => {
         <button
           disabled={isLoading}
           className={buttonStyle}
-          onClick={handleSubmit}
+          onClick={() => (isAdmin ? onNext() : handleSubmit())}
         >
           Next
         </button>

@@ -1,29 +1,31 @@
-import { buttonStyle } from '@/constants/styles';
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import { authOptions } from '../api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
+import { FaCheckCircle } from 'react-icons/fa';
 import Loading from '@/components/Loading';
-import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
-import { IUser } from '@/models/user.model';
 import { useSession } from 'next-auth/react';
+import { closePaymentModal, useFlutterwave } from 'flutterwave-react-v3';
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
+import { IUser } from '@/models/user.model';
 
-interface Props {
+interface ClubFeeProps {
   user: IUser;
 }
-const Page: NextPage<Props> = ({ user }) => {
+
+const apiKey = process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY;
+
+const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
+  const { data: session, status, update } = useSession();
   const router = useRouter();
-  const { update } = useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  const apiKey = process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY;
 
   const config = {
     public_key: apiKey || 'try',
     tx_ref: generateID(),
-    amount: 7000,
+    amount: user.entryFeePayment,
     currency: 'NGN',
     payment_options: 'card,mobilemoney,ussd',
     customer: {
@@ -33,7 +35,7 @@ const Page: NextPage<Props> = ({ user }) => {
     },
     customizations: {
       title: 'Benin Club 1931',
-      description: 'Payment for registration form',
+      description: 'Entry fee payment',
       logo: 'https://www.beninclub1931.com//api/images/image1690495346262.jpg',
     },
   };
@@ -52,9 +54,9 @@ const Page: NextPage<Props> = ({ user }) => {
         },
       });
       if (response.ok) {
-        await update({ signupStep: 'ProfileCreation' });
+        await update({ signupStep: 'Completed' });
         console.log(response);
-        router.push('/auth/signup/form');
+        router.push('/account');
         setLoading(false);
       } else {
         const errorMessage = await response.json();
@@ -80,14 +82,37 @@ const Page: NextPage<Props> = ({ user }) => {
   return (
     <>
       <div className="h-24 w-full bg-black" />
-      <div className="h-screen w-full flex flex-col justify-center items-center">
-        <h1 className="text-2xl font-bold mb-4">Registration Form Payment</h1>
-        <p className="text-lg mb-2">Payment Amount: NGN {config.amount}</p>
-        <p className="text-sm text-gray-600 mb-4">
-          This payment is for the registration form. Please note that the fee is
-          non-refundable.
-        </p>
-        <button
+      <div className="min-h-screen flex flex-col items-center justify-center ">
+        {/* <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-red to-pink text-white"> */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <FaCheckCircle className="text-6xl mb-4" />
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-4xl font-bold mb-8"
+        >
+          Congratulations!
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="text-lg mb-6 text-center max-w-md"
+        >
+          Your profile has been verified by the admin. You can now proceed to
+          pay the membership fee to become an official member of our club.
+        </motion.p>
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="py-4 px-8 bg-red text-white font-bold rounded-lg shadow-md hover:bg-white hover:text-red  transition-colors duration-300"
           onClick={() =>
             handleFlutterPayment({
               callback: async (response) => {
@@ -103,22 +128,15 @@ const Page: NextPage<Props> = ({ user }) => {
               onClose: () => {},
             })
           }
-          className={buttonStyle}
         >
-          Make Payment
-        </button>
-        <div className="mt-8">{loading && <Loading />}</div>
-        {error && (
-          <p className="text-red-500 mt-4">
-            Payment Error: {error}. Please try again later.
-          </p>
-        )}
+          Pay Membership Fee
+        </motion.button>
       </div>
     </>
   );
 };
 
-export default Page;
+export default ClubFee;
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -134,7 +152,7 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
-  if (session.user.signupStep !== 'Payment') {
+  if (session.user.signupStep !== 'ClubPayment') {
     return {
       redirect: {
         destination: '/about',
