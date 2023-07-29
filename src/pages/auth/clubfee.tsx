@@ -9,6 +9,10 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { IUser } from '@/models/user.model';
+import { bankDetails } from '@/constants/bank';
+import Link from 'next/link';
+import Image from 'next/image';
+import { compressImageUpload } from '@/utils/compressImage';
 
 interface ClubFeeProps {
   user: IUser;
@@ -20,12 +24,16 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
   const { data: session, status, update } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isPaymentTroubleVisible, setIsPaymentTroubleVisible] = useState(false);
+  const [image, setImage] = useState('');
 
   const config = {
     public_key: apiKey || 'try',
     tx_ref: generateID(),
-    amount: user.entryFeePayment,
+    // amount: user.entryFeePayment,
+    amount: 1000,
     currency: 'NGN',
     payment_options: 'card,mobilemoney,ussd',
     customer: {
@@ -46,7 +54,7 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/api/auth/payment', {
+      const response = await fetch('/api/auth/payment/clubfee', {
         method: 'POST',
         body: JSON.stringify({ transactionId }),
         headers: {
@@ -78,6 +86,18 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
     );
     // e.g. 'TRXkqjw1i7z6w29k3zqx8'
   }
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setImageLoading(true);
+      const compressedFile = await compressImageUpload(file, 1024, image);
+      setImage(compressedFile);
+      setImageLoading(false);
+    }
+  };
 
   return (
     <>
@@ -131,6 +151,79 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
         >
           Pay Membership Fee
         </motion.button>
+        <motion.button
+          // Your motion animation properties here
+          className="my-4   text-red hover:underline cursor-pointer "
+          onClick={() => setIsPaymentTroubleVisible((prev) => !prev)}
+        >
+          Having Trouble Making Payment?
+        </motion.button>
+        {isPaymentTroubleVisible && (
+          <div className="bg-white mt-6 p-6 rounded-lg shadow-md">
+            {/* Section for Account Details and Instructions */}
+            <h2 className="text-xl font-semibold mb-4">
+              Account Details for Payment:
+            </h2>
+            <table className="w-full my-4">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="py-2 px-4 text-left">Bank Name</th>
+                  <th className="py-2 px-4 text-left">Account Number</th>
+                  <th className="py-2 px-4 text-left">Account Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bankDetails.map((bank, index) => (
+                  <tr key={index} className="bg-white">
+                    <td className="py-2 px-4">{bank.bankName}</td>
+                    <td className="py-2 px-4">{bank.accountNumber}</td>
+                    <td className="py-2 px-4">{bank.accountName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="text-gray-600 mb-2">
+              Please upload proof of payment or email it to{' '}
+              <Link
+                href="mailto: info@beninclub1931.com"
+                className="text-red underline"
+              >
+                info@beninclub1931.com
+              </Link>
+            </p>
+            <div className="mt-4">
+              <label htmlFor="proofOfPayment" className="block font-semibold">
+                Upload Proof of Payment:
+              </label>
+              <input
+                type="file"
+                id="proofOfPayment"
+                name="proofOfPayment"
+                accept=".jpg, .jpeg, .png, .pdf"
+                className="mt-1 w-full"
+                onChange={handleFileUpload}
+              />
+            </div>
+            {imageLoading && <Loading />}
+            {image && (
+              <>
+                <div className="relative mt-4 h-72 w-48">
+                  <Image
+                    src={image}
+                    fill
+                    alt="payment"
+                    unoptimized
+                    className="object-cover mx-auto"
+                  />
+                </div>
+                <p>
+                  Receipt sent to support. Once confirmed, an email will be sent
+                  to you confirming your account activation.
+                </p>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

@@ -117,6 +117,7 @@ export interface IUser {
     | 'ClubPayment'
     | 'Completed';
   lastPamentYear?: number;
+  payments?: string[];
 }
 
 const VerificationTokenSchema = new Schema({
@@ -274,6 +275,7 @@ const userSchema = new Schema<IUser>(
       linkedin: { type: String },
     },
     lastPamentYear: { type: Number, default: 1 },
+    payments: [{ type: String }],
   },
   {
     timestamps: true,
