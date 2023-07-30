@@ -1,12 +1,12 @@
-import { buttonStyleOutline } from "@/constants/styles";
-import { currency } from "@/sections/PersonalInfo";
-import React, { useState } from "react";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
-import Loading from "./Loading";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { IUser } from "@/models/user.model";
+import { buttonStyleOutline } from '@/constants/styles';
+import { currency } from '@/sections/PersonalInfo';
+import React, { useState } from 'react';
+import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import { useFlutterwave, closePaymentModal } from 'flutterwave-react-v3';
+import Loading from './Loading';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { IUser } from '@/models/user.model';
 
 interface FundwalletProps {
   onClose: () => void;
@@ -17,15 +17,16 @@ interface FundwalletProps {
 function FundWallet({ onClose, fetchBalance, user }: FundwalletProps) {
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleAddFunds = async (transactionId: number) => {
     try {
       setLoading(true);
       // Make a POST request to the server to fund wallet
       const response = await fetch(`/api/account/wallet/fund`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ transactionId }),
       });
@@ -43,6 +44,7 @@ function FundWallet({ onClose, fetchBalance, user }: FundwalletProps) {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError('');
     const { value } = e.target;
     setAmount(parseFloat(value));
   };
@@ -50,20 +52,20 @@ function FundWallet({ onClose, fetchBalance, user }: FundwalletProps) {
   const apiKey = process.env.NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY;
 
   const config = {
-    public_key: apiKey || "try",
+    public_key: apiKey || 'try',
     tx_ref: generateID(),
     amount,
-    currency: "NGN",
-    payment_options: "card,mobilemoney,ussd",
+    currency: 'NGN',
+    payment_options: 'card,mobilemoney,ussd',
     customer: {
       email: user.email,
       phone_number: `${user.tel}`,
-      name: user.surName + " " + user.firstName,
+      name: user.surName + ' ' + user.firstName,
     },
     customizations: {
-      title: "Fund Wallet",
-      description: "Funding your Benin Club member",
-      logo: "/images/logo.png",
+      title: 'Fund Wallet',
+      description: 'Funding your Benin Club member',
+      logo: '/images/logo.png',
     },
   };
 
@@ -71,7 +73,7 @@ function FundWallet({ onClose, fetchBalance, user }: FundwalletProps) {
 
   function generateID() {
     return (
-      "BENCLUB_tx_ref_" +
+      'BENCLUB_tx_ref_' +
       Date.now().toString(36) +
       Math.random().toString(36).slice(2)
     );
@@ -102,19 +104,22 @@ function FundWallet({ onClose, fetchBalance, user }: FundwalletProps) {
             onChange={handleChange}
           />
         </div>
+        <div className="text-red my-2">{error || ''}</div>
         <div className="flex gap-8">
           <button
             disabled={loading}
             className={`${buttonStyleOutline} flex items-center`}
             onClick={() => {
-              handleFlutterPayment({
-                callback: async (response) => {
-                  console.log(response);
-                  closePaymentModal(); // this will close the modal programmatically
-                  await handleAddFunds(response.transaction_id);
-                },
-                onClose: () => {},
-              });
+              amount <= 0
+                ? setError('Enter a valid amount')
+                : handleFlutterPayment({
+                    callback: async (response) => {
+                      console.log(response);
+                      closePaymentModal(); // this will close the modal programmatically
+                      await handleAddFunds(response.transaction_id);
+                    },
+                    onClose: () => {},
+                  });
             }}
           >
             Add Funds

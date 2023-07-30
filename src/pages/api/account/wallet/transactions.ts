@@ -24,7 +24,9 @@ export default async function handleGetTransactions(
   try {
     await connectDB();
     // Find all transactions for the given user
-    const transactions = await Transaction.find({ userId, for: 'wallet' });
+    const transactions = await Transaction.find({ userId, for: 'wallet' }).sort(
+      { createdAt: -1 }
+    );
 
     return res.status(200).json({
       transactions: transactions,

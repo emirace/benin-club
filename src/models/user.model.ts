@@ -117,7 +117,7 @@ export interface IUser {
     | 'ClubPayment'
     | 'Completed';
   lastPamentYear?: number;
-  payments?: string[];
+  payments: string[];
 }
 
 const VerificationTokenSchema = new Schema({

@@ -1,16 +1,17 @@
-import Loading from "@/components/Loading";
-import { IUser } from "@/models/user.model";
-import { IWallet } from "@/models/wallet.model";
-import { useState } from "react";
-import { IconType } from "react-icons";
+import Loading from '@/components/Loading';
+import { IUser } from '@/models/user.model';
+import { IWallet } from '@/models/wallet.model';
+import { useState } from 'react';
+import { IconType } from 'react-icons';
 import {
   FaWallet,
   FaUniversity,
   FaEdit,
   FaCheck,
   FaTimes,
-} from "react-icons/fa";
-import SubscriptionTransaction from "./SubscriptionTransaction";
+} from 'react-icons/fa';
+import SubscriptionTransaction from './SubscriptionTransaction';
+import Image from 'next/image';
 
 interface IFinancialInformationProps {
   user: IUser;
@@ -99,6 +100,18 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
             property="entryFeeBal"
           />
         </div>
+        {user?.payments?.length > 0 &&
+          user.payments.map((image, index) => (
+            <div key={index} className="relative w-48 h-48">
+              <Image
+                alt="payments"
+                fill
+                src={image}
+                unoptimized
+                className="object-contain"
+              />
+            </div>
+          ))}
       </div>
     </div>
   );
@@ -128,7 +141,7 @@ const Input = ({
   const [inputValue, setInputValue] = useState(value);
   const [year, setYear] = useState(lastYear || currentYear);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [payment, setPayment] = useState(false);
 
   const handleEditClick = () => {
@@ -147,7 +160,7 @@ const Input = ({
     try {
       if (payment && inputValue > value) {
         setError(
-          "You are making a payment higher than the subscription balance"
+          'You are making a payment higher than the subscription balance'
         );
         return;
       }
@@ -158,9 +171,9 @@ const Input = ({
           ? `/api/dashboard/members/subscription/${id}`
           : `/api/dashboard/members/${id}`,
         {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             [property]: inputValue, // use dynamic key here,
@@ -176,7 +189,7 @@ const Input = ({
     } catch (error) {
       console.error(error);
       setLoading(false);
-      setError("Error updating value, try again");
+      setError('Error updating value, try again');
     }
   };
 
@@ -191,7 +204,7 @@ const Input = ({
               name={property}
               placeholder="Amount"
               onChange={(e) => setInputValue(parseInt(e.target.value))}
-              value={inputValue || ""}
+              value={inputValue || ''}
             />
             {payment && (
               <input
@@ -200,7 +213,7 @@ const Input = ({
                 name="year"
                 placeholder="Year"
                 onChange={(e) => setYear(parseInt(e.target.value))}
-                value={year || ""}
+                value={year || ''}
               />
             )}
             {loading ? (
@@ -229,7 +242,7 @@ const Input = ({
               onClick={handleEditClick}
             />
           </div>
-          {property === "subcriptionBal" && (
+          {property === 'subcriptionBal' && (
             <div
               className="text-red underline cursor-pointer"
               onClick={handleMakePayment}

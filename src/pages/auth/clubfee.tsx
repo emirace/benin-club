@@ -92,10 +92,25 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      setImageLoading(true);
-      const compressedFile = await compressImageUpload(file, 1024, image);
-      setImage(compressedFile);
-      setImageLoading(false);
+      try {
+        setImageLoading(true);
+        const compressedFile = await compressImageUpload(file, 1024, image);
+        const response = await fetch('/api/auth/payment/transfer', {
+          method: 'POST',
+          body: JSON.stringify({ image: compressedFile }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          await update({ signupStep: 'Completed' });
+          setImage(compressedFile);
+        } else {
+          const errorMessage = await response.json();
+          setError(errorMessage.message);
+        }
+        setImageLoading(false);
+      } catch (error) {}
     }
   };
 
@@ -151,6 +166,10 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
         >
           Pay Membership Fee
         </motion.button>
+
+        {!isPaymentTroubleVisible && (
+          <div className="tet-red my-2">{error || ''}</div>
+        )}
         <motion.button
           // Your motion animation properties here
           className="my-4   text-red hover:underline cursor-pointer "
@@ -221,6 +240,9 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
                   to you confirming your account activation.
                 </p>
               </>
+            )}
+            {isPaymentTroubleVisible && (
+              <div className="tet-red">{error || ''}</div>
             )}
           </div>
         )}

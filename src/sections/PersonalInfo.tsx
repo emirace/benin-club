@@ -105,7 +105,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         </div>
         <div className="flex items-center mb-4">
           <FaPhone className="mr-2" />
-          <p>{user.home.tel || user.tel}</p>
+          <p>{user.tel}</p>
         </div>
         <div className="flex items-center mb-4">
           <FaEnvelope className="mr-2" />
@@ -113,7 +113,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         </div>
         <div className="flex items-center mb-4">
           <FaMapMarkerAlt className="mr-2" />
-          <p>{user.home.address || user.address}</p>
+          <p>{user.address}</p>
         </div>
 
         {/* Wallet Section */}
@@ -126,7 +126,7 @@ export default function PersonalInfo(props: PersonalInfoProps) {
             ) : (
               <span className="text-red ml-2 font-bold">
                 {currency}
-                {balance}
+                {balance || 0}
               </span>
             )}
             <Link
