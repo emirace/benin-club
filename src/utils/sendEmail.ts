@@ -10,7 +10,8 @@ const sendEmail = async (to: string, subject: string, body: string) => {
   });
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `Benin Club <${process.env.EMAIL_USER}>`,
+    // from: process.env.EMAIL_USER,
     to,
     subject,
     html: body,

@@ -94,7 +94,10 @@ const MembershipForm: NextPage<Props> = () => {
       const savedData = await response.json();
       setFormData((prev) => ({ ...prev, ...savedData, step: step + 1 }));
     } else {
-      handleError('general', 'Error saving form data');
+      handleError(
+        'general',
+        'Error saving form data, refresh page if issue persist'
+      );
     }
     setLoading(false);
   };

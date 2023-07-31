@@ -32,8 +32,7 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
   const config = {
     public_key: apiKey || 'try',
     tx_ref: generateID(),
-    // amount: user.entryFeePayment,
-    amount: 1000,
+    amount: user.entryFeePayment,
     currency: 'NGN',
     payment_options: 'card,mobilemoney,ussd',
     customer: {
