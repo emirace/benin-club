@@ -4,6 +4,7 @@ type SignupStep =
   | 'Payment'
   | 'ProfileCreation'
   | 'Verification'
+  | 'ConfirmPayment'
   | 'ClubPayment'
   | 'Completed';
 
@@ -15,6 +16,7 @@ const getSignupStepUrl = (signupStep: SignupStep): string | null => {
     ProfileCreation: '/auth/signup/form',
     Verification: '/auth/success',
     ClubPayment: '/auth/clubfee',
+    ConfirmPayment: '/auth/processing',
     Completed: null,
   };
 
