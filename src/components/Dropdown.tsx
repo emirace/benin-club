@@ -27,10 +27,10 @@ const Dropdown = (User: Props) => {
   return (
     <div className="relative">
       <div
-        className="flex items-center justify-center cursor-pointer"
+        className="flex items-center justify-center mt-4 sm:mt-0 cursor-pointer"
         onClick={handleToggle}
       >
-        <button className="h-10 w-10">
+        <button className="relative h-10 w-10">
           {user?.image ? (
             <Image
               src={user.image}
@@ -49,6 +49,7 @@ const Dropdown = (User: Props) => {
             />
           )}
         </button>
+        {isOpen && <div className="bg-black bg-opacity-20 fixed inset-0" />}
         {isOpen && (
           <motion.div
             className="absolute right-0 top-16 mt-2 py-2 w-48 bg-black rounded-md shadow-lg z-10"

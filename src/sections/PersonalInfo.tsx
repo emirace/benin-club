@@ -77,9 +77,12 @@ export default function PersonalInfo(props: PersonalInfoProps) {
         </h1>
         <h2 className="text-sm font-bold text-red">{user.level}</h2>
         {/* Contact Button */}
-        <button className="bg-white text-red py-2 px-4 rounded-md shadow-md hover:bg-red hover:text-white transition duration-300 ease-in-out mb-4">
-          Contact Member
-        </button>
+        <div className="flex gap-3 items-center py-2 px-4 rounded-md shadow-md mb-4">
+          <div className="text-xs ">Member ID:</div>
+          <div className="bg-white text-red text-lg font-bold">
+            {user.memberId}
+          </div>
+        </div>
         <ShowBioPopup bio={user.bio} step={step} setStep={setStep} />
 
         <SocialMediaPopup
