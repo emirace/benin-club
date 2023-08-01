@@ -1,17 +1,18 @@
-import React, { useState } from "react";
-import Sidebar from "./Sidebar";
-import MainSection from "./MainSection";
-import MembersTable from "./MembersTable";
-import Dashboard from "./Dashboard";
-import Event from "./Event";
-import Post from "./Post";
-import { news } from "@/constants/newsCard";
-import Transaction from "./Transaction";
-import { transactions } from "@/constants/transactions";
-import { IUser } from "@/models/user.model";
-import Wallet from "./Wallet";
-import VehicleMenu from "./Vehicle";
-import NewMembersTable from "./NewMembers";
+import React, { useState } from 'react';
+import Sidebar from './Sidebar';
+import MainSection from './MainSection';
+import MembersTable from './MembersTable';
+import Dashboard from './Dashboard';
+import Event from './Event';
+import Post from './Post';
+import { news } from '@/constants/newsCard';
+import Transaction from './Transaction';
+import { transactions } from '@/constants/transactions';
+import { IUser } from '@/models/user.model';
+import Wallet from './Wallet';
+import VehicleMenu from './Vehicle';
+import NewMembersTable from './NewMembers';
+import Gallery from './Gallery';
 
 interface DashboardLayoutProps {
   user: IUser;
@@ -19,7 +20,7 @@ interface DashboardLayoutProps {
 
 function DashboardLayout(props: DashboardLayoutProps): JSX.Element {
   const { user } = props;
-  const [activePage, setActivePage] = useState("Dashboard");
+  const [activePage, setActivePage] = useState('Dashboard');
   const [isOpen, setIsOpen] = useState(true);
 
   const handleNavClick = (page: string) => {
@@ -33,31 +34,34 @@ function DashboardLayout(props: DashboardLayoutProps): JSX.Element {
   let content;
 
   switch (activePage) {
-    case "Dashboard":
+    case 'Dashboard':
       content = <Dashboard />;
       break;
-    case "New Members":
+    case 'New Members':
       content = <NewMembersTable />;
       break;
-    case "Members":
+    case 'Members':
       content = <MembersTable />;
       break;
-    case "Events":
+    case 'Events':
       content = <Event />;
       break;
-    case "Posts":
+    case 'Posts':
       content = <Post />;
       break;
-    case "Wallet":
+    case 'Galleries':
+      content = <Gallery />;
+      break;
+    case 'Wallet':
       content = <Wallet />;
       break;
-    case "Transactions":
+    case 'Transactions':
       content = <Transaction />;
       break;
-    case "Vehicles":
+    case 'Vehicles':
       content = <VehicleMenu />;
       break;
-    case "Settings":
+    case 'Settings':
       content = <p>Here you can change your settings.</p>;
       break;
     default:

@@ -141,6 +141,7 @@ function NewMemberTableRow({
               <option value="ProfileCreation">Profile Creation</option>
               <option value="Verification">Verification</option>
               <option value="ClubPayment">ClubPayment</option>
+              <option value="ConfirmPayment">ConfirmPayment</option>
               <option value="Completed">Completed</option>
             </select>
           )}

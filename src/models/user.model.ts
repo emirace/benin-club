@@ -115,6 +115,7 @@ export interface IUser {
     | 'ProfileCreation'
     | 'Verification'
     | 'ClubPayment'
+    | 'ConfirmPayment'
     | 'Completed';
   lastPamentYear?: number;
   payments: string[];

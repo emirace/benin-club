@@ -1,3 +1,4 @@
+import Loading from '@/components/Loading';
 import NewsCard from '@/components/NewsCard';
 import { buttonStyle } from '@/constants/styles';
 import { News } from '@/types/newsCard';
@@ -18,7 +19,6 @@ const NewsSection = () => {
         setNews(data);
         setLoading(false);
       } catch (error) {
-        setLoading(false);
         console.error('Error fetching news:', error);
       }
     };
@@ -38,7 +38,9 @@ const NewsSection = () => {
           </h2>
         </div>
       </div>
-      {news.length > 0 ? (
+      {loading ? (
+        <Loading />
+      ) : news.length > 0 ? (
         <>
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {news.slice(0, 4).map((n) => (

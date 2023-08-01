@@ -61,7 +61,7 @@ const ClubFee: NextPage<ClubFeeProps> = ({ user }) => {
         },
       });
       if (response.ok) {
-        await update({ signupStep: 'Completed' });
+        await update({ signupStep: 'ConfirmPayment' });
         console.log(response);
         router.push('/account');
         setLoading(false);

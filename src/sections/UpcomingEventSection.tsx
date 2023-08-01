@@ -1,3 +1,4 @@
+import Loading from '@/components/Loading';
 import UpcomingEventCard from '@/components/UpComingEventCard';
 import { buttonStyle } from '@/constants/styles';
 import Event from '@/types/events';
@@ -6,14 +7,17 @@ import { useEffect, useState } from 'react';
 
 const UpcomingEventSection = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Fetch upcoming events from an API
   const fetchUpcomingEvents = async () => {
     try {
+      setLoading(true);
       const response = await fetch('/api/events');
       const data = await response.json();
       console.log('hgfdsxfgj', data);
       setEvents(data);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching upcoming events:', error);
     }
@@ -37,7 +41,9 @@ const UpcomingEventSection = () => {
           </h2>
         </div>
       </div>
-      {events.length > 0 ? (
+      {loading ? (
+        <Loading />
+      ) : events.length > 0 ? (
         <>
           <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {events.slice(0, 4).map((event) => (

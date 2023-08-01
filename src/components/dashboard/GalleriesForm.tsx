@@ -1,66 +1,60 @@
 import { buttonStyle } from '@/constants/styles';
-import { IEvent } from '@/models/event.model';
 import moment from 'moment';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import Loading from '../Loading';
+import { IGallery } from '@/models/gallery.model';
 import { compressImageUpload } from '@/utils/compressImage';
 
-interface EventFormProps {
+interface GalleryFormProps {
   id?: string;
   onClose: () => void;
 }
-const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
-  const [event, setEvent] = useState<IEvent>({
+const GalleriesForm: React.FC<GalleryFormProps> = ({ id, onClose }) => {
+  const [gallery, setGallery] = useState<IGallery>({
     name: '',
-    date: new Date(),
-    time: '',
-    location: '',
-    description: '',
     image: '',
   });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
 
   useEffect(() => {
     // Load saved form data from database when the component mounts
     const fetchSavedData = async () => {
       if (!id) return;
       setIsLoading(true);
-      const response = await fetch(`/api/dashboard/events/${id}`);
+      const response = await fetch(`/api/dashboard/galleries/${id}`);
       if (response.ok) {
         const savedData = await response.json();
         console.log('savedData', savedData);
-        setEvent((prev) => ({ ...prev, ...savedData }));
+        setGallery((prev) => ({ ...prev, ...savedData }));
       }
       setIsLoading(false);
     };
     fetchSavedData();
   }, [id]);
 
-  const onSubmit = async (event: IEvent) => {
+  const onSubmit = async (gallery: IGallery) => {
     try {
       setLoading(true);
-      // Make a POST request to the server to create the event
-      const response = await fetch(`/api/dashboard/events`, {
+      // Make a POST request to the server to create the gallery
+      const response = await fetch(`/api/dashboard/galleries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify(gallery),
       });
       if (!response.ok) {
-        throw new Error('Failed to create event');
+        throw new Error('Failed to create gallery');
       }
       onClose();
-      setEvent({
+      setGallery({
         name: '',
-        date: new Date(),
-        time: '',
-        location: '',
-        description: '',
         image: '',
       });
       setLoading(false);
@@ -69,27 +63,23 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
     }
   };
 
-  const handleUpdate = async (event: IEvent) => {
+  const handleUpdate = async (gallery: IGallery) => {
     try {
       setLoading(true);
-      // Make a POST request to the server to create the event
-      const response = await fetch(`/api/dashboard/events/${id}`, {
+      // Make a POST request to the server to create the gallery
+      const response = await fetch(`/api/dashboard/galleries/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify(gallery),
       });
       if (!response.ok) {
-        throw new Error('Failed to update event');
+        throw new Error('Failed to update gallery');
       }
       onClose();
-      setEvent({
+      setGallery({
         name: '',
-        date: new Date(),
-        time: '',
-        location: '',
-        description: '',
         image: '',
       });
       setLoading(false);
@@ -108,16 +98,21 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
       e.target instanceof HTMLInputElement &&
       e.target?.files
     ) {
+      setLoadingImage(true);
       const file = e.target?.files[0];
-
-      const compressImage = await compressImageUpload(file, 1024);
-      setEvent((prevEvent) => ({
-        ...prevEvent,
+      const compressImage = await compressImageUpload(
+        file,
+        1024,
+        gallery.image
+      );
+      setGallery((prevGallery) => ({
+        ...prevGallery,
         [name]: compressImage as unknown as string,
       }));
+      setLoadingImage(false);
     } else {
-      setEvent((prevEvent) => ({
-        ...prevEvent,
+      setGallery((prevGallery) => ({
+        ...prevGallery,
         [name]: value,
       }));
     }
@@ -134,28 +129,12 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
 
     const newErrors: Record<string, string> = {};
 
-    if (!event.name.trim()) {
-      newErrors.name = 'Please enter an event name';
+    if (!gallery.name.trim()) {
+      newErrors.name = 'Please enter a gallery name';
     }
 
-    if (!event.date) {
-      newErrors.date = 'Please enter a valid event date';
-    }
-
-    if (!event.image) {
-      newErrors.image = 'Please select an event image';
-    }
-
-    if (!event.time.trim()) {
-      newErrors.time = 'Please enter an event time';
-    }
-
-    if (!event.location.trim()) {
-      newErrors.location = 'Please enter an event location';
-    }
-
-    if (!event.description.trim()) {
-      newErrors.description = 'Please enter an event description';
+    if (!gallery.image) {
+      newErrors.image = 'Please select a gallery image';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -164,7 +143,7 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
       return;
     }
 
-    id ? handleUpdate(event) : onSubmit(event);
+    id ? handleUpdate(gallery) : onSubmit(gallery);
     setErrors({});
   };
 
@@ -173,7 +152,7 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
       <div className="flex md:flex-row gap-4 ">
         <h2 className="text-2xl md:text-4xl uppercase font-base mb-2">Add</h2>
         <h2 className="text-2xl md:text-4xl uppercase font-bold mb-8 text-red">
-          event
+          gallery
         </h2>
       </div>
       {isLoading ? (
@@ -196,96 +175,12 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
               id="name"
               name="name"
               type="text"
-              placeholder="Event Name"
-              value={event.name}
+              placeholder="Gallery Name"
+              value={gallery.name}
               onChange={handleChange}
             />
             {errors.name && (
               <p className="text-red text-xs italic">{errors.name}</p>
-            )}
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="date"
-            >
-              Date
-            </label>
-            <input
-              className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.date && 'border-red'
-              }`}
-              id="date"
-              name="date"
-              type="date"
-              value={moment(event.date).format('YYYY-MM-DD')}
-              onChange={(e) =>
-                setEvent((prevEvent) => ({
-                  ...prevEvent,
-                  date: new Date(e.target.value),
-                }))
-              }
-            />
-            {errors.date && (
-              <p className="text-red text-xs italic">{errors.date}</p>
-            )}
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 font-bold mb-2"
-              htmlFor="time"
-            >
-              Time
-            </label>
-            <input
-              className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.time && 'border-red border'
-              }`}
-              id="time"
-              name="time"
-              type="time"
-              value={event.time}
-              onChange={handleChange}
-            />
-            {errors.time && (
-              <p className="text-red text-xs italic">{errors.time}</p>
-            )}
-          </div>
-          <div className="mb-4">
-            <label className="block font-bold mb-2" htmlFor="location">
-              Location
-            </label>
-            <input
-              className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.location && 'border-red border'
-              }`}
-              id="location"
-              name="location"
-              type="text"
-              placeholder="Event Location"
-              value={event.location}
-              onChange={handleChange}
-            />
-            {errors.location && (
-              <p className="text-red text-xs italic">{errors.location}</p>
-            )}
-          </div>
-          <div className="mb-4">
-            <label className="block text font-bold mb-2" htmlFor="description">
-              Description
-            </label>
-            <textarea
-              className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.description && 'border-red border'
-              }`}
-              id="description"
-              name="description"
-              placeholder="Event Description"
-              value={event.description}
-              onChange={handleChange}
-            />
-            {errors.description && (
-              <p className="text-red text-xs italic">{errors.description}</p>
             )}
           </div>
           <div className="mb-4">
@@ -304,12 +199,14 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
                 onChange={handleChange}
               />
               <div className="h-48 w-full border-dashed border-2 border-gray-300">
-                {event.image ? (
+                {loadingImage ? (
+                  <Loading />
+                ) : gallery.image ? (
                   <Image
-                    src={event.image}
-                    alt={`Preview of ${event.name} event`}
-                    layout="fill"
-                    objectFit="cover"
+                    src={gallery.image}
+                    alt={`Preview of ${gallery.name} gallery`}
+                    fill
+                    style={{ objectFit: 'cover' }}
                     unoptimized
                   />
                 ) : (
@@ -347,11 +244,11 @@ const EventForm: React.FC<EventFormProps> = ({ id, onClose }) => {
           </div>
         )}
         <button className={buttonStyle} type="submit">
-          {id ? 'Update Event' : 'Create Event'}
+          {id ? 'Update Gallery' : 'Create Gallery'}
         </button>
       </div>
     </form>
   );
 };
 
-export default EventForm;
+export default GalleriesForm;
