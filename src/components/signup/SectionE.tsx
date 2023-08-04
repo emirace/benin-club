@@ -125,6 +125,28 @@ const SectionE = (props: SectionProps) => {
               <div className="h-5" />
             )}
           </div>
+          <div className="mb-4">
+            <label
+              htmlFor="seconderName"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              Seconder Name
+            </label>
+            <input
+              type="text"
+              id="seconderName"
+              name="seconderName"
+              placeholder="Enter seconder name"
+              className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+              onChange={onChange}
+              value={formData.seconderName}
+            />
+            {error?.seconderName ? (
+              <div className="text-red mt-2 text-sm">{error.seconderName}</div>
+            ) : (
+              <div className="h-5" />
+            )}
+          </div>
         </div>
         <div className="flex gap-4 justify-end ml-6 mt-4">
           <button

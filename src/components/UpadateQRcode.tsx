@@ -172,7 +172,7 @@ const UpdateQRcode: React.FC<UpdateQRcodeProps> = ({
               onChange={handleMemberNameChange}
             />
             {error1 && <div className="text-red">{error1}</div>}
-            {matchingMembers.length > 0 && (
+            {matchingMembers?.length > 0 && (
               <div className="absolute z-10 top-full left-0 right-0 mt-1 rounded-md shadow-lg bg-white divide-y divide-gray-200">
                 {matchingMembers.map((member) => (
                   <div

@@ -129,6 +129,7 @@ export interface ErrorData {
   proposerPersonality: string;
   proposerKnown: string;
   proposerName: string;
+  seconderName: string;
   // add more fields as needed
 }
 

@@ -64,6 +64,7 @@ export const initialFormData: IUser = {
   bio: '',
   socials: socials,
   proposerName: '',
+  seconderName: '',
   payments: [],
 };
 
@@ -115,4 +116,5 @@ export const initialErrorData: ErrorData = {
   proposerPersonality: '',
   proposerKnown: '',
   proposerName: '',
+  seconderName: '',
 };

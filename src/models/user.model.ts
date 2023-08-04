@@ -119,6 +119,7 @@ export interface IUser {
     | 'Completed';
   lastPamentYear?: number;
   payments: string[];
+  seconderName: string;
 }
 
 const VerificationTokenSchema = new Schema({
@@ -277,6 +278,7 @@ const userSchema = new Schema<IUser>(
     },
     lastPamentYear: { type: Number, default: 1 },
     payments: [{ type: String }],
+    seconderName: { type: String },
   },
   {
     timestamps: true,

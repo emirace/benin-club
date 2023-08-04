@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import User, { IUser } from "@/models/user.model";
-import { connectDB } from "@/utils/mongoose";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]";
-import { SortOrder } from "mongoose";
+import { NextApiRequest, NextApiResponse } from 'next';
+import User, { IUser } from '@/models/user.model';
+import { connectDB } from '@/utils/mongoose';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/[...nextauth]';
+import { SortOrder } from 'mongoose';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,37 +15,37 @@ export default async function handler(
     if (!session)
       return res
         .status(401)
-        .json({ message: "You must log in to access this resource." });
+        .json({ message: 'You must log in to access this resource.' });
 
     const { user: loginUser } = session;
 
     if (
-      loginUser.role !== "admin" &&
-      loginUser.role !== "user" &&
-      loginUser.role !== "wallet"
+      loginUser.role !== 'admin' &&
+      loginUser.role !== 'user' &&
+      loginUser.role !== 'wallet'
     ) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     await connectDB();
 
     switch (req.method) {
-      case "GET":
+      case 'GET':
         const page = parseInt(req.query.page as string) || 1;
         const pageSize = parseInt(req.query.pageSize as string) || 20;
         const skip = (page - 1) * pageSize;
-        const sortField = (req.query.sort as string) || "_id";
-        const sortOrder = ((req.query.order as string) || "asc") as SortOrder;
+        const sortField = (req.query.sort as string) || '_id';
+        const sortOrder = ((req.query.order as string) || 'asc') as SortOrder;
         const sort: [string, SortOrder][] = [[sortField, sortOrder]];
-        const category = (req.query.category as string) || "all";
-        const search = (req.query.search as string) || "";
-        const searchRegex = new RegExp(search, "i");
+        const category = (req.query.category as string) || 'all';
+        const search = req.query.search?.toString() || '';
+        const searchRegex = new RegExp(search, 'i');
         const isNumber = /^\d+$/.test(search);
 
-        const categoryFilter = category === "all" ? {} : { level: category };
+        const categoryFilter = category === 'all' ? {} : { level: category };
 
         const members: IUser[] = await User.find({
-          role: "member",
+          role: 'member',
           ...categoryFilter,
           $or: [
             { surName: { $regex: searchRegex } },
@@ -58,7 +58,7 @@ export default async function handler(
           .skip(skip)
           .limit(pageSize);
         const totalMembers: number = await User.countDocuments({
-          role: "member",
+          role: 'member',
           ...categoryFilter,
           $or: [
             { surName: { $regex: searchRegex } },
@@ -71,7 +71,7 @@ export default async function handler(
 
         break;
 
-      case "POST":
+      case 'POST':
         const { memberId, category: memberCategory } = req.body;
         const isExist = await User.findOne({ memberId });
         if (isExist) {
@@ -85,11 +85,11 @@ export default async function handler(
         }
         break;
       default:
-        res.status(405).json({ message: "Method Not Allowed" });
+        res.status(405).json({ message: 'Method Not Allowed' });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: 'Server Error' });
   }
 }
 
