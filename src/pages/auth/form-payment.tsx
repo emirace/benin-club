@@ -23,7 +23,7 @@ const Page: NextPage<Props> = ({ user }) => {
   const config = {
     public_key: apiKey || 'try',
     tx_ref: generateID(),
-    amount: 7000,
+    amount: 5000,
     currency: 'NGN',
     payment_options: 'card,mobilemoney,ussd',
     customer: {
@@ -80,7 +80,10 @@ const Page: NextPage<Props> = ({ user }) => {
   return (
     <>
       <div className="h-24 w-full bg-black" />
-      <div className="h-screen w-full flex flex-col justify-center items-center">
+      <div
+        className="h-screen w-full flex flex-col justify-center items-center
+       p-4 "
+      >
         <h1 className="text-2xl font-bold mb-4">Registration Form Payment</h1>
         <p className="text-lg mb-2">Payment Amount: NGN {config.amount}</p>
         <p className="text-sm text-gray-600 mb-4">

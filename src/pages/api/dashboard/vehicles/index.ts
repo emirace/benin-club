@@ -35,8 +35,12 @@ export default async function handler(
 
         const totalVehicles = await Vehicle.countDocuments();
         const totalPages = Math.ceil(totalVehicles / pageSize);
+        const search = req.query.search?.toString() || '';
+        const searchRegex = new RegExp(search, 'i');
 
-        const vehicles = await Vehicle.find()
+        const vehicles = await Vehicle.find({
+          $or: [{ vehicleId: { $regex: searchRegex } }],
+        })
           .populate({ path: 'memberId', select: 'firstName surName' })
           .skip(skip)
           .limit(pageSize);

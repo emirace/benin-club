@@ -149,7 +149,7 @@ const userSchema = new Schema<IUser>(
       tel: { type: Number },
     },
     employer: { type: String },
-    entryFeePayment: { type: Number, default: 1000000 },
+    entryFeePayment: { type: Number, default: 950000 },
     entryFeeBal: { type: Number, default: 0 },
     subcriptionFee: { type: Number, default: 50000 },
     subcriptionBal: { type: Number, default: 0 },
