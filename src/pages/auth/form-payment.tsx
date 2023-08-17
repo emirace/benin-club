@@ -89,7 +89,7 @@ const Page: NextPage<Props> = ({ user }) => {
           <ul className="text-sm">
             <li>Total Joining Fee = NGN 1,000,000.00</li>
             <li>Joining Form Fee = NGN 5,000.00</li>
-            <li>Joining Completion Fee = NGN 955,000,000.00</li>
+            <li>Joining Completion Fee = NGN 995,000,000.00</li>
           </ul>
         </div>
         <h1 className="text-2xl font-bold mb-4">Registration Form Payment</h1>

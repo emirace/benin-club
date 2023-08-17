@@ -143,7 +143,7 @@ const SignUp: NextPage<Props> = ({ sent }) => {
                   <strong>Balance Payment and Confirmation:</strong> Once your
                   application is reviewed and approved, you&apos;ll receive a
                   confirmation email along with details about the balance
-                  payment. The balance payment amounts to NGN955,000.
+                  payment. The balance payment amounts to NGN995,000.
                 </li>
                 <li className="mb-2">
                   <strong>Membership Confirmation:</strong> Upon receiving your
