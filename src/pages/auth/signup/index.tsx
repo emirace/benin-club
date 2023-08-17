@@ -1,8 +1,10 @@
 import Loading from '@/components/Loading';
+import Modal from '@/components/Modal';
 import VerificationSuccess from '@/components/signup/VerificationSuccess';
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
 import { NextPage, NextPageContext } from 'next';
 import { useState } from 'react';
+import { BsInfoCircle } from 'react-icons/bs';
 
 interface Props {
   sent: boolean;
@@ -12,6 +14,7 @@ const SignUp: NextPage<Props> = ({ sent }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [emailSent, setEmailSent] = useState<boolean>(sent);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -94,10 +97,70 @@ const SignUp: NextPage<Props> = ({ sent }) => {
                 </button>
               </div>
             </div>
+
             <div className="flex flex-col w-full justify-center items-center mt-4">
               {loading && <Loading />}
             </div>
+            <div className="text-gray text-sm mt-1 flex items-center gap-2 ">
+              <span>How to join Benin Club.</span>
+              <BsInfoCircle
+                className="cursor-pointer"
+                onClick={() => setShowModal(true)}
+              />
+            </div>
           </div>
+          <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+            <div className="p-4">
+              <h2 className="text-xl font-semibold mb-2">
+                How to Join Benin Club
+              </h2>
+              <p className="mb-4">
+                We&apos;re thrilled that you&apos;re interested in becoming a
+                member of Benin Club. Our membership process is designed to be
+                straightforward and hassle-free. Here&apos;s a step-by-step
+                guide to help you get started:
+              </p>
+              <ol className="list-decimal pl-6 mb-4">
+                <li className="mb-2">
+                  <strong>Obtain and Fill the Membership Form:</strong> Begin by
+                  visiting our official website or our physical office to obtain
+                  the membership application form. Read the instructions
+                  carefully and complete the form with accurate details.
+                </li>
+                <li className="mb-2">
+                  <strong>Pay the Non-Refundable Form Fee:</strong> As part of
+                  the application process, you&apos;ll need to pay a
+                  non-refundable form fee of 5000 Naira. This fee covers
+                  administrative expenses for processing your application.
+                </li>
+                <li className="mb-2">
+                  <strong>Submit the Completed Form and Payment Proof:</strong>{' '}
+                  After filling out the form, submit it along with the payment
+                  proof through the specified channels. You can either do this
+                  in person at our office or online via our portal.
+                </li>
+                <li className="mb-2">
+                  <strong>Balance Payment and Confirmation:</strong> Once your
+                  application is reviewed and approved, you&apos;ll receive a
+                  confirmation email along with details about the balance
+                  payment. The balance payment amounts to 950,000 Naira.
+                </li>
+                <li className="mb-2">
+                  <strong>Membership Confirmation:</strong> Upon receiving your
+                  balance payment, our team will process your membership.
+                  You&apos;ll then be officially welcomed as a member of Benin
+                  Club, complete with a membership card and access to exclusive
+                  benefits.
+                </li>
+              </ol>
+              <p>
+                If you have any questions or need assistance at any point in the
+                process, please don&apos;t hesitate to reach out to our customer
+                support team. We look forward to having you as a valued member
+                of our community!
+              </p>
+            </div>
+          </Modal>
         </div>
       ) : (
         <VerificationSuccess email={email} />
