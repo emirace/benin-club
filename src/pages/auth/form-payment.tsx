@@ -81,9 +81,17 @@ const Page: NextPage<Props> = ({ user }) => {
     <>
       <div className="h-24 w-full bg-black" />
       <div
-        className="h-screen w-full flex flex-col justify-center items-center
+        className="h-screen w-full flex flex-col  items-center
        p-4 "
       >
+        <div className="border border-red rounded-md bg-red bg-opacity-10 p-4 my-16 ">
+          <div className="font-medium text-sm">PAYMENT INFORMATION SUMMARY</div>
+          <ul className="text-sm">
+            <li>Total Joining Fee = NGN 1,000,000.00</li>
+            <li>Joining Form Fee = NGN 5,000.00</li>
+            <li>Joining Completion Fee = NGN 955,000,000.00</li>
+          </ul>
+        </div>
         <h1 className="text-2xl font-bold mb-4">Registration Form Payment</h1>
         <p className="text-lg mb-2">Payment Amount: NGN {config.amount}</p>
         <p className="text-sm text-gray-600 mb-4">

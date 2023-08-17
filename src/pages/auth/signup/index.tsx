@@ -130,7 +130,7 @@ const SignUp: NextPage<Props> = ({ sent }) => {
                 <li className="mb-2">
                   <strong>Pay the Non-Refundable Form Fee:</strong> As part of
                   the application process, you&apos;ll need to pay a
-                  non-refundable form fee of 5000 Naira. This fee covers
+                  non-refundable form fee of NGN5000. This fee covers
                   administrative expenses for processing your application.
                 </li>
                 <li className="mb-2">
@@ -143,14 +143,14 @@ const SignUp: NextPage<Props> = ({ sent }) => {
                   <strong>Balance Payment and Confirmation:</strong> Once your
                   application is reviewed and approved, you&apos;ll receive a
                   confirmation email along with details about the balance
-                  payment. The balance payment amounts to 950,000 Naira.
+                  payment. The balance payment amounts to NGN955,000.
                 </li>
                 <li className="mb-2">
                   <strong>Membership Confirmation:</strong> Upon receiving your
                   balance payment, our team will process your membership.
-                  You&apos;ll then be officially welcomed as a member of Benin
-                  Club, complete with a membership card and access to exclusive
-                  benefits.
+                  You&apos;ll then be inducted and officially welcomed as a
+                  member of Benin Club, complete with a membership card and
+                  access to exclusive benefits.
                 </li>
               </ol>
               <p>

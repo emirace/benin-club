@@ -113,7 +113,7 @@ export default function LoginForm({ handleCloseModal }: Props) {
           id="email"
           name="email"
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) => setEmail(event.target.value.trim())}
           className="mt-1 block w-full rounded-md p-2 mb-2  shadow-lg  focus:border-red focus:ring-red focus:outline-red"
         />
       </div>{' '}
