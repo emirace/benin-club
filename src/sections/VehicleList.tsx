@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
-import { IVehicle } from '@/models/vehicle.model';
-import Image from 'next/image';
-import Modal from '@/components/Modal';
-import UpdateQRcode from '@/components/UpadateQRcode';
-import Loading from '@/components/Loading';
+import { useState, useEffect, useCallback } from "react";
+import { IVehicle } from "@/models/vehicle.model";
+import Image from "next/image";
+import Modal from "@/components/Modal";
+import UpdateQRcode from "@/components/UpadateQRcode";
+import Loading from "@/components/Loading";
 
 type Props = {};
 
@@ -23,18 +23,35 @@ const VehicleList = ({}: Props) => {
     limit: 24,
     total: 0,
   });
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const fetchData = async (page: number, limit: number) => {
     setIsLoading(true);
-    const response = await fetch(
-      `/api/dashboard/vehicles?page=${page}&limit=${limit}&search=${search}`
-    );
-    const data = await response.json();
-    console.log(data);
-    setVehicleList(data.vehicles);
-    setPagination({ ...pagination, total: data.totalPages });
-    setIsLoading(false);
+
+    try {
+      const response = await fetch(
+        `/api/dashboard/vehicles?page=${page}&limit=${limit}&search=${search}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      const data = await response.json();
+
+      if (Array.isArray(data.vehicles)) {
+        setVehicleList(data.vehicles);
+      } else {
+        setVehicleList([]);
+      }
+
+      setPagination({ ...pagination, total: data.totalPages });
+    } catch (error) {
+      console.error("Error:", error);
+      setVehicleList([]); // Set vehicleList to an empty array on error
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -44,14 +61,14 @@ const VehicleList = ({}: Props) => {
   const handleDelete = async (id: string) => {
     try {
       const shouldDelete = window.confirm(
-        'Are you sure you want to delete this vehicle?'
+        "Are you sure you want to delete this vehicle?"
       );
       if (!shouldDelete) {
         return;
       }
 
       const response = await fetch(`/api/dashboard/vehicles/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (response.ok) {
@@ -128,7 +145,7 @@ const VehicleList = ({}: Props) => {
                   {vehicle.memberId && (
                     <p className="mt-1 text-sm text-gray-500">
                       {vehicle?.memberId?.surName +
-                        ' ' +
+                        " " +
                         vehicle?.memberId?.firstName}
                     </p>
                   )}
@@ -201,8 +218,8 @@ const VehicleList = ({}: Props) => {
                     key={page}
                     className={`${
                       page === pagination.page
-                        ? 'bg-red text-white font-bold py-2 px-4 rounded-md'
-                        : 'text-red py-2 px-4'
+                        ? "bg-red text-white font-bold py-2 px-4 rounded-md"
+                        : "text-red py-2 px-4"
                     }`}
                     onClick={() => handlePageChange(page)}
                   >
