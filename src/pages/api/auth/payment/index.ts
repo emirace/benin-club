@@ -1,10 +1,12 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import Flutterwave from 'flutterwave-node-v3';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../[...nextauth]';
-import User from '@/models/user.model';
-import { connectDB } from '@/utils/mongoose';
-import Transaction, { TransactionDocument } from '@/models/transaction.model';
+import { NextApiRequest, NextApiResponse } from "next";
+import Flutterwave from "flutterwave-node-v3";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../[...nextauth]";
+import User from "@/models/user.model";
+import { connectDB } from "@/utils/mongoose";
+import Transaction, { TransactionDocument } from "@/models/transaction.model";
+import sendEmail from "@/utils/sendEmail";
+import { usersAdminEmails } from "@/constants/emails";
 
 // Configure Flutterwave SDK with your API keys
 const flutterwave = new (Flutterwave as any)(
@@ -16,8 +18,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   const session = await getServerSession(req, res, authOptions);
@@ -25,7 +27,7 @@ export default async function handler(
   if (!session)
     return res
       .status(401)
-      .json({ message: 'You must log in to access this resource.' });
+      .json({ message: "You must log in to access this resource." });
 
   const { user: loginUser } = session;
 
@@ -40,56 +42,65 @@ export default async function handler(
     });
 
     // If payment is successful, update the user's wallet balance and create a transaction record
-    if (payment.data.status === 'successful') {
+    if (payment.data.status === "successful") {
       const amount = payment.data.amount;
 
       // Create a new transaction record
       const transaction: TransactionDocument = new Transaction({
         userId: userId,
-        type: 'debit',
+        type: "debit",
         amount: amount,
         reference: payment.data.flw_ref,
-        status: 'Completed',
-        description: 'Form payment',
-        paymentMethod: 'flutterwave',
-        for: 'wallet',
+        status: "Completed",
+        description: "Form payment",
+        paymentMethod: "flutterwave",
+        for: "wallet",
         initiatedBy: userId,
       });
       await transaction.save();
 
       const user = await User.findOne({ email: session.user.email });
       if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
+        return res.status(404).json({ message: "User not found." });
       }
 
-      user.signupStep = 'ProfileCreation';
+      user.signupStep = "ProfileCreation";
       user.save();
+
+      const message =
+        "We hope this message finds you well. We are delighted to inform you that your recent form fee payment has been successfully processed. Thank you for your prompt action in completing this important step to maintain your membership with Benin";
+      sendEmail(user.email, "Form Fee Payment", message);
+
+      const message1 = `New form fee payment by ${user.firstName} ${user.surName}`;
+      for (let i = 0; i < usersAdminEmails.length; i++) {
+        sendEmail(usersAdminEmails[i], "Form Fee Payment", message1);
+      }
 
       // Return success message
       return res.status(200).json({
-        message: 'Payment successful',
+        message: "Payment successful",
       });
     } else {
       // If payment is not successful, create a failed transaction record and return error message
       const transaction: TransactionDocument = new Transaction({
         userId: userId,
-        type: 'debit',
+        type: "debit",
         amount: payment.amount,
         reference: payment.data.flw_ref,
-        status: 'Failed',
-        description: 'Form payment',
-        paymentMethod: 'flutterwave',
-        for: 'wallet',
+        status: "Failed",
+        description: "Form payment",
+        paymentMethod: "flutterwave",
+        for: "wallet",
         initiatedBy: userId,
       });
       await transaction.save();
 
       return res.status(400).json({
-        message: 'Payment failed',
+        message: "Payment failed",
       });
     }
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal server error.' });
+    return res.status(500).json({ message: "Internal server error." });
   }
 }
