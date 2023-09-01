@@ -1,9 +1,9 @@
-import { TransactionDocument } from '@/models/transaction.model';
-import { currency } from '@/sections/PersonalInfo';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import Loading from '../Loading';
+import { TransactionDocument } from "@/models/transaction.model";
+import { currency } from "@/sections/PersonalInfo";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import Loading from "../Loading";
 
 interface TransactionProps {}
 
@@ -11,7 +11,8 @@ export interface TransactionData {
   [key: string]: any;
   description: string;
   amount: number;
-  status: 'Pending' | 'Completed' | 'Failed';
+  bal: number;
+  status: "Pending" | "Completed" | "Failed";
   invoiceId: string;
   userId: {
     _id: string;
@@ -19,7 +20,7 @@ export interface TransactionData {
     surName: string;
   };
   paymentMethod: string;
-  type: 'credit' | 'debit';
+  type: "credit" | "debit";
   reference: string;
   initiatedBy: {
     _id: string;
@@ -36,12 +37,12 @@ function Transaction(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   const [transactionsPerPage] = useState(20);
   const [sortConfig, setSortConfig] = useState({
-    key: '',
-    direction: '',
-    status: '',
+    key: "",
+    direction: "",
+    status: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchEvents();
@@ -50,7 +51,7 @@ function Transaction(): JSX.Element {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/dashboard/wallets/transactions');
+      const response = await fetch("/api/dashboard/wallets/transactions");
 
       if (!response.ok) {
         const data = await response.json();
@@ -62,7 +63,7 @@ function Transaction(): JSX.Element {
       setIsLoading(false);
     } catch (error) {
       setTransactions([]);
-      setError('Problem fetching transactions');
+      setError("Problem fetching transactions");
       console.error(error);
       setIsLoading(false);
     }
@@ -73,7 +74,7 @@ function Transaction(): JSX.Element {
   }, [transactions]);
 
   const handleUpdateTransactionsTable = async () => {
-    const response = await fetch('/api/dashboard/transactions');
+    const response = await fetch("/api/dashboard/transactions");
     const data = await response.json();
     setTransactions(data);
   };
@@ -101,23 +102,23 @@ function Transaction(): JSX.Element {
   const sortedTransactions = [...currentTransactions];
   if (sortConfig.key) {
     sortedTransactions.sort((a, b) => {
-      if (sortConfig.key === 'status') {
+      if (sortConfig.key === "status") {
         switch (a.status) {
-          case 'Completed':
-            return sortConfig.direction === 'asc' ? -1 : 1;
-          case 'Pending':
-            return sortConfig.direction === 'asc' ? -1 : 1;
-          case 'Failed':
-            return sortConfig.direction === 'asc' ? -1 : 1;
+          case "Completed":
+            return sortConfig.direction === "asc" ? -1 : 1;
+          case "Pending":
+            return sortConfig.direction === "asc" ? -1 : 1;
+          case "Failed":
+            return sortConfig.direction === "asc" ? -1 : 1;
           default:
             return 0;
         }
       }
       if (a[sortConfig.key] < b[sortConfig.key]) {
-        return sortConfig.direction === 'asc' ? -1 : 1;
+        return sortConfig.direction === "asc" ? -1 : 1;
       }
       if (a[sortConfig.key] > b[sortConfig.key]) {
-        return sortConfig.direction === 'asc' ? 1 : -1;
+        return sortConfig.direction === "asc" ? 1 : -1;
       }
       return 0;
     });
@@ -134,17 +135,17 @@ function Transaction(): JSX.Element {
 
   const handlePageClick = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  const handleSort = (key: string, defaultDirection: string = 'asc') => {
+  const handleSort = (key: string, defaultDirection: string = "asc") => {
     let direction = defaultDirection;
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction, status: sortConfig.status });
   };
 
   const renderSortArrow = (key: string) => {
     if (sortConfig.key === key) {
-      return sortConfig.direction === 'asc' ? '▲' : '▼';
+      return sortConfig.direction === "asc" ? "▲" : "▼";
     }
     return null;
   };
@@ -171,39 +172,39 @@ function Transaction(): JSX.Element {
           <tr className="bg-gray-200">
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
-              onClick={() => handleSort('invoiceId', 'asc')}
+              onClick={() => handleSort("invoiceId", "asc")}
             >
-              Invoice ID {renderSortArrow('invoiceId')}
+              Invoice ID {renderSortArrow("invoiceId")}
             </th>
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
-              onClick={() => handleSort('memberName', 'asc')}
+              onClick={() => handleSort("memberName", "asc")}
             >
-              Member Name {renderSortArrow('memberName')}
+              Member Name {renderSortArrow("memberName")}
             </th>
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
-              onClick={() => handleSort('date', 'asc')}
+              onClick={() => handleSort("date", "asc")}
             >
-              Date {renderSortArrow('date')}
+              Date {renderSortArrow("date")}
             </th>
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
-              onClick={() => handleSort('description', 'asc')}
+              onClick={() => handleSort("description", "asc")}
             >
-              Description {renderSortArrow('description')}
+              Description {renderSortArrow("description")}
             </th>
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
-              onClick={() => handleSort('paymentMethod', 'asc')}
+              onClick={() => handleSort("paymentMethod", "asc")}
             >
-              Payment Method {renderSortArrow('paymentMethod')}
+              Payment Method {renderSortArrow("paymentMethod")}
             </th>
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
-              onClick={() => handleSort('amount', 'asc')}
+              onClick={() => handleSort("amount", "asc")}
             >
-              Amount {renderSortArrow('amount')}
+              Amount {renderSortArrow("amount")}
             </th>
             <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
               Status
@@ -211,7 +212,7 @@ function Transaction(): JSX.Element {
                 className="ml-2 border border-gray rounded-md py-1 px-2 text-sm"
                 onChange={(e) =>
                   setSortConfig({
-                    key: 'status',
+                    key: "status",
                     direction: sortConfig.direction,
                     status: e.target.value,
                   })
@@ -244,21 +245,21 @@ function Transaction(): JSX.Element {
                   {transaction.userId?.surName} {transaction.userId?.firstName}
                 </td>
                 <td className="px-4 py-2">
-                  {moment(transaction.createdAt).format('h:sa, Do MMM YY')}
+                  {moment(transaction.createdAt).format("h:sa, Do MMM YY")}
                 </td>
                 <td className="px-4 py-2">{transaction.description}</td>
                 <td className="px-4 py-2">{transaction.paymentMethod}</td>
                 <td className="px-4 py-2">
                   {currency}
                   {transaction.amount}
-                </td>{' '}
+                </td>{" "}
                 <td
                   className={`px-4 py-2 ${
-                    transaction.status === 'Completed'
-                      ? 'text-green'
-                      : transaction.status === 'Pending'
-                      ? 'text-yellow'
-                      : 'text-red'
+                    transaction.status === "Completed"
+                      ? "text-green"
+                      : transaction.status === "Pending"
+                      ? "text-yellow"
+                      : "text-red"
                   }`}
                 >
                   {transaction.status}
@@ -278,7 +279,7 @@ function Transaction(): JSX.Element {
           <button
             key={number}
             className={`mx-1 px-3 py-2 rounded-md ${
-              currentPage === number ? 'bg-red text-white' : 'bg-white text-red'
+              currentPage === number ? "bg-red text-white" : "bg-white text-red"
             }`}
             onClick={() => handlePageClick(number)}
           >

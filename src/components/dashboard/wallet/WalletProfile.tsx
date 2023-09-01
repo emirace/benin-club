@@ -131,8 +131,8 @@ const WalletProfile: React.FC<WalletProfileProps> = ({ wallet }) => {
                       <span
                         className={
                           transaction.type === "credit"
-                            ? "text-green-600"
-                            : "text-red-600"
+                            ? "text-green"
+                            : "text-red"
                         }
                       >
                         {transaction.type === "credit" ? "+" : "-"}
@@ -142,8 +142,11 @@ const WalletProfile: React.FC<WalletProfileProps> = ({ wallet }) => {
                         </span>
                       </span>
                     </div>
-                    <div className="text-gray-600 text-sm capitalize">
+                    <div className="text-gray text-xs capitalize">
                       {transaction.type}
+                    </div>
+                    <div className=" text-sm capitalize">
+                      bal: {transaction.bal}
                     </div>
                   </div>
                 </div>

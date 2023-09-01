@@ -1,10 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import Flutterwave from 'flutterwave-node-v3';
-import Wallet, { WalletDocument } from '@/models/wallet.model';
-import Transaction, { TransactionDocument } from '@/models/transaction.model';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]';
-import { connectDB } from '@/utils/mongoose';
+import type { NextApiRequest, NextApiResponse } from "next";
+import Flutterwave from "flutterwave-node-v3";
+import Wallet, { WalletDocument } from "@/models/wallet.model";
+import Transaction, { TransactionDocument } from "@/models/transaction.model";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]";
+import { connectDB } from "@/utils/mongoose";
 
 // Configure Flutterwave SDK with your API keys
 const flutterwave = new (Flutterwave as any)(
@@ -16,15 +16,15 @@ export default async function handleFund(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method Not Allowed" });
   }
   const session = await getServerSession(req, res, authOptions);
 
   if (!session)
     return res
       .status(401)
-      .json({ message: 'You must log in to access this resource.' });
+      .json({ message: "You must log in to access this resource." });
 
   const { user: loginUser } = session;
 
@@ -40,12 +40,11 @@ export default async function handleFund(
     console.log(payment);
 
     // If payment is successful, update the user's wallet balance and create a transaction record
-    if (payment.data.status === 'successful') {
+    if (payment.data.status === "successful") {
       const amount = payment.data.amount;
       const wallet: WalletDocument | null = await Wallet.findOne({
         userId: userId,
       });
-
       if (wallet) {
         wallet.balance += amount;
         await wallet.save();
@@ -53,20 +52,21 @@ export default async function handleFund(
         // Create a new transaction record
         const transaction: TransactionDocument = new Transaction({
           userId: userId,
-          type: 'credit',
+          type: "credit",
           amount: amount,
           reference: payment.data.flw_ref,
-          status: 'Completed',
-          description: 'Fund wallet',
-          paymentMethod: 'flutterwave',
-          for: 'wallet',
+          status: "Completed",
+          description: "Fund wallet",
+          paymentMethod: "flutterwave",
+          for: "wallet",
+          bal: wallet.balance,
           initiatedBy: userId,
         });
         await transaction.save();
 
         // Return success message
         return res.status(200).json({
-          message: 'Payment successful',
+          message: "Payment successful",
         });
       } else {
         // If the user does not have a wallet, create one and update the balance
@@ -80,45 +80,46 @@ export default async function handleFund(
         // Create a new transaction record
         const transaction: TransactionDocument = new Transaction({
           userId: userId,
-          type: 'credit',
+          type: "credit",
           amount: amount,
           reference: payment.data.flw_ref,
-          status: 'Completed',
-          description: 'Fund wallet',
-          paymentMethod: 'flutterwave',
+          status: "Completed",
+          description: "Fund wallet",
+          paymentMethod: "flutterwave",
           initiatedBy: userId,
-          for: 'wallet',
+          for: "wallet",
+          bal: newWallet.balance,
         });
         await transaction.save();
 
         // Return success message
         return res.status(200).json({
-          message: 'Payment successful',
+          message: "Payment successful",
         });
       }
     } else {
       // If payment is not successful, create a failed transaction record and return error message
       const transaction: TransactionDocument = new Transaction({
         userId: userId,
-        type: 'credit',
+        type: "credit",
         amount: payment.amount,
         reference: payment.data.flw_ref,
-        status: 'Failed',
-        description: 'Fund wallet',
-        paymentMethod: 'flutterwave',
-        for: 'wallet',
+        status: "Failed",
+        description: "Fund wallet",
+        paymentMethod: "flutterwave",
+        for: "wallet",
         initiatedBy: userId,
       });
       await transaction.save();
 
       return res.status(400).json({
-        message: 'Payment failed',
+        message: "Payment failed",
       });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      message: 'An error occurred while processing your payment',
+      message: "An error occurred while processing your payment",
     });
   }
 }

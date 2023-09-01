@@ -1,12 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { connectDB } from '@/utils/mongoose';
+import { NextApiRequest, NextApiResponse } from "next";
+import { connectDB } from "@/utils/mongoose";
 import Transaction, {
   ITransaction,
   TransactionDocument,
-} from '@/models/transaction.model';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]';
-import User from '@/models/user.model';
+} from "@/models/transaction.model";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]";
+import User from "@/models/user.model";
+import Wallet, { WalletDocument } from "@/models/wallet.model";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,25 +15,25 @@ export default async function handler(
 ) {
   try {
     switch (req.method) {
-      case 'GET':
+      case "GET":
         const session = await getServerSession(req, res, authOptions);
 
         if (!session)
           return res
             .status(401)
-            .json({ message: 'You must log in to access this resource.' });
+            .json({ message: "You must log in to access this resource." });
 
         const { user: loginUser } = session;
-        if (loginUser.role !== 'admin' && loginUser.role !== 'wallet') {
-          return res.status(401).json({ message: 'Unauthorized' });
+        if (loginUser.role !== "admin" && loginUser.role !== "wallet") {
+          return res.status(401).json({ message: "Unauthorized" });
         }
         await connectDB();
         if (req.query.status) {
           const transactions: TransactionDocument[] = await Transaction.find()
             .sort({ createdAt: -1 })
             .populate({
-              path: 'userId',
-              select: 'surName firstName',
+              path: "userId",
+              select: "surName firstName",
             });
 
           res.status(200).json(transactions);
@@ -41,14 +42,14 @@ export default async function handler(
           res.status(200).json(transactions);
         }
         break;
-      case 'POST':
-        if (req.body.accessToken !== '0987654321') {
-          return res.status(401).json({ message: 'Unauthorized' });
+      case "POST":
+        if (req.body.accessToken !== "JqwiG9RpjDbYSiC") {
+          return res.status(401).json({ message: "Unauthorized" });
         }
         await connectDB();
 
-        if (!req.body || typeof req.body !== 'object') {
-          return res.status(400).json({ message: 'Invalid request body' });
+        if (!req.body || typeof req.body !== "object") {
+          return res.status(400).json({ message: "Invalid request body" });
         }
 
         const { description, amount, memberId } = req.body;
@@ -57,47 +58,56 @@ export default async function handler(
         const errors: string[] = [];
 
         if (!description) {
-          errors.push('Description is required.');
+          errors.push("Description is required.");
         }
 
-        if (!amount || typeof amount !== 'number' || amount <= 0) {
-          errors.push('Amount should be a positive number.');
+        if (!amount || typeof amount !== "number" || amount <= 0) {
+          errors.push("Amount should be a positive number.");
         }
 
         if (!memberId) {
-          errors.push('member ID is required.');
+          errors.push("member ID is required.");
         }
 
         const member = await User.findOne({ memberId });
         if (!member) {
-          errors.push('Invalid member ID');
+          errors.push("Invalid member ID");
         }
 
         if (errors.length > 0) {
-          return res.status(400).json({ message: 'Validation error', errors });
+          return res.status(400).json({ message: "Validation error", errors });
+        }
+
+        const wallet: WalletDocument | null = await Wallet.findOne({
+          userId: member._id,
+        });
+
+        if (!wallet) {
+          return res.status(400).json({ message: "No wallet found" });
         }
 
         const transaction = new Transaction({
           description,
           amount,
-          status: 'Pending',
+          status: "Pending",
           userId: member._id,
-          paymentMethod: 'Wallet',
-          type: 'debit',
-          for: 'Wallet',
-          reference: '',
-          initiatedBy: 'bar',
+          paymentMethod: "Wallet",
+          type: "debit",
+          for: "Wallet",
+          reference: "",
+          initiatedBy: "bar",
           createdAt: new Date(),
+          bal: wallet.balance,
         });
 
         res.status(201).json(transaction);
 
         break;
       default:
-        res.status(405).json({ message: 'Method Not Allowed' });
+        res.status(405).json({ message: "Method Not Allowed" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: "Server Error" });
   }
 }
