@@ -235,7 +235,7 @@ function Transaction(): JSX.Element {
         ) : error ? (
           <div className="text-red">{error}</div>
         ) : !transactions.length ? (
-          <div className="my-4 ml-4">No subscription history</div>
+          <div className="my-4 ml-4">No transaction history</div>
         ) : (
           <tbody>
             {sortedTransactions.map((transaction) => (

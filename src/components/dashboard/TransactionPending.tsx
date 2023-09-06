@@ -2,7 +2,7 @@ import { TransactionDocument } from "@/models/transaction.model";
 import { currency } from "@/sections/PersonalInfo";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaCheck, FaEdit, FaTrash } from "react-icons/fa";
+import { FaCheck, FaEdit, FaTimes, FaTrash } from "react-icons/fa";
 import Loading from "../Loading";
 
 interface TransactionProps {}
@@ -43,6 +43,7 @@ function TransactionPending(): JSX.Element {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -51,7 +52,9 @@ function TransactionPending(): JSX.Element {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/dashboard/wallets/transactions");
+      const response = await fetch(
+        "/api/dashboard/wallets/transactions-pending"
+      );
 
       if (!response.ok) {
         const data = await response.json();
@@ -74,10 +77,36 @@ function TransactionPending(): JSX.Element {
   }, [transactions]);
 
   const handleUpdateTransactionsTable = async () => {
-    const response = await fetch("/api/dashboard/transactions");
+    const response = await fetch("/api/dashboard/wallets/transactions-pending");
     const data = await response.json();
     setTransactions(data);
   };
+
+  // Define a function to update the transaction status
+  async function updateTransactionStatus(id: string, status: string) {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `/api/dashboard/wallets/transactions-pending/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error("Error updating transaction status");
+      }
+      fetchEvents();
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   // Filtering transactions based on search query
 
@@ -236,7 +265,7 @@ function TransactionPending(): JSX.Element {
         ) : error ? (
           <div className="text-red">{error}</div>
         ) : !transactions.length ? (
-          <div className="my-4 ml-4">No subscription history</div>
+          <div className="my-4 ml-4">No Pending Transactions</div>
         ) : (
           <tbody>
             {sortedTransactions.map((transaction) => (
@@ -266,9 +295,32 @@ function TransactionPending(): JSX.Element {
                   {transaction.status}
                 </td>
                 <td className="px-4 py-2">
-                  <button className="mr-2  hover:text-yellow focus:outline-none">
-                    <FaCheck />
-                  </button>
+                  {loading ? (
+                    <Loading />
+                  ) : (
+                    <>
+                      <button className="mr-2 text-green  hover:text-yellow focus:outline-none">
+                        <FaCheck
+                          onClick={() =>
+                            updateTransactionStatus(
+                              transaction._id,
+                              "Completed"
+                            )
+                          }
+                        />
+                      </button>
+                      <button className="mr-2  text-red hover:text-yellow focus:outline-none">
+                        <FaTimes
+                          onClick={() =>
+                            updateTransactionStatus(
+                              transaction._id,
+                              "Completed"
+                            )
+                          }
+                        />
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}

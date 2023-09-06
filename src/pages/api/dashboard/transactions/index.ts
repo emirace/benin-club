@@ -121,12 +121,14 @@ export default async function handler(
           userId: member._id,
           paymentMethod: "Wallet",
           type: "debit",
-          for: "Wallet",
+          for: "wallet",
           reference: "",
-          initiatedBy: "bar",
+          initiatedBy: "64f8645fcdad483e0c866ad8",
           createdAt: new Date(),
           bal: wallet.balance,
         });
+
+        await transaction.save();
 
         res.status(201).json({
           success: true,
