@@ -2,7 +2,7 @@ import { TransactionDocument } from "@/models/transaction.model";
 import { currency } from "@/sections/PersonalInfo";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaCheck, FaEdit, FaTrash } from "react-icons/fa";
 import Loading from "../Loading";
 
 interface TransactionProps {}
@@ -169,7 +169,7 @@ function TransactionPending(): JSX.Element {
       </div>
 
       <table className="w-full whitespace-nowrap text-sm">
-        <thead>
+        <thead className="w-full">
           <tr className="bg-gray-200">
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
@@ -267,7 +267,7 @@ function TransactionPending(): JSX.Element {
                 </td>
                 <td className="px-4 py-2">
                   <button className="mr-2  hover:text-yellow focus:outline-none">
-                    <FaEdit />
+                    <FaCheck />
                   </button>
                 </td>
               </tr>
