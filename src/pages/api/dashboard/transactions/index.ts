@@ -8,12 +8,40 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]";
 import User from "@/models/user.model";
 import Wallet, { WalletDocument } from "@/models/wallet.model";
+import Cors from "cors";
+import TransactionTest from "@/models/transaction.model.text";
+
+// Initializing the cors middleware
+// You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
+const cors = Cors({
+  methods: ["POST", "GET", "HEAD"],
+});
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: Function
+) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+
+      return resolve(result);
+    });
+  });
+}
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
+    await runMiddleware(req, res, cors);
+
     switch (req.method) {
       case "GET":
         const session = await getServerSession(req, res, authOptions);
@@ -78,15 +106,15 @@ export default async function handler(
           return res.status(400).json({ message: "Validation error", errors });
         }
 
-        const wallet: WalletDocument | null = await Wallet.findOne({
-          userId: member._id,
-        });
+        const wallet = await Wallet.findOneAndUpdate(
+          { userId: member._id },
+          { $inc: { balance: 0 } },
+          { upsert: true, new: true }
+        ).exec();
 
-        if (!wallet) {
-          return res.status(400).json({ message: "No wallet found" });
-        }
+        console.log(wallet);
 
-        const transaction = new Transaction({
+        const transaction = new TransactionTest({
           description,
           amount,
           status: "Pending",
@@ -100,7 +128,11 @@ export default async function handler(
           bal: wallet.balance,
         });
 
-        res.status(201).json(transaction);
+        res.status(201).json({
+          success: true,
+          message: "this is a test transaction",
+          transaction,
+        });
 
         break;
       default:
