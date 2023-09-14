@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Request, Response } from "express";
 import multer from "multer";
 import sendEmail from "@/utils/sendEmail";
+import fs from "fs"; // Import the 'fs' module
 
 type NextApiRequestWithFormData = NextApiRequest &
   Request & {
@@ -48,6 +49,9 @@ export default async function handler(
 
         // Send the PDF file as an attachment in an email
         await sendEmail(email, subject, msg, pdfFile.buffer);
+
+        // Delete the stored PDF file after sending the email
+        fs.unlinkSync(pdfFile.path);
 
         res.status(200).json({ message: "PDF file sent via email" });
       });
