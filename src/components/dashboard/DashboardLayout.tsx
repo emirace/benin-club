@@ -14,6 +14,7 @@ import VehicleMenu from "./Vehicle";
 import NewMembersTable from "./NewMembers";
 import Gallery from "./Gallery";
 import TransactionPending from "./TransactionPending";
+import Newsletter from "./Newsletter";
 
 interface DashboardLayoutProps {
   user: IUser;
@@ -65,6 +66,9 @@ function DashboardLayout(props: DashboardLayoutProps): JSX.Element {
     case "Vehicles":
       content = <VehicleMenu />;
       break;
+    case "Newsletter":
+      content = <Newsletter />;
+      break;
     case "Settings":
       content = <p>Here you can change your settings.</p>;
       break;
@@ -73,7 +77,7 @@ function DashboardLayout(props: DashboardLayoutProps): JSX.Element {
   }
 
   return (
-    <div className="flex h-screen ">
+    <div className="flex  ">
       <Sidebar
         user={user}
         onNavClick={handleNavClick}

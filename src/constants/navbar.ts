@@ -1,4 +1,4 @@
-import { FaUserTie } from "react-icons/fa";
+import { FaEnvelope, FaUserTie } from "react-icons/fa";
 import {
   FiHome,
   FiUsers,
@@ -61,6 +61,7 @@ export const menuItems = [
     role: ["admin", "wallet"],
   },
   { label: "Vehicles", icon: FiTruck, role: ["admin", "user"] },
+  { label: "Newsletter", icon: FaEnvelope, role: ["admin", "user"] },
   // { label: "Agents", icon: FaUserTie, role: ["admin"] },
   { label: "Settings", icon: FiSettings, role: ["admin"] },
 ];

@@ -1,7 +1,12 @@
-import nodemailer from 'nodemailer';
-const sendEmail = async (to: string, subject: string, body: string) => {
+import nodemailer from "nodemailer";
+const sendEmail = async (
+  to: string,
+  subject: string,
+  body: string,
+  attachments?: Buffer
+) => {
   const transporter = nodemailer.createTransport({
-    host: 'mail.privateemail.com',
+    host: "mail.privateemail.com",
     port: 465,
     auth: {
       user: process.env.EMAIL_USER,
@@ -15,6 +20,12 @@ const sendEmail = async (to: string, subject: string, body: string) => {
     to,
     subject,
     html: body,
+    attachments: [
+      {
+        filename: "Newsletter",
+        content: attachments,
+      },
+    ],
   };
 
   try {
