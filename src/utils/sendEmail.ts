@@ -14,7 +14,17 @@ const sendEmail = async (
     },
   });
 
-  const mailOptions = {
+  const mailOptionsWithoutAttach = {
+    from: `Benin Club <${process.env.EMAIL_USER}>`,
+    // from: process.env.EMAIL_USER,
+    to,
+    subject,
+    html: body,
+  };
+
+  console.log(attachments);
+
+  const mailOptionsWithAttach = {
     from: `Benin Club <${process.env.EMAIL_USER}>`,
     // from: process.env.EMAIL_USER,
     to,
@@ -22,13 +32,17 @@ const sendEmail = async (
     html: body,
     attachments: [
       {
-        filename: "Newsletter",
+        filename: "Newsletter.pdf",
         content: attachments,
+        contentType: "application/pdf",
       },
     ],
   };
 
   try {
+    const mailOptions = attachments
+      ? mailOptionsWithAttach
+      : mailOptionsWithoutAttach;
     const info = await transporter.sendMail(mailOptions);
     console.log(`Email sent: ${info.messageId}`);
     return true;

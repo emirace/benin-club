@@ -47,8 +47,12 @@ export default async function handler(
         const subject = "Benin Club Newsletter";
         const msg = "Here is our latest Newsletter";
 
+        // Read the file from the server's filesystem
+        const pdfBuffer = fs.readFileSync(pdfFile.path);
+
+        console.log("file", pdfBuffer);
         // Send the PDF file as an attachment in an email
-        await sendEmail(email, subject, msg, pdfFile.buffer);
+        await sendEmail(email, subject, msg, pdfBuffer);
 
         // Delete the stored PDF file after sending the email
         fs.unlinkSync(pdfFile.path);
