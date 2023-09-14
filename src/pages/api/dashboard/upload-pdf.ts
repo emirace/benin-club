@@ -50,7 +50,6 @@ export default async function handler(
         // Read the file from the server's filesystem
         const pdfBuffer = fs.readFileSync(pdfFile.path);
 
-        console.log("file", pdfBuffer);
         // Send the PDF file as an attachment in an email
         await sendEmail(email, subject, msg, pdfBuffer);
 
