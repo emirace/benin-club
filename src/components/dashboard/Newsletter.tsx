@@ -114,6 +114,7 @@ const Newsletter = () => {
                 <th className="py-2 px-4 text-left">Email</th>
                 <th className="py-2 px-4 text-left">Reg Member</th>
                 <th className="py-2 px-4 text-left">Action</th>
+                <th className="py-2 px-4 text-left"></th>
               </tr>
             </thead>
             <tbody>
