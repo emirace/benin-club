@@ -22,34 +22,34 @@ const SectionC = (props: SectionProps) => {
     let isValid = true;
 
     // Validate marriage duration
-    if (!formData.marriageDuration) {
-      handleError(
-        'marriageDuration',
-        'Please enter the duration of your marriage.'
-      );
-      isValid = false;
-    } else if (formData.marriageDuration <= 0) {
-      handleError(
-        'marriageDuration',
-        'Please enter a valid duration of marriage (greater than 0).'
-      );
-      isValid = false;
-    }
+    // if (!formData.marriageDuration) {
+    //   handleError(
+    //     'marriageDuration',
+    //     'Please enter the duration of your marriage.'
+    //   );
+    //   isValid = false;
+    // } else if (formData.marriageDuration <= 0) {
+    //   handleError(
+    //     'marriageDuration',
+    //     'Please enter a valid duration of marriage (greater than 0).'
+    //   );
+    //   isValid = false;
+    // }
 
     // Validate number of wives
-    if (!formData.numberOfWives) {
-      handleError(
-        'numberOfWives',
-        'Please enter the number of wives you have.'
-      );
-      isValid = false;
-    } else if (formData.numberOfWives < 0) {
-      handleError(
-        'numberOfWives',
-        'Please enter a valid number of wives (greater than or equal to 0).'
-      );
-      isValid = false;
-    }
+    // if (!formData.numberOfWives) {
+    //   handleError(
+    //     'numberOfWives',
+    //     'Please enter the number of wives you have.'
+    //   );
+    //   isValid = false;
+    // } else if (formData.numberOfWives < 0) {
+    //   handleError(
+    //     'numberOfWives',
+    //     'Please enter a valid number of wives (greater than or equal to 0).'
+    //   );
+    //   isValid = false;
+    // }
 
     // Validate number of children
     if (!formData.numberOfChildren) {
@@ -171,7 +171,7 @@ const SectionC = (props: SectionProps) => {
                 placeholder="Enter duration of marriage"
                 className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
                 onChange={onChange}
-                value={formData.marriageDuration || ''}
+                value={formData.marriageDuration || 0}
               />
               <span className="ml-2">year(s)</span>
             </div>
