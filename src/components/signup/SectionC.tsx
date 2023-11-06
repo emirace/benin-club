@@ -234,6 +234,7 @@ const SectionC = (props: SectionProps) => {
               formData={formData}
               setFormData={setFormData}
               updateError={handleError}
+              isAdmin={isAdmin}
             />
 
             {error?.children ? (

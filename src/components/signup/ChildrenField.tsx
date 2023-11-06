@@ -1,38 +1,40 @@
-import { SetFormData } from '@/types/signup';
-import { useState } from 'react';
-import Modal from '../Modal';
-import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
-import { IChild, IUser } from '@/models/user.model';
-import { BsArrowRight } from 'react-icons/bs';
-import { compressImageUpload } from '@/utils/compressImage';
-import Loading from '../Loading';
-import Image from 'next/image';
-import { FiUpload } from 'react-icons/fi';
+import { SetFormData } from "@/types/signup";
+import { useState } from "react";
+import Modal from "../Modal";
+import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
+import { IChild, IUser } from "@/models/user.model";
+import { BsArrowRight } from "react-icons/bs";
+import { compressImageUpload } from "@/utils/compressImage";
+import Loading from "../Loading";
+import Image from "next/image";
+import { FiUpload } from "react-icons/fi";
 
 type ChildrenFieldProps = {
   setFormData: SetFormData;
   formData: IUser;
   updateError: (name: string, value: string) => void;
+  isAdmin: boolean;
 };
 
 const ChildrenField = ({
   setFormData,
   formData,
   updateError,
+  isAdmin,
 }: ChildrenFieldProps) => {
   const [childFields, setChildFields] = useState<IChild>({
-    name: '',
+    name: "",
     age: 0,
-    school: '',
-    sex: 'male',
-    image: '',
+    school: "",
+    sex: "male",
+    image: "",
   });
   const [error, setError] = useState({
-    name: '',
-    age: '',
-    school: '',
-    sex: '',
-    image: '',
+    name: "",
+    age: "",
+    school: "",
+    sex: "",
+    image: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,13 +45,13 @@ const ChildrenField = ({
   };
 
   const closeModal = () => {
-    updateError('children', '');
+    updateError("children", "");
     setChildFields({
-      name: '',
+      name: "",
       age: 0,
-      school: '',
-      sex: 'male',
-      image: '',
+      school: "",
+      sex: "male",
+      image: "",
     });
     setCurrentIndex(null);
     setIsModalOpen(false);
@@ -62,8 +64,8 @@ const ChildrenField = ({
   ) => {
     const { name, value } = event.target;
     setChildFields({ ...childFields, [name]: value });
-    handleError('general', '');
-    setError((prev) => ({ ...prev, [name]: '' }));
+    handleError("general", "");
+    setError((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleError = (name: string, value: string) => {
@@ -96,53 +98,53 @@ const ChildrenField = ({
 
     // Validate child's image
     if (!childFields.image) {
-      handleError('image', "Please add the child's image.");
+      handleError("image", "Please add the child's image.");
       isValid = false;
     }
 
     // Validate child's name
     if (!childFields.name) {
-      handleError('name', "Please enter the child's name.");
+      handleError("name", "Please enter the child's name.");
       isValid = false;
     }
 
     // Validate child's age
     if (childFields.age <= 0) {
-      handleError('age', "Please enter a valid child's age (greater than 0).");
+      handleError("age", "Please enter a valid child's age (greater than 0).");
       isValid = false;
     }
 
     // Validate child's school
     if (!childFields.school) {
-      handleError('school', "Please enter the child's school.");
+      handleError("school", "Please enter the child's school.");
       isValid = false;
     }
 
     // If all validations pass, add the child
-    if (isValid) {
+    if (isAdmin || isValid) {
       submit();
     }
   };
 
   async function deleteImage(imageURL: string): Promise<void> {
     try {
-      const response = await fetch('/api/images/delete', {
-        method: 'PUT',
+      const response = await fetch("/api/images/delete", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ image: imageURL }),
       });
 
       if (!response.ok) {
         const errorMessage = await response.text();
-        throw new Error(errorMessage || 'Failed to delete image');
+        throw new Error(errorMessage || "Failed to delete image");
       }
 
       const data = await response.json();
       console.log(data.message); // Image deleted successfully
     } catch (error: any) {
-      console.log('Error deleting image:', error.message);
+      console.log("Error deleting image:", error.message);
     }
   }
 
@@ -202,8 +204,8 @@ const ChildrenField = ({
             />
           </div>
           <span onClick={() => showChild(child, index)}>
-            {child.name}, {child.age} years old, goes to {child.school},{' '}
-            {child.sex}{' '}
+            {child.name}, {child.age} years old, goes to {child.school},{" "}
+            {child.sex}{" "}
           </span>
           <span onClick={() => handleRemove(index)}>
             <svg
@@ -377,7 +379,7 @@ const ChildrenField = ({
               Cancel
             </button>
             <button className={buttonStyle} onClick={handleSubmit}>
-              {currentIndex !== null ? 'Update' : 'Add'}
+              {currentIndex !== null ? "Update" : "Add"}
             </button>
           </div>
         </div>

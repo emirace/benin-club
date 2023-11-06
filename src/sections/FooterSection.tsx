@@ -1,11 +1,51 @@
-import { buttonStyleOutline, buttonStyleW } from '@/constants/styles';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { FaMapMarker, FaPhone, FaEnvelope } from 'react-icons/fa';
+import Loading from "@/components/Loading";
+import { buttonStyleOutline, buttonStyleW } from "@/constants/styles";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { FaMapMarker, FaPhone, FaEnvelope } from "react-icons/fa";
 
 const FooterSection = () => {
   const { data: session, status } = useSession();
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function createNewsletterSubscription(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    try {
+      setLoading(true);
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setLoading(false);
+        setEmail("");
+      } else {
+        // Handle errors, e.g., display an error message
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || "Failed to create newsletter subscription"
+        );
+      }
+    } catch (error) {
+      // Handle network errors or unexpected issues
+      console.error("Error creating newsletter subscription:", error);
+      setLoading(false);
+    }
+  }
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
   return (
     <div>
       {!session && (
@@ -76,15 +116,20 @@ const FooterSection = () => {
               Subscribe to our newsletter so you don&apos;t miss important
               update
             </p>
-            <form>
+            <form onSubmit={createNewsletterSubscription}>
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full py-2 px-2 bg-white rounded-lg mb-4"
+                className="w-full py-2 px-2 bg-white text-black rounded-lg mb-4"
+                onChange={handleEmailChange}
               />
-              <button type="submit" className={`${buttonStyleW}`}>
-                Subscribe
-              </button>
+              {loading ? (
+                <Loading />
+              ) : (
+                <button type="submit" className={`${buttonStyleW}`}>
+                  Subscribe
+                </button>
+              )}
             </form>
           </div>
         </div>

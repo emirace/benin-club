@@ -2,7 +2,7 @@ import { TransactionDocument } from "@/models/transaction.model";
 import { currency } from "@/sections/PersonalInfo";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaCheck, FaEdit, FaTimes, FaTrash } from "react-icons/fa";
 import Loading from "../Loading";
 
 interface TransactionProps {}
@@ -29,7 +29,7 @@ export interface TransactionData {
   };
 }
 
-function Transaction(): JSX.Element {
+function TransactionPending(): JSX.Element {
   const [transactions, setTransactions] = useState<TransactionData[]>([]);
   const [filteredTransactions, setFilteredTransactions] = useState<
     TransactionData[]
@@ -43,6 +43,7 @@ function Transaction(): JSX.Element {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -51,7 +52,9 @@ function Transaction(): JSX.Element {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/dashboard/wallets/transactions");
+      const response = await fetch(
+        "/api/dashboard/wallets/transactions-pending"
+      );
 
       if (!response.ok) {
         const data = await response.json();
@@ -74,10 +77,36 @@ function Transaction(): JSX.Element {
   }, [transactions]);
 
   const handleUpdateTransactionsTable = async () => {
-    const response = await fetch("/api/dashboard/transactions");
+    const response = await fetch("/api/dashboard/wallets/transactions-pending");
     const data = await response.json();
     setTransactions(data);
   };
+
+  // Define a function to update the transaction status
+  async function updateTransactionStatus(id: string, status: string) {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `/api/dashboard/wallets/transactions-pending/${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error("Error updating transaction status");
+      }
+      fetchEvents();
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   // Filtering transactions based on search query
 
@@ -154,9 +183,10 @@ function Transaction(): JSX.Element {
     <div className="w-full">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-medium">Transactions</h3>
-        <button className="px-3 py-2 bg-red text-white rounded-md hover:bg-white hover:text-red focus:outline-none focus:ring-2 focus:ring-red focus:ring-offset-2">
-          Add Transaction
-        </button>
+        <div />
+        {/* <button className="px-3 py-2 bg-red text-white rounded-md hover:bg-white hover:text-red focus:outline-none focus:ring-2 focus:ring-red focus:ring-offset-2">
+          Add TransactionPending
+        </button> */}
       </div>
       <div className="flex justify-between items-center mb-4">
         <input
@@ -168,7 +198,7 @@ function Transaction(): JSX.Element {
       </div>
 
       <table className="w-full whitespace-nowrap text-sm">
-        <thead>
+        <thead className="w-full">
           <tr className="bg-gray-200">
             <th
               className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer"
@@ -235,7 +265,7 @@ function Transaction(): JSX.Element {
         ) : error ? (
           <div className="text-red">{error}</div>
         ) : !transactions.length ? (
-          <div className="my-4 ml-4">No transaction history</div>
+          <div className="my-4 ml-4">No Pending Transactions</div>
         ) : (
           <tbody>
             {sortedTransactions.map((transaction) => (
@@ -265,9 +295,32 @@ function Transaction(): JSX.Element {
                   {transaction.status}
                 </td>
                 <td className="px-4 py-2">
-                  <button className="mr-2  hover:text-yellow focus:outline-none">
-                    <FaEdit />
-                  </button>
+                  {loading ? (
+                    <Loading />
+                  ) : (
+                    <>
+                      <button className="mr-2 text-green  hover:text-yellow focus:outline-none">
+                        <FaCheck
+                          onClick={() =>
+                            updateTransactionStatus(
+                              transaction._id,
+                              "Completed"
+                            )
+                          }
+                        />
+                      </button>
+                      <button className="mr-2  text-red hover:text-yellow focus:outline-none">
+                        <FaTimes
+                          onClick={() =>
+                            updateTransactionStatus(
+                              transaction._id,
+                              "Completed"
+                            )
+                          }
+                        />
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}
@@ -291,4 +344,4 @@ function Transaction(): JSX.Element {
   );
 }
 
-export default Transaction;
+export default TransactionPending;
