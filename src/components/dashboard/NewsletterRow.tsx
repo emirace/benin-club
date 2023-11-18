@@ -107,7 +107,7 @@ function NewsletterRow({
       </td>
 
       <Modal isOpen={showModal} onClose={onClose}>
-        <PdfUpload email={member.email} />
+        <div></div>
       </Modal>
     </tr>
   );

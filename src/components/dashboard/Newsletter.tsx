@@ -5,6 +5,7 @@ import WalletRow from "./WalletRow";
 import { buttonStyle } from "@/constants/styles";
 import Modal from "../Modal";
 import NewsletterRow from "./NewsletterRow";
+import PdfUpload from "../PdfUpload";
 
 export type NewsletterDataProps = {
   _id: string;
@@ -92,12 +93,12 @@ const Newsletter = () => {
           />
         </div>
         <button className={buttonStyle} onClick={onOpen}>
-          Create
+          upload newsletter
         </button>
       </div>
 
       <Modal isOpen={showModal} onClose={onClose}>
-        {/* //create newsletter */}
+        <PdfUpload />
       </Modal>
       {error && <div className="text-red"> {error}</div>}
       {isLoading ? (
