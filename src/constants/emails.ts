@@ -10,3 +10,6 @@ export const accountAdminEmails: string[] = [
   "emmanuelakwuba57@gmail.com",
   "esther.izekor@beninclub1931.com",
 ];
+
+export const newletterUrl =
+  "https://drive.google.com/file/d/1-hPs-g8Os_y1mRo178LpY8P0i64mrUHI/view?usp=sharing";

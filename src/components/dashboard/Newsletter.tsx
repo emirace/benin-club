@@ -2,10 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronRight, FiSearch } from "react-icons/fi";
 import Loading from "../Loading";
 import WalletRow from "./WalletRow";
-import { buttonStyle } from "@/constants/styles";
+import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
 import Modal from "../Modal";
 import NewsletterRow from "./NewsletterRow";
 import PdfUpload from "../PdfUpload";
+import { newletterUrl } from "@/constants/emails";
 
 export type NewsletterDataProps = {
   _id: string;
@@ -28,6 +29,8 @@ const Newsletter = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [errorSendingEmail, setErrorSendingEmail] = useState("");
 
   const fetchNewsletterData = useCallback(
     async ({ query, page }: FetchNewsletterDataProps) => {
@@ -51,6 +54,29 @@ const Newsletter = () => {
     },
     [pageSize]
   );
+
+  const handleSendEmail = async () => {
+    setSendingEmail(true);
+    setErrorSendingEmail("");
+    try {
+      const response = await fetch(`/api/newsletter/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
+      if (!response.ok) {
+        throw new Error("Unable to fetch newsletter url.");
+      }
+      const newsletterurl = await response.json();
+      alert(newsletterurl.message);
+    } catch (error: any) {
+      console.log(error);
+      setErrorSendingEmail(error);
+    }
+    setSendingEmail(false);
+  };
 
   useEffect(() => {
     fetchNewsletterData({ query: "", page: currentPage });
@@ -92,10 +118,29 @@ const Newsletter = () => {
             onChange={handleSearch}
           />
         </div>
-        <button className={buttonStyle} onClick={onOpen}>
-          upload newsletter
-        </button>
+        <div className="flex items-center gap-2">
+          <a
+            href={newletterUrl}
+            className="text-red hover:underline cursor-pointer"
+          >
+            Current Newsleter
+          </a>
+          {/* <button className={buttonStyleOutline} onClick={onOpen}>
+            upload newsletter
+          </button> */}
+
+          {sendingEmail ? (
+            <Loading />
+          ) : (
+            <button className={buttonStyle} onClick={handleSendEmail}>
+              Send newsletter
+            </button>
+          )}
+        </div>
       </div>
+      {errorSendingEmail && (
+        <div className="text-red text-right">{errorSendingEmail}</div>
+      )}
 
       <Modal isOpen={showModal} onClose={onClose}>
         <PdfUpload />
