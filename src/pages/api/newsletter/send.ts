@@ -90,7 +90,7 @@ export default async function handler(
     
   `;
 
-    for (const existUser of [{ email: "emiracegroup@gmail.com" }]) {
+    for (const existUser of existUsers) {
       await sendEmail(existUser.email, "Newsletter", message);
     }
     res.status(201).json({ message: "Email sent successfully" });
