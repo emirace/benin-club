@@ -33,7 +33,7 @@ const transactionSchema = new Schema<TransactionDocument>(
     invoiceId: { type: String },
     reference: { type: String },
     amount: { type: Number, required: true },
-    bal: { type: Number, required: true },
+    bal: { type: Number },
     initiatedBy: { type: Schema.Types.ObjectId, ref: "User" },
   },
   {

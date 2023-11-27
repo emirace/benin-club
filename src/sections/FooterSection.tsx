@@ -4,12 +4,13 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { FaMapMarker, FaPhone, FaEnvelope } from "react-icons/fa";
+import { FaMapMarker, FaPhone, FaEnvelope, FaCheck } from "react-icons/fa";
 
 const FooterSection = () => {
   const { data: session, status } = useSession();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submittedNewsletter, setSubmittedNewsletter] = useState(false);
 
   async function createNewsletterSubscription(
     event: React.FormEvent<HTMLFormElement>
@@ -28,6 +29,7 @@ const FooterSection = () => {
       if (response.ok) {
         setLoading(false);
         setEmail("");
+        setSubmittedNewsletter(true);
       } else {
         // Handle errors, e.g., display an error message
         const errorData = await response.json();
@@ -125,6 +127,10 @@ const FooterSection = () => {
               />
               {loading ? (
                 <Loading />
+              ) : submittedNewsletter ? (
+                <button className="bg-green py-2 px-4 rounded-lg flex items-center gap-4 ">
+                  <FaCheck /> Subscibed
+                </button>
               ) : (
                 <button type="submit" className={`${buttonStyleW}`}>
                   Subscribe

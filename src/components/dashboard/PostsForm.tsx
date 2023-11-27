@@ -1,11 +1,11 @@
-import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
-import { useEffect, useState } from 'react';
-import Loading from '../Loading';
-import Image from 'next/image';
-import { FiTrash, FiUpload } from 'react-icons/fi';
-import moment from 'moment';
-import { IPost } from '@/models/post.model';
-import { compressImageUpload } from '@/utils/compressImage';
+import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
+import { useEffect, useState } from "react";
+import Loading from "../Loading";
+import Image from "next/image";
+import { FiTrash, FiUpload } from "react-icons/fi";
+import moment from "moment";
+import { IPost } from "@/models/post.model";
+import { compressImageUpload } from "@/utils/compressImage";
 
 interface PostFormProps {
   id?: string;
@@ -13,10 +13,10 @@ interface PostFormProps {
 }
 
 const initialPost = {
-  title: '',
+  title: "",
   tags: [],
   date: new Date(),
-  description: '',
+  description: "",
   images: [],
 };
 const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
@@ -40,14 +40,14 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        setErrors((prev) => ({ ...prev, general: 'Error fetvhing data' }));
+        setErrors((prev) => ({ ...prev, general: "Error fetvhing data" }));
       }
     };
     fetchSavedData();
   }, [id]);
 
   const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const tags = e.target.value.split(',');
+    const tags = e.target.value.split(",");
     setPost((prevPost) => ({
       ...prevPost,
       tags: tags.map((tag) => tag.trim()),
@@ -72,7 +72,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
       })
       .catch((error) => {
         // Handle error appropriately, e.g., display an error message
-        console.error('Error compressing images:', error);
+        console.error("Error compressing images:", error);
         setLoading(false);
       });
   };
@@ -80,31 +80,35 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
   const handleImageRemoval = async (image: string, index: number) => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/images/delete`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image }),
+      // const response = await fetch(`/api/images/delete`, {
+      //   method: 'PUT',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ image }),
+      // });
+
+      setPost((prevPost) => {
+        const newImages = [...prevPost.images];
+        newImages.splice(index, 1);
+        return {
+          ...prevPost,
+          images: newImages,
+        };
       });
 
-      if (response.ok) {
-        await response.json();
-        setPost((prevPost) => {
-          const newImages = [...prevPost.images];
-          newImages.splice(index, 1);
-          return {
-            ...prevPost,
-            images: newImages,
-          };
-        });
-        setLoading(false);
-      } else {
-        const errorData = await response.json();
-        console.log(errorData);
-        setLoading(false);
-        throw new Error(errorData.message);
-      }
+      // if (response.ok) {
+      //   await response.json();
+
+      //   setLoading(false);
+      // } else {
+      //   const errorData = await response.json();
+      //   console.log(errorData);
+      //   setLoading(false);
+      //   throw new Error(errorData.message);
+      // }
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
@@ -114,7 +118,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
     const { name, value } = e.target;
 
     if (
-      name === 'image' &&
+      name === "image" &&
       e.target instanceof HTMLInputElement &&
       e.target?.files
     ) {
@@ -130,9 +134,9 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
   const createPost = async (post: IPost) => {
     try {
       setLoading(true);
-      const res = await fetch('/api/dashboard/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/dashboard/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(post),
       });
 
@@ -160,14 +164,14 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
       setLoading(true);
       // Make a POST request to the server to create the post
       const response = await fetch(`/api/dashboard/posts/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(post),
       });
       if (!response.ok) {
-        throw new Error('Failed to update post');
+        throw new Error("Failed to update post");
       }
       onClose();
       setPost(initialPost);
@@ -184,15 +188,15 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
     const validationErrors: Record<string, string> = {};
 
     if (!post.title) {
-      validationErrors.title = 'Title is required';
+      validationErrors.title = "Title is required";
     }
 
     if (!post.description) {
-      validationErrors.description = 'Description is required';
+      validationErrors.description = "Description is required";
     }
 
     if (post.tags.length === 0) {
-      validationErrors.tags = 'At least one tag is required';
+      validationErrors.tags = "At least one tag is required";
     }
 
     if (Object.keys(validationErrors).length > 0) {
@@ -216,7 +220,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
       console.log(error);
       setErrors((prevErrors) => ({
         ...prevErrors,
-        general: 'Error submitting the form',
+        general: "Error submitting the form",
       }));
     } finally {
       setLoading(false);
@@ -246,7 +250,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
             </label>
             <input
               className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.title && 'border-red'
+                errors.title && "border-red"
               }`}
               id="title"
               name="title"
@@ -266,7 +270,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
             </label>
             <input
               className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.tags && 'border-red'
+                errors.tags && "border-red"
               }`}
               id="tags"
               name="tags"
@@ -286,12 +290,12 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
             </label>
             <input
               className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.date && 'border-red'
+                errors.date && "border-red"
               }`}
               id="date"
               name="date"
               type="date"
-              value={moment(post.date).format('YYYY-MM-DD')}
+              value={moment(post.date).format("YYYY-MM-DD")}
               onChange={handleChange}
             />
           </div>
@@ -305,7 +309,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
             </label>
             <textarea
               className={`mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red ${
-                errors.description && 'border-red'
+                errors.description && "border-red"
               }`}
               id="description"
               name="description"
@@ -339,7 +343,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
                       src={image}
                       fill
                       alt={post.title}
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: "cover" }}
                       unoptimized
                     />
                   </div>
@@ -364,7 +368,7 @@ const PostsForm: React.FC<PostFormProps> = ({ id, onClose }) => {
           </div>
         )}
         <button className={buttonStyle} type="submit">
-          {id ? 'Update Event' : 'Create Event'}
+          {id ? "Update Event" : "Create Event"}
         </button>
       </div>
     </form>
