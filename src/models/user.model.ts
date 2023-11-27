@@ -90,6 +90,7 @@ export interface IUser {
   workExperiences: IWorkExperience[];
   proposerPersonality: string;
   proposerKnown: string;
+  proposerPhone: string;
   proposerName: string;
   image: string;
   email: string;
@@ -207,6 +208,7 @@ const userSchema = new Schema<IUser>(
     ],
     proposerPersonality: { type: String },
     proposerKnown: { type: String },
+    proposerPhone: { type: String },
     proposerName: { type: String },
     category: { type: String },
     image: { type: String, default: '/images/profile.webp' },

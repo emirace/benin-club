@@ -76,6 +76,7 @@ export interface FormData {
   workExperiences: WorkExperience[];
   proposerPersonality: string;
   proposerKnown: string;
+  proposerPhone: string;
   proposerName: string;
   step: number;
   // add more fields as needed
@@ -128,6 +129,7 @@ export interface ErrorData {
   workExperiences: string;
   proposerPersonality: string;
   proposerKnown: string;
+  proposerPhone: string;
   proposerName: string;
   seconderName: string;
   // add more fields as needed

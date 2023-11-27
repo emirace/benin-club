@@ -61,6 +61,7 @@ export const initialFormData: IUser = {
   workExperiences: [],
   proposerPersonality: '',
   proposerKnown: '',
+  proposerPhone: '',
   bio: '',
   socials: socials,
   proposerName: '',
@@ -115,6 +116,7 @@ export const initialErrorData: ErrorData = {
   workExperiences: '',
   proposerPersonality: '',
   proposerKnown: '',
+  proposerPhone: '',
   proposerName: '',
   seconderName: '',
 };

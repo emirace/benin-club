@@ -80,51 +80,78 @@ const SectionE = (props: SectionProps) => {
           </div>
           <div className="mb-4">
             <label
-              htmlFor="proposerKnown"
+              htmlFor="proposerPhone"
               className="block text-gray-700 font-medium mb-2"
             >
-              How long have you known the applicant and in what capacity?
+              Proposer Phone Number
             </label>
             <textarea
-              id="proposerKnown"
-              name="proposerKnown"
+              id="proposerPhone"
+              name="proposerPhone"
               placeholder=""
               className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               onChange={onChange}
-              value={formData.proposerKnown}
+              value={formData.proposerPhone}
             />
-            {error?.proposerKnown ? (
-              <div className="text-red mt-2 text-sm">{error.proposerKnown}</div>
+            {error?.proposerPhone ? (
+              <div className="text-red mt-2 text-sm">{error.proposerPhone}</div>
             ) : (
               <div className="h-5" />
             )}
           </div>
+          {isAdmin && (
+            <div className="mb-4">
+              <label
+                htmlFor="proposerKnown"
+                className="block text-gray-700 font-medium mb-2"
+              >
+                How long have you known the applicant and in what capacity?
+              </label>
+              <textarea
+                id="proposerKnown"
+                name="proposerKnown"
+                placeholder=""
+                className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                onChange={onChange}
+                value={formData.proposerKnown}
+              />
+              {error?.proposerKnown ? (
+                <div className="text-red mt-2 text-sm">
+                  {error.proposerKnown}
+                </div>
+              ) : (
+                <div className="h-5" />
+              )}
+            </div>
+          )}
 
-          <div className="mb-4">
-            <label
-              htmlFor="proposerPersonality"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Please comment on the candidates personality with particular
-              reference to his/her moral character, emotional stability and
-              physical stability
-            </label>
-            <textarea
-              id="proposerPersonality"
-              name="proposerPersonality"
-              placeholder=""
-              className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
-              onChange={onChange}
-              value={formData.proposerPersonality}
-            />
-            {error?.proposerPersonality ? (
-              <div className="text-red mt-2 text-sm">
-                {error.proposerPersonality}
-              </div>
-            ) : (
-              <div className="h-5" />
-            )}
-          </div>
+          {isAdmin && (
+            <div className="mb-4">
+              <label
+                htmlFor="proposerPersonality"
+                className="block text-gray-700 font-medium mb-2"
+              >
+                Please comment on the candidates personality with particular
+                reference to his/her moral character, emotional stability and
+                physical stability
+              </label>
+              <textarea
+                id="proposerPersonality"
+                name="proposerPersonality"
+                placeholder=""
+                className="mt-1 block w-full rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
+                onChange={onChange}
+                value={formData.proposerPersonality}
+              />
+              {error?.proposerPersonality ? (
+                <div className="text-red mt-2 text-sm">
+                  {error.proposerPersonality}
+                </div>
+              ) : (
+                <div className="h-5" />
+              )}
+            </div>
+          )}
           <div className="mb-4">
             <label
               htmlFor="seconderName"
