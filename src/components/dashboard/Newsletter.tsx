@@ -44,8 +44,8 @@ const Newsletter = () => {
         }
         const newsletter = await response.json();
         console.log(newsletter);
-        setNewsletterData(newsletter);
-        setTotalPages(Math.ceil(newsletter.length / pageSize));
+        setNewsletterData(newsletter.newsletters);
+        setTotalPages(Math.ceil(newsletter.totalEmails / pageSize));
       } catch (error: any) {
         setError(error.message);
         console.log(error);

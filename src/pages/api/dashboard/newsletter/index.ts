@@ -37,7 +37,11 @@ export default async function handler(
         const newsletters = await Newsletter.find({ email: { $regex: search } })
           .skip(skip)
           .limit(pageSize);
-        res.status(200).json(newsletters);
+        const totalEmails: number = await Newsletter.countDocuments({
+          email: { $regex: search },
+        });
+
+        res.status(200).json({ newsletters, totalEmails });
         break;
 
       case "POST":
