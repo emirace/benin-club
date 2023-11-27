@@ -20,7 +20,7 @@ const VehicleList = ({}: Props) => {
   );
   const [pagination, setPagination] = useState({
     page: 1,
-    limit: 24,
+    limit: 36,
     total: 0,
   });
   const [search, setSearch] = useState("");
@@ -212,8 +212,8 @@ const VehicleList = ({}: Props) => {
 
             {Array.from({ length: pagination.total }, (_, i) => i + 1).map(
               (page) =>
-                page >= pagination.page - 2 &&
-                page <= pagination.page + 2 && (
+                page >= pagination.page - 5 &&
+                page <= pagination.page + 5 && (
                   <button
                     key={page}
                     className={`${

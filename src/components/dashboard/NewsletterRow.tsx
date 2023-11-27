@@ -83,7 +83,7 @@ function NewsletterRow({
       <td className="py-2 px-4 cursor-pointer" onClick={onOpenP}>
         {member.email}
       </td>
-      <td>
+      {/* <td>
         {member.isMember ? (
           <span className="flex items-center gap-4 ml-4">
             <FaCheck className="text-green" /> <span>Yes</span>{" "}
@@ -94,10 +94,10 @@ function NewsletterRow({
             <span>No</span>{" "}
           </span>
         )}
-      </td>
-      <td className="py-2 px-4 flex hover:text-red">
+      </td> */}
+      {/* <td className="py-2 px-4 flex hover:text-red">
         <FaPaperPlane className="cursor-pointer" onClick={onOpen} />
-      </td>
+      </td> */}
       <td>
         {loading ? (
           <Loading />
@@ -107,7 +107,7 @@ function NewsletterRow({
       </td>
 
       <Modal isOpen={showModal} onClose={onClose}>
-        <PdfUpload email={member.email} />
+        <div></div>
       </Modal>
     </tr>
   );

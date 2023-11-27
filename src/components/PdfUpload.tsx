@@ -1,10 +1,8 @@
 import { useState } from "react";
 import Loading from "./Loading";
 
-interface PdfUploadProps {
-  email: string;
-}
-function PdfUpload({ email }: PdfUploadProps) {
+interface PdfUploadProps {}
+function PdfUpload({}: PdfUploadProps) {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -21,11 +19,10 @@ function PdfUpload({ email }: PdfUploadProps) {
     if (pdfFile) {
       const formData = new FormData();
       formData.append("pdf", pdfFile);
-      formData.append("email", email);
 
       try {
         setLoading(true);
-        const response = await fetch("/api/dashboard/upload-pdf", {
+        const response = await fetch("/api/upload/pdf", {
           method: "POST",
           body: formData,
         });
