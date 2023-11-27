@@ -1,7 +1,7 @@
-import { allSections } from '@/constants/sectionsCard';
-import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
-import { Child, FormData, SectionProps } from '@/types/signup';
-import ChildrenField from './ChildrenField';
+import { allSections } from "@/constants/sectionsCard";
+import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
+import { Child, FormData, SectionProps } from "@/types/signup";
+import ChildrenField from "./ChildrenField";
 
 const SectionC = (props: SectionProps) => {
   const {
@@ -52,19 +52,19 @@ const SectionC = (props: SectionProps) => {
     // }
 
     // Validate number of children
-    if (!formData.numberOfChildren) {
-      handleError(
-        'numberOfChildren',
-        'Please enter the number of children you have.'
-      );
-      isValid = false;
-    } else if (formData.numberOfChildren < 0) {
-      handleError(
-        'numberOfChildren',
-        'Please enter a valid number of children (greater than or equal to 0).'
-      );
-      isValid = false;
-    }
+    // if (!formData.numberOfChildren) {
+    //   handleError(
+    //     'numberOfChildren',
+    //     'Please enter the number of children you have.'
+    //   );
+    //   isValid = false;
+    // } else if (formData.numberOfChildren < 0) {
+    //   handleError(
+    //     'numberOfChildren',
+    //     'Please enter a valid number of children (greater than or equal to 0).'
+    //   );
+    //   isValid = false;
+    // }
 
     // Validate children data (if applicable)
     if (
@@ -73,21 +73,21 @@ const SectionC = (props: SectionProps) => {
         formData.children.length.toString() !==
           formData.numberOfChildren.toString())
     ) {
-      handleError('children', 'Please provide details for all your children.');
+      handleError("children", "Please provide details for all your children.");
       isValid = false;
     }
 
     // Validate address years
     if (!formData.addressYears) {
       handleError(
-        'addressYears',
-        'Please enter the number of years you have lived at your current address.'
+        "addressYears",
+        "Please enter the number of years you have lived at your current address."
       );
       isValid = false;
     } else if (formData.addressYears < 0) {
       handleError(
-        'addressYears',
-        'Please enter a valid number of years (greater than or equal to 0).'
+        "addressYears",
+        "Please enter a valid number of years (greater than or equal to 0)."
       );
       isValid = false;
     }
@@ -95,23 +95,23 @@ const SectionC = (props: SectionProps) => {
     // Validate emergency contact
     if (!formData.emergencyContact) {
       handleError(
-        'emergencyContact',
-        'Please enter the person to contact in case of an emergency.'
+        "emergencyContact",
+        "Please enter the person to contact in case of an emergency."
       );
       isValid = false;
     }
 
     // Validate disability details (if applicable)
-    if (formData.disability && formData.disability.trim() === '') {
-      handleError('disability', 'Please enter details of your disability.');
+    if (formData.disability && formData.disability.trim() === "") {
+      handleError("disability", "Please enter details of your disability.");
       isValid = false;
     }
 
     // Validate sport sections selection
     if (formData.sportSection && formData.sportSection.length === 0) {
       handleError(
-        'sportSection',
-        'Please select at least one sporting section you would like to join.'
+        "sportSection",
+        "Please select at least one sporting section you would like to join."
       );
       isValid = false;
     }
@@ -119,18 +119,18 @@ const SectionC = (props: SectionProps) => {
     // Validate reason for joining
     if (!formData.reasonToJoin) {
       handleError(
-        'reasonToJoin',
-        'Please enter the reason for joining Benin Club.'
+        "reasonToJoin",
+        "Please enter the reason for joining Benin Club."
       );
       isValid = false;
     }
 
     // Validate tribe (if applicable)
     if (
-      formData.isNigeria === 'Yes' &&
-      (!formData.tribe || formData.tribe.trim() === '')
+      formData.isNigeria === "Yes" &&
+      (!formData.tribe || formData.tribe.trim() === "")
     ) {
-      handleError('tribe', 'Please enter your tribe.');
+      handleError("tribe", "Please enter your tribe.");
       isValid = false;
     }
 
@@ -197,7 +197,7 @@ const SectionC = (props: SectionProps) => {
               placeholder="Enter number of wives"
               className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               onChange={onChange}
-              value={formData.numberOfWives || ''}
+              value={formData.numberOfWives || ""}
             />
             {error?.numberOfWives ? (
               <div className="text-red mt-2 text-sm">{error.numberOfWives}</div>
@@ -219,7 +219,7 @@ const SectionC = (props: SectionProps) => {
               placeholder="Enter number of children"
               className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               onChange={onChange}
-              value={formData.numberOfChildren || ''}
+              value={formData.numberOfChildren || ""}
             />
             {error?.numberOfChildren ? (
               <div className="text-red mt-2 text-sm">
@@ -257,7 +257,7 @@ const SectionC = (props: SectionProps) => {
               placeholder="Enter years at current address"
               className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               onChange={onChange}
-              value={formData.addressYears || ''}
+              value={formData.addressYears || ""}
             />
             {error?.addressYears ? (
               <div className="text-red mt-2 text-sm">{error.addressYears}</div>
@@ -280,7 +280,7 @@ const SectionC = (props: SectionProps) => {
               placeholder="Enter emergency contact"
               className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               onChange={onChange}
-              value={formData.emergencyContact || ''}
+              value={formData.emergencyContact || ""}
             />
             {error?.emergencyContact ? (
               <div className="text-red mt-2 text-sm">
@@ -307,7 +307,7 @@ const SectionC = (props: SectionProps) => {
               placeholder="Enter details of your disability"
               className="mt-1 block w-full md:w-96 rounded-md p-2 shadow-lg focus:border-red focus:ring-red focus:outline-red"
               onChange={onChange}
-              value={formData.disability || ''}
+              value={formData.disability || ""}
             />
             {error?.disability ? (
               <div className="text-red mt-2 text-sm">{error.disability}</div>

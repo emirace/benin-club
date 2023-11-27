@@ -1,6 +1,6 @@
-import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
-import { Education, SectionProps } from '@/types/signup';
-import React, { useState } from 'react';
+import { buttonStyle, buttonStyleOutline } from "@/constants/styles";
+import { Education, SectionProps } from "@/types/signup";
+import React, { useState } from "react";
 
 const SectionE = (props: SectionProps) => {
   const {
@@ -26,22 +26,22 @@ const SectionE = (props: SectionProps) => {
     // add validation here
     if (!formData.proposerKnown) {
       handleError(
-        'proposerKnown',
-        'Please enter how long you have known the applicant and in what capacity'
+        "proposerKnown",
+        "Please enter how long you have known the applicant and in what capacity"
       );
       isValid = false;
     }
 
     if (!formData.proposerPersonality) {
       handleError(
-        'proposerPersonality',
+        "proposerPersonality",
         "Please comment on the candidate's personality with particular reference to his/her moral character, emotional stability, and physical stability"
       );
       isValid = false;
     }
 
     if (!formData.proposerName) {
-      handleError('proposerName', 'Please enter your proposer name');
+      handleError("proposerName", "Please enter your proposer name");
       isValid = false;
     }
 
