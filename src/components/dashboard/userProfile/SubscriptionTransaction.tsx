@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TransactionData } from '../Transaction';
 import Loading from '@/components/Loading';
 import moment from 'moment';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaTrash } from 'react-icons/fa';
 import { currency } from '@/sections/PersonalInfo';
 
 interface SubscriptionTransactionProps {
@@ -15,6 +15,7 @@ function SubscriptionTransaction({
 }: SubscriptionTransactionProps) {
   const [transactions, setTransactions] = useState<TransactionData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -37,6 +38,19 @@ function SubscriptionTransaction({
     setIsLoading(false);
   };
 
+  const deleteTransaction = async (id: string) => {
+    setIsLoadingDelete(true);
+    const res = await fetch(`/api/dashboard/transactions/${id}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      setTransactions(
+        transactions.filter((transaction) => transaction._id !== id)
+      );
+    }
+    setIsLoadingDelete(false);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -46,23 +60,26 @@ function SubscriptionTransaction({
       <table className="w-full whitespace-nowrap text-sm">
         <thead>
           <tr className="bg-gray-200">
-            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
               Invoice ID
             </th>
-            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
               Date
             </th>
-            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
               Description
             </th>
-            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
               Payment Method
             </th>
-            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
               Amount
             </th>
-            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider cursor-pointer">
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
               Status
+            </th>
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
+              Action
             </th>
           </tr>
         </thead>
@@ -97,6 +114,12 @@ function SubscriptionTransaction({
                   }`}
                 >
                   {transaction.status}
+                </td>
+                <td className="px-4 py-2 text-red">
+                  <FaTrash
+                    onClick={() => deleteTransaction(transaction._id)}
+                    className="text-red cursor-pointer"
+                  />
                 </td>
               </tr>
             ))
