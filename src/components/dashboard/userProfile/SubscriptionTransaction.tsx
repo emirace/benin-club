@@ -67,6 +67,9 @@ function SubscriptionTransaction({
               Date
             </th>
             <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
+              Payment Year
+            </th>
+            <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
               Description
             </th>
             <th className="px-4 py-2 text-left font capitalize text-sm  tracking-wider ">
@@ -98,6 +101,7 @@ function SubscriptionTransaction({
                 <td className="px-4 py-2">
                   {moment(transaction.createdAt).format('h:sa, Do MMM YY')}
                 </td>
+                <td>{transaction.meta?.lastPamentYear || '2023'}</td>
                 <td className="px-4 py-2">{transaction.description}</td>
                 <td className="px-4 py-2">{transaction.paymentMethod}</td>
                 <td className="px-4 py-2">

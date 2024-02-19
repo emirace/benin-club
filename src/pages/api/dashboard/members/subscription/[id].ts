@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import User, { IUser } from "@/models/user.model";
-import { connectDB } from "@/utils/mongoose";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import Transaction, { TransactionDocument } from "@/models/transaction.model";
+import { NextApiRequest, NextApiResponse } from 'next';
+import User, { IUser } from '@/models/user.model';
+import { connectDB } from '@/utils/mongoose';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import Transaction, { TransactionDocument } from '@/models/transaction.model';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,37 +15,37 @@ export default async function handler(
     if (!session)
       return res
         .status(401)
-        .json({ message: "You must log in to access this resource." });
+        .json({ message: 'You must log in to access this resource.' });
 
     const { user: loginUser } = session;
 
-    if (loginUser.role !== "admin" && loginUser.role !== "user") {
-      return res.status(401).json({ message: "Unauthorized" });
+    if (loginUser.role !== 'admin' && loginUser.role !== 'user') {
+      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     await connectDB();
     const { id: userId } = req.query;
 
     switch (req.method) {
-      case "GET":
+      case 'GET':
         // Find all transactions for the given user
         const transactions = await Transaction.find({
           userId: userId,
-          for: "subscription",
+          for: 'subscription',
         }).sort({ createdAt: -1 });
         return res.status(200).json({ transactions });
         break;
 
-      case "PUT":
+      case 'PUT':
         const { subcriptionBal: amount, year } = req.body;
 
         if (!year) {
-          return res.status(400).json({ message: "Enter payment year" });
+          return res.status(400).json({ message: 'Enter payment year' });
         }
 
         const updatedUser: IUser | null = await User.findById(userId);
         if (!updatedUser) {
-          res.status(404).json({ message: "User not found" });
+          res.status(404).json({ message: 'User not found' });
         } else {
           // const currentDate: Date = new Date();
           // const currentYear: number = currentDate.getFullYear();
@@ -57,14 +57,15 @@ export default async function handler(
           // Create a new transaction record
           const transaction: TransactionDocument = new Transaction({
             userId,
-            type: "credit",
+            type: 'credit',
             amount: parseInt(amount),
-            reference: "",
-            status: "Completed",
-            description: "Subscription payment",
-            paymentMethod: "deposit",
+            reference: '',
+            status: 'Completed',
+            description: 'Subscription payment',
+            paymentMethod: 'deposit',
             initiatedBy: loginUser._id,
-            for: "subscription",
+            for: 'subscription',
+            meta: { lastPamentYear: year },
           });
           await transaction.save();
 
@@ -72,10 +73,10 @@ export default async function handler(
         }
         break;
       default:
-        res.status(405).json({ message: "Method Not Allowed" });
+        res.status(405).json({ message: 'Method Not Allowed' });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({ message: 'Server Error' });
   }
 }
