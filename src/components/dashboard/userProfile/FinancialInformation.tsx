@@ -34,6 +34,11 @@ const FinancialInformation: React.FC<IFinancialInformationProps> = ({
       <h2 className="text-red text-xl mb-4">Financial Information</h2>
       <div className="grid grid-cols-2 gap-8">
         <div className="mb-4 -mt-8 col-span-2 shadow-md rounded-lg p-4">
+          <p className="text-black">
+            {user.firstName} {user.surName}{' '}
+          </p>
+        </div>
+        <div className="mb-4 -mt-8 col-span-2 shadow-md rounded-lg p-4">
           <label className="block text-black font-bold mb-2">
             Last Payment Year
           </label>
