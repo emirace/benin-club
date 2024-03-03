@@ -186,10 +186,11 @@ const Input = ({
           }),
         }
       );
-      const data = await response.json();
-      setEditing(false);
-      setPayment(false);
-      handleUpdateMemberTable();
+      if (response.ok) {
+        setEditing(false);
+        setPayment(false);
+        handleUpdateMemberTable();
+      }
       setLoading(false);
     } catch (error) {
       console.error(error);

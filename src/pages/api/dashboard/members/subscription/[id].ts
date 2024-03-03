@@ -38,39 +38,45 @@ export default async function handler(
 
       case 'PUT':
         const { subcriptionBal: amount, year } = req.body;
+        console.log(req.body, amount);
 
         if (!year) {
           return res.status(400).json({ message: 'Enter payment year' });
         }
 
-        const updatedUser: IUser | null = await User.findById(userId);
+        const updatedUser: IUser | null = await User.findOneAndUpdate(
+          { _id: userId },
+          {
+            $inc: { subcriptionBal: -amount },
+            lastPaymentYear: year,
+          },
+          { new: true }
+        );
+
         if (!updatedUser) {
-          res.status(404).json({ message: 'User not found' });
-        } else {
-          // const currentDate: Date = new Date();
-          // const currentYear: number = currentDate.getFullYear();
-
-          updatedUser.subcriptionBal -= amount;
-          updatedUser.lastPamentYear = year;
-          const newUser = updatedUser.save();
-
-          // Create a new transaction record
-          const transaction: TransactionDocument = new Transaction({
-            userId,
-            type: 'credit',
-            amount: parseInt(amount),
-            reference: '',
-            status: 'Completed',
-            description: 'Subscription payment',
-            paymentMethod: 'deposit',
-            initiatedBy: loginUser._id,
-            for: 'subscription',
-            meta: { lastPamentYear: year },
-          });
-          await transaction.save();
-
-          res.status(200).json(newUser);
+          return res.status(404).json({ message: 'User not found' });
         }
+        console.log('amount', amount);
+        // Create a new transaction record
+
+        await Transaction.create({
+          userId,
+          type: 'credit',
+          amount,
+          reference: '',
+          status: 'Completed',
+          description: 'Subscription payment',
+          paymentMethod: 'deposit',
+          initiatedBy: loginUser._id, // Assuming loginUser is defined somewhere
+          for: 'subscription',
+          meta: { lastPaymentYear: year },
+        });
+        console.log('hello1');
+
+        // await transaction.save();
+
+        console.log('hello2');
+        res.status(200).json(updatedUser);
         break;
       default:
         res.status(405).json({ message: 'Method Not Allowed' });

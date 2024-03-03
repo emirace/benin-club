@@ -2,7 +2,7 @@
 import { buttonStyle, buttonStyleOutline } from '@/constants/styles';
 import Link from 'next/link';
 import { useState } from 'react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Loading from './Loading';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useRouter } from 'next/router';
