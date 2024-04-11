@@ -1,9 +1,9 @@
-import { newletterUrl } from "@/constants/emails";
-import Newsletter, { INewsletter } from "@/models/newsletter.model";
-import User, { IUser } from "@/models/user.model";
-import { connectDB } from "@/utils/mongoose";
-import sendEmail from "@/utils/sendEmail";
-import { NextApiRequest, NextApiResponse } from "next";
+import Constant, { IConstant } from '@/models/constant.model';
+import Newsletter, { INewsletter } from '@/models/newsletter.model';
+import User, { IUser } from '@/models/user.model';
+import { connectDB } from '@/utils/mongoose';
+import sendEmail from '@/utils/sendEmail';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,8 +11,8 @@ export default async function handler(
 ) {
   await connectDB();
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
   try {
     // Create a new newsletter subscription
@@ -20,8 +20,15 @@ export default async function handler(
     const emails: string[] = newsletters.map((newsletter) => newsletter.email);
     const existUsers = await User.find({ email: { $in: emails } });
 
+    const newletterUrl: IConstant | null = await Constant.findOne({
+      name: 'newsletter',
+    });
+    if (!newletterUrl) {
+      return res.status(404).json({ error: 'No newsleter found' });
+    }
+
     const currentDate = new Date();
-    const month = currentDate.toLocaleString("default", { month: "long" });
+    const month = currentDate.toLocaleString('default', { month: 'long' });
     const year = currentDate.getFullYear();
 
     const message = `<!DOCTYPE html>
@@ -62,7 +69,7 @@ export default async function handler(
               </p>
               <p>
                 <a
-                  href='${newletterUrl}'
+                  href='${newletterUrl.value}'
                   style="text-decoration: none; color: red; font-weight: bold"
                   >Download Newsletter</a
                 >
@@ -91,10 +98,10 @@ export default async function handler(
   `;
 
     for (const existUser of existUsers) {
-      sendEmail(existUser.email, "Newsletter", message);
+      sendEmail(existUser.email, 'Newsletter', message);
     }
-    res.status(201).json({ message: "Email sent successfully" });
+    res.status(201).json({ message: 'Email sent successfully' });
   } catch (error) {
-    res.status(400).json({ error: "Bad Request" });
+    res.status(400).json({ error: 'Bad Request' });
   }
 }
