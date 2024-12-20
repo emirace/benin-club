@@ -16,7 +16,7 @@ export default function ResendPassword(props: ResendPasswordProps) {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/dashboard/members/resendlink', {
+      const response = await fetch('/api/dashboard/members/email/resendlink', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
