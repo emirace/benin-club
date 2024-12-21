@@ -5,7 +5,8 @@ import { promisify } from 'util';
 import sendEmail from '@/utils/sendEmail';
 import { connectDB } from '@/utils/mongoose';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+// import { authOptions } from '../../auth/[...nextauth]';
 
 const randomBytesAsync = promisify(randomBytes);
 
