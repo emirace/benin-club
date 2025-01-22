@@ -36,49 +36,32 @@ export default function Kitchen() {
 
           <div className="mt-12">
             <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
-              MANET KITCHEN
+            VICTORIOUS MEGA KITCHEN (VMK)
             </h2>
 
             <p className="mt-4 text-lg text-gray-500">
-              They offer the following; Jollof rice, Fried rice, Ofada rice,
-              Banga rice, Coconut rice, Spaghetti, and Oil rice (Native rice)
-              with toppings like Dodo, Moi-Moi, Vegetable salad, pasta and
-              salad.
-            </p>
+            They offer indoor and outdoor catering services around the Country.</p>
             <p className="mt-4 text-lg text-gray-500">
-              They also offer swallow like Amala, Semo, Pounded Yam, Wheat,
-              Starch, and Oat-Meal with soup like Ewedu, Gbegiri, Vegetable,
-              Banga, Egusi, Black soup, Ogbono and Owo soup.
-            </p>
-            <p className="mt-4 text-lg text-gray-500">
-              They offer INTERCONTINENTAL DISHES such as Chinese Fried Rice,
-              Russian salad, Chicken Escalope, Spaghetti Bolognese, Green Salad,
-              Singapore Fried Noodles, Beef Croma, Chicken Casseroie, Farfare
-              Pasta in Vegetable sauce, Shredded Beef in green pepper sauce etc.
-              Fried Fish Batter, Stewed Beef, Stewed Chicken/Turkey, Cat Fish,
-              Dry Fish, fish in tomato sauce, chicken in tomato sauce, fish in
-              curry sauce, Assorted and Goat Meat are also available..
-            </p>
+<b>CONTINENTAL DISHES:</b> Fried Rice, White Rice, Jollof Rice, Vegetable Rice, Basmatic Fried Rice, including Rice and Beans.</p>
+<p className="mt-4 text-lg text-gray-500">
 
-            <p className="mt-4 text-lg text-gray-500">
-              They also offer indoor and outdoor catering services.
-            </p>
+<b>AFRICAN DISHES:</b> Pounded Yam, Eba, Starch, Semovita, Poundo, Fufu, Wheat, etc.
 
-            <p className="mt-4 text-lg text-gray-500">
-              You can contact them on 08032671011.
+There are also Beans, Yam Porridge, Dodo, Garden Egg, Boiled Plantain, Leaf Moi Moi, Cup Moi Moi.</p>
+<p className="mt-4 text-lg text-gray-500">
+<b>VARIETIES OF SOUP:</b>  Edekaeko Soup, Afang Soup, Banga Cat Fish Soup, Bitter Leaf Soup, Oha Soup, Egusi Soup, Ogbolo Soup.</p>
+<p className="mt-4 text-lg text-gray-500">
+All kinds of Fish and Meats, such as: Melluza Fish, Vegetable Fish, Fried Chicken, Fried Turkey, Fried Beef, Boiled Eggs, and Assorted Meat Stew, Palm Oil Stew and Beef. </p>
+<p className="mt-4 text-lg text-gray-500">
+<b>BREAD:</b>  We offer Coconut Bread, Butter Bread, Wheat Bread, VMK Special Sliced Bread, Sardine Bread, Banana Bread, Burger Bread.</p>
+<p className="mt-4 text-lg text-gray-500">
+<b>Victorious Mega Kitchen Branches:</b>
+- 7, Ihama Road, G.R.A Opp. Royal Marble Hotel, Benin City, Edo State.
+- Central Ugbor Road, Opp. Ogunmwenyi Junction, Benin City, Edo State.
+- 2b, Osagiede Street, Opp. St. Regis Hotel, Water Resource, G.R.A, Benin City, Edo State.
+ Contact us:  09152436986, 08083389253.
+
             </p>
-            <Gallery
-              images={[
-                'image1.JPG',
-                'image2.JPG',
-                'image3.JPG',
-                'image4.JPG',
-                'image5.JPG',
-                'image6.JPG',
-                'image7.JPG',
-              ]}
-              link="/manetKitchen"
-            />
           </div>
           <div className="mt-12">
             <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
@@ -105,33 +88,6 @@ export default function Kitchen() {
             </p>
           </div>
 
-          <div className="mt-12">
-            <h2 className="text-3xl md:text-5xl uppercase font-bold text-red">
-              PERFECT KITCHEN
-            </h2>
-            <p className="mt-4 text-lg text-gray-500">
-              They offer the following services to customers such as Chinese
-              meal, making different types of sauce such as Kpomo Sauce, Chicken
-              sauce, Turkey sauce, Goat meat sauce etc.
-            </p>
-            <p className="mt-4 text-lg text-gray-500">
-              They offer hot cat fish peppersoup, Chicken Peppersoup, Turkey
-              peppersoup, Bush meat peppersoup, Gizzard Peppersoup, Snail
-              peppersoup etc.
-            </p>
-            <p className="mt-4 text-lg text-gray-500">
-              They also offer Poundo, Wheat, Semo, Plantain, Amala, Starch,
-              Garri with soups such as Vegetable, Melon, Ogbono, Okro,
-              Groundnut, Afang, White, Black and Banga Soup etc.
-            </p>
-
-            <p className="mt-4 text-lg text-gray-500">
-              They also offer indoor and outdoor catering services.
-            </p>
-            <p className="mt-4 text-lg text-gray-500">
-              You can contact them on 09138199573, 08078014366.
-            </p>
-          </div>
         </div>
       </div>
     </>
