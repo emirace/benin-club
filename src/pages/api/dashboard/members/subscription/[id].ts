@@ -48,7 +48,7 @@ export default async function handler(
           { _id: userId },
           {
             $inc: { subcriptionBal: -amount },
-            lastPaymentYear: year,
+            lastPamentYear: year,
           },
           { new: true }
         );
@@ -69,7 +69,7 @@ export default async function handler(
           paymentMethod: 'deposit',
           initiatedBy: loginUser._id, // Assuming loginUser is defined somewhere
           for: 'subscription',
-          meta: { lastPaymentYear: year },
+          meta: { lastPamentYear: year },
         });
         console.log('hello1');
 
